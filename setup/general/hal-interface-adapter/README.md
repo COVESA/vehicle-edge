@@ -82,33 +82,33 @@
 
   ```json
   {
-    "loglevel": "DEBUG",                                  // Can be VERBOSE, DEBUG, INFO, WARN, ERROR
+    "loglevel": "DEBUG",                                    // Can be VERBOSE, DEBUG, INFO, WARN, ERROR
     "iotea": {
       "mqtt": {
         "connectionString": "mqtt://localhost:1883",
         "ns": "iotea/"
       },
-      "subject": "<Some userId>",                         // Mandatory, if Kuksa.VAL should be bypasseed, vss.ws is not given and/or vss.subjectPath is undefined
-      "instance": "<The VIN, or serial number>"           // Mandatory, if Kuksa.VAL should be bypasseed, vss.ws is not given and/or vss.instancePath is undefined
+      "subject": "<Some userId>",                           // Mandatory, if Kuksa.VAL should be bypasseed, vss.ws is not given and/or vss.subjectPath is undefined
+      "instance": "<The VIN, or serial number>"             // Mandatory, if Kuksa.VAL should be bypasseed, vss.ws is not given and/or vss.instancePath is undefined
     },
     "vss": {
-      "ws": "ws://localhost:8090",                        // (Default: undefined) If not given, all events will be automatically sent to IoTea
-                                                          // iotea.subject AND iotea.instance are mandatory
-      "jwt": "<JSON Web Token>",                          // (Default: undefined) If not given, all events will be automatically sent to IoTea
-                                                          // iotea.subject AND iotea.instance are mandatory
-      "bypass": false,                                    // (Default: false) If true, send all signal events to IoTea Event Analytics per default
-                                                          // You can override this globel setting, by setting the bypass flag in your mapping configuration (mapping.json)
-      "subjectPath": "Vehicle.VehicleIdentification.VIN", // (Default: undefined) Subject will be read from the given path, if vss.ws and vss.jwt are also given
-                                                          // If undefined AND at least one event has to be bypass Kuksa.VAL, iotea.subject is mandatory
-                                                          // MAKE SURE it's compatible path notation for the current Kuksa.VAL version
-      "instancePath": "Vehicle.UserId",                   // (Default: undefined) Instance will be read from the given path, if vss.ws and vss.jwt are also given
-                                                          // If undefined AND at least one event has to be bypass Kuksa.VAL, iotea.instance is mandatory
-                                                          // MAKE SURE it's compatible path notation for the current Kuksa.VAL version
+      "ws": "ws://localhost:8090",                          // (Default: undefined) If not given, all events will be automatically sent to IoTea
+                                                            // iotea.subject AND iotea.instance are mandatory
+      "jwt": "<JSON Web Token>",                            // (Default: undefined) If not given, all events will be automatically sent to IoTea
+                                                            // iotea.subject AND iotea.instance are mandatory
+      "bypass": false,                                      // (Default: false) If true, send all signal events to IoTea Event Analytics per default
+                                                            // You can override this globel setting, by setting the bypass flag in your mapping configuration (mapping.json)
+      "subjectPath": "Vehicle.VehicleIdentification.VIN",   // (Default: undefined) Subject will be read from the given path, if vss.ws and vss.jwt are also given
+                                                            // If undefined AND at least one event has to be bypass Kuksa.VAL, iotea.subject is mandatory
+                                                            // MAKE SURE it's compatible path notation for the current Kuksa.VAL version
+      "instancePath": "Vehicle.Driver.Indentifier.Subject", // (Default: undefined) Instance will be read from the given path, if vss.ws and vss.jwt are also given
+                                                            // If undefined AND at least one event has to be bypass Kuksa.VAL, iotea.instance is mandatory
+                                                            // MAKE SURE it's compatible path notation for the current Kuksa.VAL version
       "pathConfig": {
-        "separator": ".",                                 // Separators, which are used for different hierarchical layers in VSS paths
+        "separator": ".",                                   // Separators, which are used for different hierarchical layers in VSS paths
         "replacer": {
-          ".": "$"                                        // Which characters have to be replaced (from left to right) to derive IoTea compatible type and feature from VSS paths
-                                                          // Also used to transform given type and feature from IoTea into VSS paths to check whether mappings are present in mapping.json
+          ".": "$"                                          // Which characters have to be replaced (from left to right) to derive IoTea compatible type and feature from VSS paths
+                                                            // Also used to transform given type and feature from IoTea into VSS paths to check whether mappings are present in mapping.json
         }
       }
     },
