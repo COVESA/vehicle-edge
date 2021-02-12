@@ -337,6 +337,8 @@ class MockBusObserver(BusObserver):
         self.logger = logging.getLogger('HalInterface.MockBusObserver')
         self.generators = {}
 
+        self.lock = threading.Lock()
+
     async def start(self):
         await self.hal_broker.subscribe_json('+/start', self.__on_signal_start)
         await self.hal_broker.subscribe_json('+/stop', self.__on_signal_stop)
@@ -418,8 +420,9 @@ class MockBusObserver(BusObserver):
             self.logger.warning(err)
 
     async def __on_signal(self, frame_id, signal, value):
-        self.logger.info('Sending: "{}" to: {}'.format(value, self.get_signal_id(frame_id, signal)))
-        await self.hal_broker.publish_json(self.get_signal_topic(frame_id, signal), { "value": value })
+        with self.lock:
+            self.logger.info('Sending: "{}" to: {}'.format(value, self.get_signal_id(frame_id, signal)))
+            await self.hal_broker.publish_json(self.get_signal_topic(frame_id, signal), { "value": value })
 
     def extract_can_info_from_topic(self, topic):
         # Returns frame_id, signal
