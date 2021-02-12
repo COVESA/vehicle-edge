@@ -79,6 +79,10 @@ Configure start of mock, by setting _interface_ property in _config.json_ to "mo
                 },
                 "11.Test": {
                     "file": "", // relative filepath to hal-interface executable or absolute filepath
+                                // The filename determines the singnals datatype
+                                // sampledata-int.txt >> signals are treated as integers
+                                // sampledata-float.txt >> signals are treated as float values
+                                // sampledata.txt and sampledata-string.txt >> signals are treated as string values
                     "baseTimeMs": 0, // defaults to 0, Time, which will be subtracted from all given times in the file
                     "useSignalRequestTriggers": false // Use messages via start/stop to start and stop the generator manually
                 }
