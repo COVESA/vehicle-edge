@@ -68,8 +68,8 @@ if [ -d $IOTEA_PROJECT_DIR ]; then
 else
     # Create the iotea project directory
     mkdir -p $IOTEA_PROJECT_DIR
-    # Clone boschio.iotea Repo 
-    git clone https://$SOCO_NT_USER@sourcecode.socialcoding.bosch.com/scm/dbao/boschio.iotea.git $IOTEA_PROJECT_DIR
+    # Clone boschio.iotea Repo
+    git clone https://<Github IoTea repo> $IOTEA_PROJECT_DIR
     exit_on_error
     # Go into the project directory
     cd $IOTEA_PROJECT_DIR
@@ -172,7 +172,7 @@ if [ "$DOCKER_IMAGE_EXPORT" = "1" ]; then
 	### add kuksa-val image to exports
 	DOCKER_IMAGES="$DOCKER_IMAGES
 	$KUKSA_VAL_IMG"
-	
+
     for img in $DOCKER_IMAGES; do
         IMG_REPO=`echo ${img} | cut -d ':' -f 1`
         FILENAME=$( echo $IMG_REPO.$IOTEA_VERSION.${ARCH}.tar | tr '/' '_' )
