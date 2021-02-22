@@ -199,9 +199,8 @@ module.exports = class HalInterfaceAdapter {
                     if (ev.type === PLATFORM_EVENT_TYPE_SET_RULES) {
                         this.logger.info(`Adding consumer for ${entry.getVssPath()} with HAL resourceId ${entry.getHalResourceId()}`);
 
-                        entry.pushUniqueConsumer(talentId);
-
-                        if (this.retainBuffer.hasOwnProperty(entry.getHalResourceId())) {
+                        if (entry.pushUniqueConsumer(talentId) && entry.shouldRetainValue && this.retainBuffer.hasOwnProperty(entry.getHalResourceId())) {
+                            // Only triggers, if it's the first time the talent was added to the consumers of a specific entry
                             this.logger.info(`Found signal ${entry.getHalResourceId()} in retain buffer`);
                             // Previous value is present, publish it to give an immediate feedback for the talent
                             await this.__publishValue(entry, this.retainBuffer[entry.getHalResourceId()]);
@@ -333,6 +332,8 @@ class HalVssLookupTableEntry {
         this.valueMapping = this.data.halValueMapping || null;
         this.valueFactor = isFinite(this.data.halValueFactor) ? this.data.halValueFactor : 1;
         this.valueOffset = isFinite(this.data.halValueOffset) ? this.data.halValueOffset : 0;
+        // Defaults to true
+        this.shouldRetainValue = this.data.retainValue !== false;
     }
 
     getHalValuePath() {
@@ -352,7 +353,13 @@ class HalVssLookupTableEntry {
     }
 
     pushUniqueConsumer(consumer) {
+        if (this.consumers.has(consumer)) {
+            return false;
+        }
+
         this.consumers.add(consumer);
+
+        return true;
     }
 
     removeConsumerIfExisting(consumer) {
