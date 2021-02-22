@@ -66,6 +66,7 @@
         "(Undefined)": 2,
         "Brake Switch Fault": 3
       },
+      "retainValue": true,                            // If true, retain the last value and republish it if the feature is requested (default = true)
       "halValueFactor": 0.5,                          // scaling for numerical values (optional)
       "halValueOffset": 100,                          // offsetting for numerical values (optional)
       "vssPath": "Vehicle.Body.Lights.IsBrakeOn",     // MAKE SURE it's compatible path notation for the current Kuksa.VAL version
