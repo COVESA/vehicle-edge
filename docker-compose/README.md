@@ -86,14 +86,14 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
 
 ### Manual
 
-- Clone the [IoT Event Analytics](https://<Github IoTea repo>) repository into `<any folder>` using git<br>
+- Clone the [IoT Event Analytics](https://github.com/GENIVI/iot-event-analytics) repository into `<any folder>` using git<br>
   Update the _.env_ file (IOTEA_PROJECT_DIR) with the absolute path to `<any folder>` - could be any valid local folder<br>
   You can checkout a specific version tag if desired. __This version should match the SDKs you are copying in the next steps!__
 - Copy `<any folder>/src/sdk/javascript/lib/boschio.iotea-<version>.tgz` into _/src/vapp.hal-interface-adapter_ AND _/docker-compose/talent_<br>
   Update the _.env_ file (IOTEA_JS_SDK) with `boschio.iotea-<version>.tgz`
 - Copy `<any folder>/src/sdk/python/lib/boschio_iotea-<version>-py3-none-any.whl` into the _/src/vapp.hal-interface_ directory<br>
   Update the _.env_ file (IOTEA_PYTHON_SDK) with `boschio_iotea-<version>-py3-none-any.whl`
-- Follow **Install KUKSA.VAL** section from [https://<Github IoTea repo>/docker/vss2iotea/README.md](https://<Github IoTea repo>/browse/docker/vss2iotea/README.md) to __download AND load__ the latest version of KUKSA.VAL into your local Docker registry.<br>
+- Follow **Install KUKSA.VAL** section from [https://github.com/GENIVI/iot-event-analytics/docker/vss2iotea/README.md](https://https://github.com/GENIVI/iot-event-analytics/browse/docker/vss2iotea/README.md) to __download AND load__ the latest version of KUKSA.VAL into your local Docker registry.<br>
   Update the _.env_ file (KUKSA_VAL_IMG) with
   - __>> AMD64 platform only: <<__ `amd64/kuksa-val:<version>`
   - __>> ARM64 platform only: <<__ `arm64/kuksa-val:<version>`
@@ -121,7 +121,7 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
 
 - Starting the \<run-script\>
   - If you want to keep the current configuration in _run.properties_ and _.env_ simply call `<run-script>` OR equivalently `<run-script> .env run.properties`
-  - The variables _IOTEA\_VERSION_ (in `run.properties`) and _IOTEA_PROJECT_DIR_ (in `.env`) are only important, if the IoTea respository is cloned for the first time. This given tag will be checked out to the given project directory.<br>
+  - The variables _IOTEA\_VERSION_ (in `run.properties`) and _IOTEA_PROJECT_DIR_ (in `.env`) are only important, if the IoT Event Analytics respository is cloned for the first time. This given tag will be checked out to the given project directory.<br>
     There is no guarantee, that the stack works, if you choose diverging versions in _IOTEA\_VERSION_, _IOTEA\_JS\_SDK_ and _IOTEA\_PYTHON\_SDK_
   - If you want to change the default configuration, you can EITHER
     - Copy _run.properties_ and _.env_ to a custom location and provide the names as parameters. i.e. `<run-script> <custom .env path> <custom run.properties path>`

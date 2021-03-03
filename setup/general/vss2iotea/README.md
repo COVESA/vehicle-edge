@@ -8,8 +8,8 @@
   SPDX-License-Identifier: MPL-2.0
 -->
 
-# Vss2IoTea Adapter
+# Vss2IoT Event Analytics Adapter
 
-See [here](https://<Github IoTea repo>/browse/docker/vss2iotea)
+See [here](https://github.com/GENIVI/iot-event-analytics/browse/docker/vss2iotea)
 
 Update the JWT for authentication against Kuksa.VAL in these configuration file _./config/config.json_

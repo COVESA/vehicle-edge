@@ -10,4 +10,4 @@
 
 # Mosquitto MQTT Broker
 
-See [here](https://<Github IoTea repo>/browse/docker/mosquitto)
+See [here](https://github.com/GENIVI/iot-event-analytics/browse/docker/mosquitto)
