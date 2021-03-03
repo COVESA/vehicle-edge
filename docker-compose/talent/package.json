@@ -1,0 +1,14 @@
+{
+  "name": "talent",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "author": "Robert Bosch GmbH",
+  "license": "MPL-2.0",
+  "scripts": {
+    "start": "nodemon ./src/index.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}

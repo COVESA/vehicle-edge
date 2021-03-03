@@ -1,0 +1,24 @@
+{
+    "loglevel": "DEBUG",
+    "can": [
+        {
+            "interface": "mock",
+            "signals": {
+                "8.BrakeSwitchStatus": {
+                    "values": [
+                        "Normal Condition",
+                        "Brake Pedal Pressed",
+                        "(Undefined)",
+                        "Brake Switch Fault"
+                    ],
+                    "intervalMs": 1000,
+                    "jitterMs": 500
+                }
+            }
+        }
+    ],
+    "mqtt": {
+        "connectionString": "mqtt://localhost:1883",
+        "ns": "hal/"
+    }
+}
