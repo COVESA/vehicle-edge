@@ -14,7 +14,7 @@ First off, thanks for taking the time to contribute!
 
 Any contribution is welcome, e.g. documentation, bug reports, feature requests, issues, blog posts, tutorials, feature implementaion, etc. You can contribute code or documentation through the stadard GitHub pull request model. For large contributions we do encourage you to file a ticket in the GitHub issue tracking system prior to any development to coordinate with the IoT Event Analytics developement deam early in the process. Coordinatin up front helps to avoid frustration later on.
 
-The following is a set of guidelines for contributing to IoT Event Analytics and its packages, which are hosted on GitHub [https://github.com/GENIVI/venicle-edge](https://github.com/GENIVI/venicle-edge). These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
+The following is a set of guidelines for contributing to IoT Event Analytics and its packages, which are hosted on GitHub [https://github.com/GENIVI/vehicle-edge](https://github.com/GENIVI/vehicle-edge). These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
 ## Table Of Contents
 
@@ -36,7 +36,7 @@ The following is a set of guidelines for contributing to IoT Event Analytics and
 
 ### Reporting Bugs
 
-- If you find anything, which does not work as expected, feel free to file a bug in our [Bugtracker](https://github.com/GENIVI/venicle-edge/issues). Please be sure to describe in the ticket, what you expected, what the actual result was and the steps to reproduce the issue (in case it can be reproduced and it's no runtime related issue).
+- If you find anything, which does not work as expected, feel free to file a bug in our [Bugtracker](https://github.com/GENIVI/vehicle-edge/issues). Please be sure to describe in the ticket, what you expected, what the actual result was and the steps to reproduce the issue (in case it can be reproduced and it's no runtime related issue).
 
 ### Suggesting Enhancements
 
@@ -46,7 +46,7 @@ The following is a set of guidelines for contributing to IoT Event Analytics and
 
 - Cool, you actually implemented something, which brings the platform to the next level. We highly appreciate collaborative work. Did you already went through our [Styleguides](#Styleguides) to make sure your contribution fits to the rest of the codebase?<br>
   You rebased your feature branch onto our develop-branch and it works with the latest commit? If yes, it's time for your pull request.
-- Push your feature branch in this repository [https://github.com/GENIVI/venicle-edge](https://github.com/GENIVI/venicle-edge) and create a pull-request [here](https://github.com/GENIVI/venicle-edge/pulls)
+- Push your feature branch in this repository [https://github.com/GENIVI/vehicle-edge](https://github.com/GENIVI/vehicle-edge) and create a pull-request [here](https://github.com/GENIVI/vehicle-edge/pulls)
 - __EVERY__ commit needs to be signed. By signing of your commits you certify that you can contribute code according to the rquiremtnts of the [GENIVI contirbution guidelines](https://www.genivi.org/contribute). Simply speaking you certify that you are the creator of the code or have the rights ot contribute under the MPL-2.0 license
   - If you have set your `user.name` and `user.email` git configs you can automatically sign the commit by running the git-commit command with the `-s` option. There may be multiple sign-offs if more than one developer was involved in authoring the contribution.
 
