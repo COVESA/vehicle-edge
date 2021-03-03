@@ -18,7 +18,7 @@
 
 ## Build
 
-- Download the latest npm package from [here](https://<Github IoTea repo>/src/sdk/javascript/lib) and copy it into the _setup/general/test-talent_ folder
+- Download the latest npm package from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/javascript/lib) and copy it into the _setup/general/test-talent_ folder
 - Open the folder _setup/general/test-talent_
 - Docker build arguments:
   - _IOTEA_JS_SDK_ (__mandatory__): Specify the npm module e.g. `boschio.iotea-1.7.0.tgz`, that you downloaded above. It is needed at buildtime

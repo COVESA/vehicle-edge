@@ -8,6 +8,6 @@
   SPDX-License-Identifier: MPL-2.0
 -->
 
-# IoT Event Analytics Platform - IoTea Platform
+# IoT Event Analytics Platform
 
-- See [here](https://<Github IoTea repo>/docker/platform)
+- See [here](https://github.com/GENIVI/iot-event-analytics/docker/platform)
