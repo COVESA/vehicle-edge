@@ -1,0 +1,12 @@
+{
+  "name": "test-talent",
+  "version": "1.0.0",
+  "description": "- Make sure you have Docker 19.03 or above installed and experimental CLI features enable to be able to perform cross platform builds",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Robert Bosch GmbH",
+  "license": "MPL-2.0",
+  "dependencies": {}
+}

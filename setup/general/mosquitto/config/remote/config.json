@@ -1,0 +1,15 @@
+{
+    "logTypes": [
+        "error",
+        "warning",
+        "notice",
+        "information",
+        "subscribe",
+        "unsubscribe",
+        "websockets",
+        "all"
+    ],
+	"mqtt": {
+        "port": 1884
+    }
+}

@@ -1,0 +1,134 @@
+version: '3.2'
+services:
+  mosquitto-remote:
+    build:
+      context: ${IOTEA_PROJECT_DIR}/docker/mosquitto
+      dockerfile: Dockerfile.${ARCH}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+        - MQTT_PORT=1884
+    ports:
+      - '1884:1884'
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/mosquitto/remote"
+        target: "/mosquitto/config"
+  mosquitto-local:
+    build:
+      context: ${IOTEA_PROJECT_DIR}/docker/mosquitto
+      dockerfile: Dockerfile.${ARCH}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    depends_on:
+      - mosquitto-remote
+    ports:
+      - '1883:1883'
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/mosquitto/local"
+        target: "/mosquitto/config"
+  configmanager:
+    build:
+      context: ${IOTEA_PROJECT_DIR}
+      dockerfile: docker/config/Dockerfile.${ARCH}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+        - API_PORT=8080
+    depends_on:
+      - mosquitto-local
+    ports:
+      - '8080:8080'
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/iotea-platform"
+        target: "/app/docker/config/config"
+  pipeline:
+    build:
+      context: ${IOTEA_PROJECT_DIR}
+      dockerfile: docker/pipeline/Dockerfile.${ARCH}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    depends_on:
+      - configmanager
+      - kuksa-val
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/iotea-platform"
+        target: "/app/docker/pipeline/config"
+  kuksa-val:
+    image: ${KUKSA_VAL_IMG}
+    environment:
+      - KUKSAVAL_OPTARGS=--insecure
+    ports:
+      - '8090:8090'
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/vss"
+        target: "/config"
+  vss2iotea:
+    build:
+      context: ${IOTEA_PROJECT_DIR}
+      dockerfile: ${IOTEA_PROJECT_DIR}/docker/vss2iotea/Dockerfile.${ARCH}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    depends_on:
+      - kuksa-val
+      - pipeline
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/vss2iotea"
+        target: "/app/docker/vss2iotea/config"
+  hal-interface-adapter:
+    build:
+      context: ../src/vapp.hal-interface-adapter
+      dockerfile: Dockerfile.${ARCH}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+        - IOTEA_JS_SDK=${IOTEA_JS_SDK}
+    depends_on:
+      - kuksa-val
+      - pipeline
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/hal-interface-adapter"
+        target: "/home/node/app/config"
+  hal-interface:
+    build:
+      context: ../src/vapp.hal-interface
+      dockerfile: Dockerfile.${ARCH}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+        - IOTEA_PYTHON_SDK=${IOTEA_PYTHON_SDK}
+    depends_on:
+      - hal-interface-adapter
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/hal-interface"
+        target: "/app/hal-interface/config"
+  test-talent:
+    build:
+      context: ./talent
+      dockerfile: Dockerfile.${ARCH}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+        - IOTEA_JS_SDK=${IOTEA_JS_SDK}
+    environment:
+      - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+      - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    volumes:
+      - type: bind
+        source: "./talent/config"
+        target: "/app/config"
+      - type: bind
+        source: "./talent/src"
+        target: "/app/src"
+    depends_on:
+      - pipeline

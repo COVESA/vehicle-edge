@@ -1,0 +1,22 @@
+{
+    "100000": {
+        "features": {},
+        "types": {
+            "Vehicle": {
+                "features": {
+                    "Body$Lights$IsBrakeOn": {
+                        "description": "Is brake light on",
+                        "idx": 0,
+                        "history": 20,
+                        "encoding": {
+                            "type": "number",
+                            "encoder": "minmax",
+                            "min": 0,
+                            "max": 3
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

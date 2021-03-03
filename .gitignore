@@ -1,0 +1,12 @@
+.settings
+.project
+.classpath
+target
+.iml
+.idea/
+.DS_Store
+**/.idea/*
+**/*.iml
+**/venv*/*
+**/__pycache__/*
+node_modules/

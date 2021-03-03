@@ -1,0 +1,25 @@
+FROM python:3.6.12-alpine
+
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+ARG IOTEA_PYTHON_SDK
+
+ENV HTTP_PROXY=${HTTP_PROXY}
+ENV HTTPS_PROXY=${HTTPS_PROXY}
+
+RUN mkdir -p /app/hal-interface
+
+WORKDIR /app/hal-interface
+
+COPY requirements.txt .
+
+COPY ${IOTEA_PYTHON_SDK} ./
+
+RUN python3 -m pip install -r requirements.txt --user
+
+RUN python3 -m pip install ${IOTEA_PYTHON_SDK} --user
+
+COPY src/ .
+
+ENTRYPOINT [ "python", "run.py" ]
+
