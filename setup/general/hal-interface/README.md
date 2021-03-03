@@ -19,7 +19,7 @@
 
 ## Install
 
-- Download the latest python wheel from [here](https://<Github IoTea repo>/src/sdk/python/lib)
+- Download the latest python wheel from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/python/lib)
   - Install it using `pip install --user boschio_iotea-<some-version>-py3-none-any.whl`
 - In a terminal, change into the the folder _src/vapp.hal-interface_
 - Install other missing dependencies using `pip install --user -r requirements.dev.txt`
