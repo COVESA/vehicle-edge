@@ -20,7 +20,7 @@
 
 ## Build
 
-- Download the latest npm package from [here](https://<Github IoTea repo>/src/sdk/javascript/lib) and copy it into the _src/vapp.hal-interface-adapter_ folder
+- Download the latest npm package from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/javascript/lib) and copy it into the _src/vapp.hal-interface-adapter_ folder
 - Open the folder _src/vapp.hal-interface-adapter_
 - Docker build arguments:
   - __>> AMD64 target platform only <<__<br>
@@ -70,7 +70,7 @@
       "halValueFactor": 0.5,                          // scaling for numerical values (optional)
       "halValueOffset": 100,                          // offsetting for numerical values (optional)
       "vssPath": "Vehicle.Body.Lights.IsBrakeOn",     // MAKE SURE it's compatible path notation for the current Kuksa.VAL version
-      "vssBypass": false                              // Send events directly to IoTea without publishing them to Kuksa.VAL
+      "vssBypass": false                              // Send events directly to IoT Event Analytics Platform without publishing them to Kuksa.VAL
                                                       // Global setting in config.json will be overridden by this signal-based value
     },
     {
@@ -93,11 +93,11 @@
       "instance": "<The VIN, or serial number>"             // Mandatory, if Kuksa.VAL should be bypasseed, vss.ws is not given and/or vss.instancePath is undefined
     },
     "vss": {
-      "ws": "ws://localhost:8090",                          // (Default: undefined) If not given, all events will be automatically sent to IoTea
+      "ws": "ws://localhost:8090",                          // (Default: undefined) If not given, all events will be automatically sent to IoT Event Analytics
                                                             // iotea.subject AND iotea.instance are mandatory
-      "jwt": "<JSON Web Token>",                            // (Default: undefined) If not given, all events will be automatically sent to IoTea
+      "jwt": "<JSON Web Token>",                            // (Default: undefined) If not given, all events will be automatically sent to IoT Event Analytics
                                                             // iotea.subject AND iotea.instance are mandatory
-      "bypass": false,                                      // (Default: false) If true, send all signal events to IoTea Event Analytics per default
+      "bypass": false,                                      // (Default: false) If true, send all signal events to IoT Event Analytics Event Analytics per default
                                                             // You can override this globel setting, by setting the bypass flag in your mapping configuration (mapping.json)
       "subjectPath": "Vehicle.VehicleIdentification.VIN",   // (Default: undefined) Subject will be read from the given path, if vss.ws and vss.jwt are also given
                                                             // If undefined AND at least one event has to be bypass Kuksa.VAL, iotea.subject is mandatory
@@ -108,8 +108,8 @@
       "pathConfig": {
         "separator": ".",                                   // Separators, which are used for different hierarchical layers in VSS paths
         "replacer": {
-          ".": "$"                                          // Which characters have to be replaced (from left to right) to derive IoTea compatible type and feature from VSS paths
-                                                            // Also used to transform given type and feature from IoTea into VSS paths to check whether mappings are present in mapping.json
+          ".": "$"                                          // Which characters have to be replaced (from left to right) to derive IoT Event Analytics compatible type and feature from VSS paths
+                                                            // Also used to transform given type and feature from IoT Event Analytics into VSS paths to check whether mappings are present in mapping.json
         }
       }
     },
@@ -135,7 +135,7 @@
 - __Prerequisites__
   - NodeJS has to be installed >=12.13.0
   - Python has to be installed >=3.6.8
-- [Start the IoTea Event Analytics platform using docker-compose](https://<Github IoTea repo>)
+- [Start the IoT Event Analytics platform using docker-compose](https://github.com/GENIVI/iot-event-analytics)
 - Start KUKSA Val server following the guide [here](../vss/README.md)
 - Copy __../hal-interface/config_ into _../../src/hal-interface/src_
   - Open a console at _../../src/hal-interface/src_ and execute `python run.py`
