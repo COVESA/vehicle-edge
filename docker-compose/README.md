@@ -25,60 +25,10 @@
     - Docker Engine v19.03.6
     - Compose 1.27.4
 
-### (Optional) Linux px-proxy configuration
-
-If you are running behind a px-proxy on Linux (e.g. using [Bosch Open Source desktop](https://inside-docupedia.bosch.com/confluence/x/nRujEQ)) you need to ensure the binding between your docker network and proxy is configured.
-
-- __~/.px/config.ini:__ Ensure binding ___"binds = [...], \<docker network proxy\>___ (e.g. 172.17.0.1:3128) exists
-
-  ```code
-  [server]
-  binds = 127.0.0.1:3128, 172.17.0.1:3128#`
-  ```
-
-  If not, add it and restart your proxy (e.g. via _osd-proxy-restart_ for osd)
-
-  To check that the binding exists you can call for your proxy port (e.g. 3128):
-  `netstat -ntlpn | grep -i 3128`
-
-  Which should show the your docker-network proxy (e.g. 172.17.0.1:3128):
-  `tcp       0     0 172.17.0.1:3128        0.0.0.0:*              LISTEN     12391/python3`
-
-- __~/.docker/config.json:__ Ensure _http(s)Proxys_ in your docker-network have the same port as your host proxy (e.g. (´[http://172.17.0.1:__3128__](http://172.17.0.1:__3128__))
-
-```json
-{
- "proxies":
- {
-   "default":
-   {
-     "httpProxy": "http://172.17.0.1:3128",
-     "httpsProxy": "http://172.17.0.1:3128"
-   }
- }
-}
-```
-
-- __/etc/systemd/system/docker.service.d/http_proxy.conf__: Ensure that the http(s)_proxies are set
-
-```code
-[Service]
-Environment=HTTP_PROXY=http://localhost:3128/
-Environment=HTTPS_PROXY=http://localhost:3128/
-```
-
-Afterwards you have to restart your docker daemon:
-`sudo systemctl daemon-reload`
-`sudo systemctl restart docker`
-
-To check your env-variables for docker you can call:
-`sudo systemctl show --property=Environment docker`
-
 ## Setup
 
-- If you are behind a corporate proxy, specify DOCKER_HTTP_PROXY and DOCKER_HTTPS_PROXY in the _.env_ file. __If NOT, remove these lines completly from the .env file__
-  - __>> Windows only: <<__ Use `docker.for.win.localhost` to refer to your computer i.e. _[http://docker.for.win.localhost:3128](http://docker.for.win.localhost:3128)_ assuming your proxy is running locally on Port 3128
-  - __>> Linux only: <<__ Use _[http://172.17.0.1:3128](http://172.17.0.1:3128)_ as proxy address
+- For further information how to build the images (especially, if you are working behind a proxy), please see [here](https://github.com/GENIVI/iot-event-analytics/docker/)
+- [Install docker-compose and check the version](https://github.com/GENIVI/iot-event-analytics/docker-compose)
 
 ### Scripted
 
@@ -103,16 +53,6 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
 ## Run
 
 ### >> AMD64 platform only <<
-
-- Make sure docker-compose is installed on your system `docker-compose --version`
-  - __>> Linux only <<__ To install missing docker-compose<br>
-    `sudo apt-get -y -q install docker-compose`<br>
-    If docker-compose packgage is missing or too old, directly download the binary<br>
-
-    ```text
-    sudo curl -q -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
-    ```
 
 - __>> Windows only <<__<br>
   `<run-script>` is _run.bat_
@@ -162,50 +102,9 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
       ```
 
 - Start it without the `<run-script>` script using standalone docker-compose: `docker-compose -f docker-compose.vapp.amd64.yml --project-name vapp-platform --env-file .env -- up --build --remove-orphans`<br>
-  If you have a custom _.env_ file for your project, you can specify it using the --env-file parameter (Requires Compose >1.27.0)
+  If you have a custom _.env_ file for your project, you can specify it using the --env-file parameter
 
 ## Test
 
 - Start the VAPP stack by using the instructions given in the previous __[Run](##Run)__ section
   - The talent BrakeLightTalent is automatically started along with the stack
-- If you want to additionally test your own talent do the following:
-  - Install NodeJS
-    - Verify installed version. It should be >12.13.0<br>
-      `node --version`
-    - __>> Linux only <<__ To update old/missing NodeJS<br>
-
-    ```text
-    sudo apt install npm nodejs -y
-    sudo npm install -g n
-    sudo n latest
-    ```
-
-  - Install docker-compose
-    - Check your installed version by executing `docker-compose --version`
-      - It should be > 1.27.4
-    - __>> Linux only <<__<br>
-      `sudo apt-get -y -q install docker.io docker-compose`
-      - If docker-compose packgage is missing or too old, directly download binary:
-
-        ```text
-        sudo curl -q -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-        ```
-
-  - Copy `<any folder>/src/sdk/javascript/lib/boschio.iotea-<version>.tgz` into your talent directory
-    - Pick the same file as defined in the _.env_ file IOTEA_JS_SDK
-  - Install it by typing `npm install boschio.iotea-<version>.tgz`
-    - If you have problems with the installation behind the corporate proxy try the following:
-
-      ```text
-      npm config set proxy ${HTTP_PROXY}
-      npm config set https-proxy ${HTTPS_PROXY}
-      npm config set strict-ssl false -g
-      npm config set maxsockets 5 -g
-      ```
-
-    - If npm still can't successfully install the needed packages, it is possible to execute the installation on your host (e.g. Windows) and copy downloaded `node_modules` dir to Linux VM.
-  - You can use the following connectionString to connect your talent to:
-    - `mqtt://localhost:1883` for a local talent
-    - `mqtt://localhost:1884` for a remote talent (Do not forget to override function isRemote/is_remote and return `true`)
-  - Run `node index.js` to start the test talent. You should see incoming events, after your talent was registered successfully. You may have to wait up to 30 seconds until the next discovery is sent around.
