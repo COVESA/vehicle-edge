@@ -10,15 +10,14 @@
 
 # Welcome to the VAPP reference implementation
 
-![Image of VAPP](assets/vapp.png)
-
-## WHAT is VAPP
+## What is VAPP
 
 The **V**ehicle **A**pplication **P**lugin **P**latform (**VAPP**) acts as an interface within the software stack of domain or vehicle computers.
 
-Compare the [in a nutshell introduction](assets/).
+## Getting started
 
-## Docs
+- For building/running the stack using docker-compose continue reading here [the description here](docker-compose/)
 
-- For building the whole system from source code goto [the description here](docker-compose/)
-- For just running the whole system goto [the description here](images/)
+## Writing your first Vehicle App (aka IoT Event Analytics Talent) using the NodeJS SDK
+
+- Use the instructions given [here](https://github.com/GENIVI/iot-event-analytics/)
