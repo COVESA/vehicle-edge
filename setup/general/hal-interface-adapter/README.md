@@ -23,9 +23,8 @@
 - Download the latest npm package from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/javascript/lib) and copy it into the _src/vapp.hal-interface-adapter_ folder
 - Open the folder _src/vapp.hal-interface-adapter_
 - Docker build arguments:
-  - __>> AMD64 target platform only <<__<br>
-    _HTTP\_PROXY_ and _HTTPS\_PROXY_: Specify these variables if the internet is only reachable via a proxy. (optional)
   - _IOTEA_JS_SDK_ (__mandatory__): Specify the npm module e.g. `boschio.iotea-1.7.0.tgz`, that you downloaded above. It is needed at buildtime
+- For further information how to build the images (especially, if you are working behind a proxy), please see [here](https://github.com/GENIVI/iot-event-analytics/docker/)
 
 ### >> ARM64 target platform only <<
 
