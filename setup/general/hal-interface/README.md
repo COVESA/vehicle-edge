@@ -17,6 +17,27 @@
 - `<some-folder>` refers to your installation folder
 - `<some-version>` refers to the version of the IoT Event Analytics Python SDK. Hint: Take the most recent one
 
+## Build Docker image
+
+- Download the latest npm package from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/python/lib) and copy it into the _src/vapp.hal-interface_ folder
+- Open the folder _src/vapp.hal-interface_
+- Docker build arguments:
+  - _IOTEA_PYTHON_SDK_ (__mandatory__): Specify the npm module e.g. `boschio_iotea-2.2.1-py3-none-any.whl`, that you downloaded above. It is needed at buildtime
+- For further information how to build the images (especially, if you are working behind a proxy), please see [here](https://github.com/GENIVI/iot-event-analytics/docker/)
+
+### >> ARM64 target platform only <<
+
+- Build your Docker image and export the image as tar-archive<br>
+  `docker buildx build --platform linux/arm64 -t hal-interface-arm64:<version> -o type=oci,dest=./hal-interface-arm64.<version>.tar --build-arg IOTEA_PYTHON_SDK=boschio_iotea-<version>-py3-none-any.whl -f Dockerfile.arm64 .`
+- Import this image
+  - `sudo docker load --input hal-interface-arm64.<version>.tar`
+  - `sudo docker tag <SHA256-Hash> hal-interface-arm64:<version>`
+
+### >> AMD64 target platform only <<
+
+- Build your Docker image using the local registry<br>
+  `docker build --build-arg IOTEA_PYTHON_SDK=boschio_iotea-<version>-py3-none-any.whl -t hal-interface-amd64:<version> -f Dockerfile.amd64 .`
+
 ## Install
 
 - Download the latest python wheel from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/python/lib)
