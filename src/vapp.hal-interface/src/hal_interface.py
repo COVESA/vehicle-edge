@@ -8,6 +8,7 @@
 # SPDX-License-Identifier: MPL-2.0
 ##############################################################################
 
+import math
 import random
 import asyncio
 import threading
@@ -16,6 +17,7 @@ import json
 import os
 import time
 import logging
+from datetime import datetime
 import can
 import cantools
 
@@ -23,6 +25,11 @@ from iotea.core.logger import Logger
 from iotea.core.mqtt_broker import NamedMqttBroker
 
 logging.setLoggerClass(Logger)
+
+def now_ms():
+    dt_now = datetime.now()
+    # Get rid of fractions of a second if set and add the current milliseconds
+    return int(math.floor(time.time()) * 1000 + math.floor(dt_now.microsecond / 1000))
 
 class BusObserver:
     def __init__(self, bus_config, hal_broker):
@@ -102,7 +109,7 @@ class BusObserver:
                 # filter out, if frame_id exists but signal list is empty
                 continue
 
-            now = int(round(time.time() * 1000))
+            now = now_ms()
             decoded_message = self.db.decode_message(message.arbitration_id, message.data) # Needs int input
 
             for signal in self.filter[frame_id]:
@@ -129,7 +136,8 @@ class BusObserver:
 
                 self.logger.info("Sending: '{}' to: {}".format(value, self.get_signal_id(frame_id, signal)))
 
-                await self.hal_broker.publish_json(self.get_signal_topic(frame_id, signal), { "value": value })
+                # Take the current milliseconds, since message.timestamp gives the fractions of a second the frame was created?
+                await self.hal_broker.publish_json(self.get_signal_topic(frame_id, signal), {"value": value, "whenMs": now})
 
     def __add_dbc_file(self, dbc_file):
         self.logger.info('Loading dbc file {}...'.format(dbc_file))
@@ -249,7 +257,7 @@ class MockSignalGenerator:
             if value == self.last_value:
                 continue
 
-            await self.__on_signal(self.frame_id, self.signal, value)
+            await self.__on_signal(self.frame_id, self.signal, value, now_ms())
 
             self.last_value = value
             self.value_cnt += 1
@@ -271,8 +279,15 @@ class MockSignalGenerator:
         if value_type_result is not None:
             value_type = value_type_result.group(1).lower()
 
+        # Marks the starting point of the simulation
+        simulation_start_at_ms = now_ms()
+
         with open(config['file'], 'r') as simulation_file:
+            previous_line_duration_ms = 0
+
             while not self.should_stop:
+                line_start_at_ms = now_ms()
+
                 signal = simulation_file.readline()
 
                 if not signal:
@@ -289,17 +304,25 @@ class MockSignalGenerator:
                     current_ts_ms = int(signal_parts[1])
                     rel_ts_ms = current_ts_ms - previous_ts_ms
 
-                    if rel_ts_ms < 0:
-                        self.logger.error('Subsequent lines must have increasing timestamp values')
+                    if rel_ts_ms <= 0:
+                        self.logger.error('Subsequent lines must have monotonically increasing timestamp values with a delta of at least 1ms. Stopping simulation')
+                        # Do not carry on because of invalid time delays
                         break
 
-                    if rel_ts_ms > 0:
-                        self.sleep_task = asyncio.ensure_future(asyncio.sleep(rel_ts_ms / 1000))
+                    # Assume the less than 1ms was spent from reading the line up to this point
+                    if (rel_ts_ms > previous_line_duration_ms):
+                        sleep_ms = rel_ts_ms - previous_line_duration_ms
+
+                        self.logger.debug(f'Sleeping for {sleep_ms}ms...')
+
+                        self.sleep_task = asyncio.ensure_future(asyncio.sleep(sleep_ms / 1000))
 
                         try:
                             await self.sleep_task
                         except asyncio.CancelledError:
                             continue
+                    else:
+                        self.logger.debug(f'Skipping sleep since last line took {previous_line_duration_ms}ms to submit and the line delta should only be {rel_ts_ms}ms')
 
                     previous_ts_ms = current_ts_ms
                     self.value_cnt += 1
@@ -315,13 +338,23 @@ class MockSignalGenerator:
                             signal_value = float(signal_value)
 
                         # Emit signal value
-                        await self.__on_signal(self.frame_id, self.signal, signal_value)
+                        await self.__on_signal(self.frame_id, self.signal, signal_value, simulation_start_at_ms + current_ts_ms)
                     # pylint: disable=broad-except
                     except Exception as ex:
                         self.logger.warn('Given value {} of signal {} cannot be cast to type {}'.format(signal_parts[0], self.get_signal_id(), value_type), ex)
+
+                    # Calculate the time without the sleep interval
+                    if (rel_ts_ms > previous_line_duration_ms):
+                        # Slept for (rel_ts_ms - previous_line_duration_ms)ms. Subtract it
+                        previous_line_duration_ms = now_ms() - line_start_at_ms - (rel_ts_ms - previous_line_duration_ms)
+                    else:
+                        # No sleep necessary
+                        now = now_ms()
+                        previous_line_duration_ms = now_ms() - line_start_at_ms
                 # pylint: disable=broad-except
                 except Exception as ex:
                     self.logger.error('Error simulating signal {}'.format(self.get_signal_id()), ex)
+                    # An error ocurred during event simulation
                     break
 
     def get_signal_id(self):
@@ -419,10 +452,10 @@ class MockBusObserver(BusObserver):
         except Exception as err:
             self.logger.warning(err)
 
-    async def __on_signal(self, frame_id, signal, value):
+    async def __on_signal(self, frame_id, signal, value, when_ms=-1):
         with self.lock:
             self.logger.info('Sending: "{}" to: {}'.format(value, self.get_signal_id(frame_id, signal)))
-            await self.hal_broker.publish_json(self.get_signal_topic(frame_id, signal), { "value": value })
+            await self.hal_broker.publish_json(self.get_signal_topic(frame_id, signal), {"value": value, "whenMs": when_ms})
 
     def extract_can_info_from_topic(self, topic):
         # Returns frame_id, signal
