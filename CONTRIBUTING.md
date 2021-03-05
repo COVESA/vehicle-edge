@@ -22,7 +22,7 @@ The following is a set of guidelines for contributing to Vehicle Edge and its pa
 
 - [Reporting Bugs](#reporting-bugs)
 - [Suggesting Enhancements](#suggesting-enhancements)
-- [Your First Code Contribution](#your-first-code-contribution)
+- [Contribution requirements](#contribution-requirements)
 - [Pull Requests](#pull-requests)
 
 [Styleguides](#styleguides)
