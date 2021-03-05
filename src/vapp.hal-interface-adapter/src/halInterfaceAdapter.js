@@ -36,7 +36,7 @@ module.exports = class HalInterfaceAdapter {
         this.halBroker = null;
 
         this.vssSocket = null;
-        // Needed for directly passing values to IoTea
+        // Needed for directly passing values to IoT Event Analytics
         this.instance = null;
         this.subject = null;
 
@@ -62,7 +62,7 @@ module.exports = class HalInterfaceAdapter {
                 // Init the global log level
                 process.env.LOG_LEVEL = this.config.get('loglevel', Logger.ENV_LOG_LEVEL.WARN);
 
-                this.logger.info(`IoTea mqtt namespace: ${this.config.get('iotea.mqtt.ns', null)}`);
+                this.logger.info(`IoT Event Analytics MQTT namespace: ${this.config.get('iotea.mqtt.ns', null)}`);
                 this.ioTeaBroker = new MqttBroker(this.config.get('iotea.mqtt.connectionString'), this.config.get('iotea.mqtt.ns', null));
                 this.halBroker = new MqttBroker(this.config.get('hal.mqtt.connectionString'), this.config.get('hal.mqtt.ns', null));
             })
@@ -74,7 +74,7 @@ module.exports = class HalInterfaceAdapter {
                 const hasVssConfig = this.config.get('vss.ws', null) !== null && this.config.get('vss.jwt', null) !== null;
 
                 if (!hasVssConfig) {
-                    this.logger.always('*****INFO***** No Kuksa.VAL configuration found. All events will be directly sent to IoTea');
+                    this.logger.always('*****INFO***** No Kuksa.VAL configuration found. All events will be directly sent to IoT Event Anayltics Platform');
 
                     if (this.subject === null || this.instance === null) {
                         throw new Error(`You need to define the mandatory fields iotea.subject and iotea.instance to be able to omit vss.ws and vss.jwt`);
@@ -85,7 +85,7 @@ module.exports = class HalInterfaceAdapter {
 
                 this.vssSocket = new VssWebsocket(this.config.get('vss.ws'), this.config.get('vss.jwt'));
 
-                // Check if any event goes directly to IoTea
+                // Check if any event goes directly to IoT Event Analytics Platform
                 const sendAnyEventToIoTea = this.lut.entries().reduce((acc, entry) => acc && entry.shouldBypassVss(), false);
 
                 // Get subject from KUKSA.val
@@ -199,9 +199,8 @@ module.exports = class HalInterfaceAdapter {
                     if (ev.type === PLATFORM_EVENT_TYPE_SET_RULES) {
                         this.logger.info(`Adding consumer for ${entry.getVssPath()} with HAL resourceId ${entry.getHalResourceId()}`);
 
-                        entry.pushUniqueConsumer(talentId);
-
-                        if (this.retainBuffer.hasOwnProperty(entry.getHalResourceId())) {
+                        if (entry.pushUniqueConsumer(talentId) && entry.shouldRetainValue && this.retainBuffer.hasOwnProperty(entry.getHalResourceId())) {
+                            // Only triggers, if it's the first time the talent was added to the consumers of a specific entry
                             this.logger.info(`Found signal ${entry.getHalResourceId()} in retain buffer`);
                             // Previous value is present, publish it to give an immediate feedback for the talent
                             await this.__publishValue(entry, this.retainBuffer[entry.getHalResourceId()]);
@@ -281,7 +280,7 @@ module.exports = class HalInterfaceAdapter {
             // Rewrite the path and extract the type
             const { type, feature } = this.vssPathTranslator.kuksaVss2IoteaTypeAndFeature(vssPath);
 
-            this.logger.debug(`Publishing ${value} to IoTea for type=${type} and feature=${feature}...`);
+            this.logger.debug(`Publishing ${value} to IoT Event Analytics for type=${type} and feature=${feature}...`);
 
             return this.ioTeaBroker.publishJson(iotea.constants.INGESTION_TOPIC, {
                 // First element is type
@@ -333,6 +332,8 @@ class HalVssLookupTableEntry {
         this.valueMapping = this.data.halValueMapping || null;
         this.valueFactor = isFinite(this.data.halValueFactor) ? this.data.halValueFactor : 1;
         this.valueOffset = isFinite(this.data.halValueOffset) ? this.data.halValueOffset : 0;
+        // Defaults to true
+        this.shouldRetainValue = this.data.retainValue !== false;
     }
 
     getHalValuePath() {
@@ -352,7 +353,13 @@ class HalVssLookupTableEntry {
     }
 
     pushUniqueConsumer(consumer) {
+        if (this.consumers.has(consumer)) {
+            return false;
+        }
+
         this.consumers.add(consumer);
+
+        return true;
     }
 
     removeConsumerIfExisting(consumer) {

@@ -69,7 +69,7 @@ else
     # Create the iotea project directory
     mkdir -p $IOTEA_PROJECT_DIR
     # Clone boschio.iotea Repo
-    git clone https://<Github IoTea repo> $IOTEA_PROJECT_DIR
+    git clone https://github.com/GENIVI/iot-event-analytics $IOTEA_PROJECT_DIR
     exit_on_error
     # Go into the project directory
     cd $IOTEA_PROJECT_DIR
