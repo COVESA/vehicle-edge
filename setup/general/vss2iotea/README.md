@@ -11,3 +11,5 @@
 # Vss2IoTea Adapter
 
 See [here](https://<Github IoTea repo>/browse/docker/vss2iotea)
+
+Update the JWT for authentication against Kuksa.VAL in these configuration file _./config/config.json_
