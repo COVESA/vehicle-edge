@@ -47,7 +47,7 @@ The following is a set of guidelines for contributing to IoT Event Analytics and
 - Cool, you actually implemented something, which brings the platform to the next level. We highly appreciate collaborative work. Did you already went through our [Styleguides](#Styleguides) to make sure your contribution fits to the rest of the codebase?<br>
   You rebased your feature branch onto our develop-branch and it works with the latest commit? If yes, it's time for your pull request.
 - Push your feature branch in this repository [https://github.com/GENIVI/vehicle-edge](https://github.com/GENIVI/vehicle-edge) and create a pull-request [here](https://github.com/GENIVI/vehicle-edge/pulls)
-- __EVERY__ commit needs to be signed. By signing of your commits you certify that you can contribute code according to the rquiremtnts of the [GENIVI contirbution guidelines](https://www.genivi.org/contribute). Simply speaking you certify that you are the creator of the code or have the rights ot contribute under the MPL-2.0 license
+- __EVERY__ commit needs to be signed. By signing of your commits you certify that you can contribute code according to the rquiremtnts of the [GENIVI contribution guidelines](https://www.genivi.org/contribute). Simply speaking you certify that you are the creator of the code or have the rights ot contribute under the MPL-2.0 license
   - If you have set your `user.name` and `user.email` git configs you can automatically sign the commit by running the git-commit command with the `-s` option. There may be multiple sign-offs if more than one developer was involved in authoring the contribution.
 
 ### Pull requests
