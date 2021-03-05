@@ -59,10 +59,10 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
 - __>> Linux only <<__<br>
   `<run-script>` is _run.sh_
 
-- Starting the \<run-script\>
-  - If you want to keep the current configuration in _run.properties_ and _.env_ simply call `<run-script>` OR equivalently `<run-script> .env run.properties`
-  - The variables _IOTEA\_VERSION_ (in `run.properties`) and _IOTEA_PROJECT_DIR_ (in `.env`) are only important, if the IoT Event Analytics respository is cloned for the first time. This given tag will be checked out to the given project directory.<br>
-    There is no guarantee, that the stack works, if you choose diverging versions in _IOTEA\_VERSION_, _IOTEA\_JS\_SDK_ and _IOTEA\_PYTHON\_SDK_
+- Start using the \<run-script\>
+  - Update the _IOTEA\_PROJECT\_DIR_ variable in the _.env_  file to the location where you cloned the IoT Event Analytics repository. If you do not want to clone it manually from [https://github.com/GENIVI/iot-event-analytics](https://github.com/GENIVI/iot-event-analytics), the given _IOTEA\_PROJECT\_DIR_ directory will be created and the repository will be cloned. Make sure you specify the _IOTEA\_VERSION_ (in `run.properties`) in this case in order to check out a specific version of IoT Event Analytics.<br>
+  There is no guarantee, that the stack works, if you choose diverging versions (minor, or major versions) of _IOTEA\_VERSION_, _IOTEA\_JS\_SDK_ and _IOTEA\_PYTHON\_SDK_
+  - You can start the platform using `<run-script>` OR equivalently `<run-script> .env run.properties`
   - If you want to change the default configuration, you can EITHER
     - Copy _run.properties_ and _.env_ to a custom location and provide the names as parameters. i.e. `<run-script> <custom .env path> <custom run.properties path>`
     - Merge both files into one and call `<run-script> <custom merged file path>`
@@ -102,7 +102,7 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
       ```
 
 - Start it without the `<run-script>` script using standalone docker-compose: `docker-compose -f docker-compose.vapp.amd64.yml --project-name vapp-platform --env-file .env -- up --build --remove-orphans`<br>
-  If you have a custom _.env_ file for your project, you can specify it using the --env-file parameter
+  If you have a custom _.env_ file for your project, you can specify it using a different value for the --env-file parameter
 
 ## Test
 
