@@ -8,7 +8,7 @@
   SPDX-License-Identifier: MPL-2.0
 -->
 
-# Start the whole VAPP Stack on your local machine using docker-compose
+# Start the Vehicle Edge stack on your local machine using docker-compose
 
 ## Prerequisites
 
@@ -66,7 +66,7 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
   - If you want to change the default configuration, you can EITHER
     - Copy _run.properties_ and _.env_ to a custom location and provide the names as parameters. i.e. `<run-script> <custom .env path> <custom run.properties path>`
     - Merge both files into one and call `<run-script> <custom merged file path>`
-    - If you want to configure every single component of the VAPP-Stack, copy the whole _./config_ folder to `<some-custom-config-folder>`. Change the _CONFIG\_DIR_ variable to the absolute path to this folder e.g. `/home/user/<some-custom-config-folder>`<br>
+    - If you want to configure every single component of the Vehicle Edge stack, copy the whole _./config_ folder to `<some-custom-config-folder>`. Change the _CONFIG\_DIR_ variable to the absolute path to this folder e.g. `/home/user/<some-custom-config-folder>`<br>
       It should look like this<br>
 
       ```text
@@ -106,5 +106,5 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
 
 ## Test
 
-- Start the VAPP stack by using the instructions given in the previous __[Run](##Run)__ section
-  - The talent BrakeLightTalent is automatically started along with the stack
+- Start the Vehicle Edge stack by using the instructions given in the previous __[Run](##Run)__ section
+  - The Vehicle Application BrakeLightTalent is automatically started along with the stack

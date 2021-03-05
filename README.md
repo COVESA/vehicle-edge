@@ -8,15 +8,16 @@
   SPDX-License-Identifier: MPL-2.0
 -->
 
-# Welcome to the VAPP reference implementation
+# Welcome to the Vehicle Edge reference implementation
 
-## What is VAPP
+## What is Vehicle Edge?
 
-The **V**ehicle **A**pplication **P**lugin **P**latform (**VAPP**) acts as an interface within the software stack of domain or vehicle computers.
+Vehicle Edge is a software stack, which acts as an interface within the software stack of domain or vehicle computers.
+The Vehicle Edge stack is built from various software components. It is built around the IoT Event Analytics Platform, which offers to write vehicle agnostic applications so called _"Vehicle Applications"_.
 
-## Getting started
+## Getting started using docker-compose
 
-- For building/running the stack using docker-compose continue reading here [the description here](docker-compose/)
+- For building/running the stack using docker-compose continue reading here [the description here](./docker-compose)
 
 ## Writing your first Vehicle App (aka IoT Event Analytics Talent) using the NodeJS SDK
 
