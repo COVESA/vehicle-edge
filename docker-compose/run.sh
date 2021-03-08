@@ -38,7 +38,7 @@ exit_on_error()
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Create a subshell to allow local modifications, which do not affect the actual environment variables
-DOCKER_IMAGE_PREFIX=vapp-platform
+DOCKER_IMAGE_PREFIX=vehicle-edge-platform
 
 CONFIG="$1"
 [ -z "$CONFIG" ] && CONFIG="$SCRIPT_DIR/.env"
@@ -84,7 +84,7 @@ cd $SCRIPT_DIR
 
 # Copy JS SDK
 echo "# Copy JS SDK"
-cp -v $IOTEA_PROJECT_DIR/src/sdk/javascript/lib/$IOTEA_JS_SDK $SCRIPT_DIR/../src/vapp.hal-interface-adapter/
+cp -v $IOTEA_PROJECT_DIR/src/sdk/javascript/lib/$IOTEA_JS_SDK $SCRIPT_DIR/../src/edge.hal-interface-adapter/
 exit_on_error
 # Copy <any folder>/src/sdk/javascript/lib/boschio.iotea-<version>.tgz into the ./talent
 cp -v $IOTEA_PROJECT_DIR/src/sdk/javascript/lib/$IOTEA_JS_SDK $SCRIPT_DIR/talent/
@@ -92,7 +92,7 @@ exit_on_error
 
 # Copy Python SDK
 echo "# Copy Python SDK"
-cp -v $IOTEA_PROJECT_DIR/src/sdk/python/lib/$IOTEA_PYTHON_SDK $SCRIPT_DIR/../src/vapp.hal-interface/
+cp -v $IOTEA_PROJECT_DIR/src/sdk/python/lib/$IOTEA_PYTHON_SDK $SCRIPT_DIR/../src/edge.hal-interface/
 exit_on_error
 
 # Check if local image of KUKSA.VAL is already loaded
@@ -148,14 +148,14 @@ docker-compose --version
 # Print configuration
 echo
 echo "# Print configuration"
-sudo docker-compose $DOCKER_OPT -f docker-compose.vapp.yml config
+sudo docker-compose $DOCKER_OPT -f docker-compose.edge.yml config
 echo
 
 if [ "$DOCKER_IMAGE_BUILD" = "1" ]; then
     # Build all images
     echo "# Build all images"
     # Since environment variables have precedence over variables defined in .env, nothing has to be changed here, if another .env-file is chosen as startup parameter
-    sudo docker-compose $DOCKER_OPT -f docker-compose.vapp.yml --project-name $DOCKER_IMAGE_PREFIX up --build --no-start --remove-orphans --force-recreate
+    sudo docker-compose $DOCKER_OPT -f docker-compose.edge.yml --project-name $DOCKER_IMAGE_PREFIX up --build --no-start --remove-orphans --force-recreate
 	exit_on_error
 fi
 
@@ -184,6 +184,6 @@ fi
 if [ "$DOCKER_CONTAINER_START" = "1" ]; then
     # Starting containers
     # Since environment variables have precedence over variables defined in .env, nothing has to be changed here, if another .env-file is chosen as startup parameter
-    sudo docker-compose $DOCKER_OPT -f docker-compose.vapp.yml --project-name $DOCKER_IMAGE_PREFIX up
+    sudo docker-compose $DOCKER_OPT -f docker-compose.edge.yml --project-name $DOCKER_IMAGE_PREFIX up
 	exit_on_error
 fi

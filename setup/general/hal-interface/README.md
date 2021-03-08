@@ -19,8 +19,8 @@
 
 ## Build Docker image
 
-- Download the latest npm package from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/python/lib) and copy it into the _src/vapp.hal-interface_ folder
-- Open the folder _src/vapp.hal-interface_
+- Download the latest npm package from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/python/lib) and copy it into the _src/edge.hal-interface_ folder
+- Open the folder _src/edge.hal-interface_
 - Docker build arguments:
   - _IOTEA_PYTHON_SDK_ (__mandatory__): Specify the npm module e.g. `boschio_iotea-2.2.1-py3-none-any.whl`, that you downloaded above. It is needed at buildtime
 - For further information how to build the images (especially, if you are working behind a proxy), please see [here](https://github.com/GENIVI/iot-event-analytics/docker/)
@@ -42,15 +42,15 @@
 
 - Download the latest python wheel from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/python/lib)
   - Install it using `pip install --user boschio_iotea-<some-version>-py3-none-any.whl`
-- In a terminal, change into the the folder _src/vapp.hal-interface_
+- In a terminal, change into the the folder _src/edge.hal-interface_
 - Install other missing dependencies using `pip install --user -r requirements.dev.txt`
-- Create the folder `config` and copy _config.json_ from _./config_ into _src/vapp.hal-interface/config_
+- Create the folder `config` and copy _config.json_ from _./config_ into _src/edge.hal-interface/config_
   - Adapt this configuration according to your needs (see below)
 - Optionally create the folder `resources` e.g. for mock CAN-signal files
 - The directory structure should look like this<br>
 
   ```code
-  src/vapp.hal-interface
+  src/edge.hal-interface
   L- config
   |  L- config.json
   L- resources
@@ -153,7 +153,7 @@ As default, all signals are published when they change. For continuous values li
 
 ## Run
 
-Start everything using `python src/vapp.hal-interface/run.py`<br>
+Start everything using `python src/edge.hal-interface/run.py`<br>
 
 ### >> Linux only <<
 

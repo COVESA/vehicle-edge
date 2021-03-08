@@ -8,7 +8,7 @@
   SPDX-License-Identifier: MPL-2.0
 -->
 
-# Start the whole VAPP Stack on your local machine using docker-compose
+# Start the Vehicle Edge stack on your local machine using docker-compose
 
 ## Prerequisites
 
@@ -39,15 +39,15 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
 - Clone the [IoT Event Analytics](https://github.com/GENIVI/iot-event-analytics) repository into `<any folder>` using git<br>
   Update the _.env_ file (IOTEA_PROJECT_DIR) with the absolute path to `<any folder>` - could be any valid local folder<br>
   You can checkout a specific version tag if desired. __This version should match the SDKs you are copying in the next steps!__
-- Copy `<any folder>/src/sdk/javascript/lib/boschio.iotea-<version>.tgz` into _/src/vapp.hal-interface-adapter_ AND _/docker-compose/talent_<br>
+- Copy `<any folder>/src/sdk/javascript/lib/boschio.iotea-<version>.tgz` into _/src/edge.hal-interface-adapter_ AND _/docker-compose/talent_<br>
   Update the _.env_ file (IOTEA_JS_SDK) with `boschio.iotea-<version>.tgz`
-- Copy `<any folder>/src/sdk/python/lib/boschio_iotea-<version>-py3-none-any.whl` into the _/src/vapp.hal-interface_ directory<br>
+- Copy `<any folder>/src/sdk/python/lib/boschio_iotea-<version>-py3-none-any.whl` into the _/src/edge.hal-interface_ directory<br>
   Update the _.env_ file (IOTEA_PYTHON_SDK) with `boschio_iotea-<version>-py3-none-any.whl`
 - Follow **Install KUKSA.VAL** section from [https://github.com/GENIVI/iot-event-analytics/docker/vss2iotea/README.md](https://https://github.com/GENIVI/iot-event-analytics/browse/docker/vss2iotea/README.md) to __download AND load__ the latest version of KUKSA.VAL into your local Docker registry.<br>
   Update the _.env_ file (KUKSA_VAL_IMG) with
   - __>> AMD64 platform only: <<__ `amd64/kuksa-val:<version>`
   - __>> ARM64 platform only: <<__ `arm64/kuksa-val:<version>`
-- Check your configuration using `docker-compose -f docker-compose.vapp.amd64.yml config`
+- Check your configuration using `docker-compose -f docker-compose.edge.yml config`
 - Now you can run the platform by purely using docker-compose i.e. without the `<run-script>`. See bottom of [Run](Run) section;
 
 ## Run
@@ -59,14 +59,14 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
 - __>> Linux only <<__<br>
   `<run-script>` is _run.sh_
 
-- Starting the \<run-script\>
-  - If you want to keep the current configuration in _run.properties_ and _.env_ simply call `<run-script>` OR equivalently `<run-script> .env run.properties`
-  - The variables _IOTEA\_VERSION_ (in `run.properties`) and _IOTEA_PROJECT_DIR_ (in `.env`) are only important, if the IoT Event Analytics respository is cloned for the first time. This given tag will be checked out to the given project directory.<br>
-    There is no guarantee, that the stack works, if you choose diverging versions in _IOTEA\_VERSION_, _IOTEA\_JS\_SDK_ and _IOTEA\_PYTHON\_SDK_
+- Start using the \<run-script\>
+  - Update the _IOTEA\_PROJECT\_DIR_ variable in the _.env_  file to the location where you cloned the IoT Event Analytics repository. If you do not want to clone it manually from [https://github.com/GENIVI/iot-event-analytics](https://github.com/GENIVI/iot-event-analytics), the given _IOTEA\_PROJECT\_DIR_ directory will be created and the repository will be cloned. Make sure you specify the _IOTEA\_VERSION_ (in `run.properties`) in this case in order to check out a specific version of IoT Event Analytics.<br>
+  There is no guarantee, that the stack works, if you choose diverging versions (minor, or major versions) of _IOTEA\_VERSION_, _IOTEA\_JS\_SDK_ and _IOTEA\_PYTHON\_SDK_
+  - You can start the platform using `<run-script>` OR equivalently `<run-script> .env run.properties`
   - If you want to change the default configuration, you can EITHER
     - Copy _run.properties_ and _.env_ to a custom location and provide the names as parameters. i.e. `<run-script> <custom .env path> <custom run.properties path>`
     - Merge both files into one and call `<run-script> <custom merged file path>`
-    - If you want to configure every single component of the VAPP-Stack, copy the whole _./config_ folder to `<some-custom-config-folder>`. Change the _CONFIG\_DIR_ variable to the absolute path to this folder e.g. `/home/user/<some-custom-config-folder>`<br>
+    - If you want to configure every single component of the Vehicle Edge stack, copy the whole _./config_ folder to `<some-custom-config-folder>`. Change the _CONFIG\_DIR_ variable to the absolute path to this folder e.g. `/home/user/<some-custom-config-folder>`<br>
       It should look like this<br>
 
       ```text
@@ -101,10 +101,10 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
         L- config.json              // Needs to have the correct JSON Web token, to authenticate against Kuksa.Val
       ```
 
-- Start it without the `<run-script>` script using standalone docker-compose: `docker-compose -f docker-compose.vapp.amd64.yml --project-name vapp-platform --env-file .env -- up --build --remove-orphans`<br>
-  If you have a custom _.env_ file for your project, you can specify it using the --env-file parameter
+- Start it without the `<run-script>` script using standalone docker-compose: `docker-compose -f docker-compose.edge.yml --project-name vehicle-edge-platform --env-file .env -- up --build --remove-orphans`<br>
+  If you have a custom _.env_ file for your project, you can specify it using a different value for the --env-file parameter
 
 ## Test
 
-- Start the VAPP stack by using the instructions given in the previous __[Run](##Run)__ section
-  - The talent BrakeLightTalent is automatically started along with the stack
+- Start the Vehicle Edge stack by using the instructions given in the previous __[Run](##Run)__ section
+  - The Vehicle Application BrakeLightTalent is automatically started along with the stack

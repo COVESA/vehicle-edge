@@ -85,7 +85,7 @@ services:
         target: "/app/docker/vss2iotea/config"
   hal-interface-adapter:
     build:
-      context: ../src/vapp.hal-interface-adapter
+      context: ../src/edge.hal-interface-adapter
       dockerfile: Dockerfile.${ARCH}
       args:
         - HTTP_PROXY=${DOCKER_HTTP_PROXY}
@@ -100,7 +100,7 @@ services:
         target: "/home/node/app/config"
   hal-interface:
     build:
-      context: ../src/vapp.hal-interface
+      context: ../src/edge.hal-interface
       dockerfile: Dockerfile.${ARCH}
       args:
         - HTTP_PROXY=${DOCKER_HTTP_PROXY}

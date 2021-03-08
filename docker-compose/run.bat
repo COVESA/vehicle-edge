@@ -12,7 +12,7 @@ REM ############################################################################
 
 SETLOCAL EnableExtensions
 
-SET DOCKER_IMAGE_PREFIX=vapp-platform
+SET DOCKER_IMAGE_PREFIX=vehicle-edge-platform
 SET BATCH_PATH=%~dp0
 
 IF "%1"=="" (
@@ -57,7 +57,7 @@ REM Change into the directory of the batch file
 cd %BATCH_PATH%
 
 REM Copy JS SDK
-copy %IOTEA_PROJECT_DIR%\src\sdk\javascript\lib\%IOTEA_JS_SDK% %BATCH_PATH%..\src\vapp.hal-interface-adapter
+copy %IOTEA_PROJECT_DIR%\src\sdk\javascript\lib\%IOTEA_JS_SDK% %BATCH_PATH%..\src\edge.hal-interface-adapter
 IF errorlevel 1 GOTO error
 
 REM Copy <any folder>/src/sdk/javascript/lib/boschio.iotea-<version>.tgz into the ./talent directory
@@ -65,7 +65,7 @@ copy %IOTEA_PROJECT_DIR%\src\sdk\javascript\lib\%IOTEA_JS_SDK% %BATCH_PATH%talen
 IF errorlevel 1 GOTO error
 
 REM Copy Python SDK
-copy %IOTEA_PROJECT_DIR%\src\sdk\python\lib\%IOTEA_PYTHON_SDK% %BATCH_PATH%..\src\vapp.hal-interface
+copy %IOTEA_PROJECT_DIR%\src\sdk\python\lib\%IOTEA_PYTHON_SDK% %BATCH_PATH%..\src\edge.hal-interface
 IF errorlevel 1 GOTO error
 
 REM Check if local image of KUKSA.VAL is already loaded
@@ -88,10 +88,10 @@ IF NOT %EXISTING_KUKSA_IMAGE% == %KUKSA_VAL_IMG% (
 )
 
 REM Print configuration
-docker-compose -f docker-compose.vapp.yml config
+docker-compose -f docker-compose.edge.yml config
 
 REM Build all images
-docker-compose -f docker-compose.vapp.yml --project-name %DOCKER_IMAGE_PREFIX% up --build --no-start --remove-orphans --force-recreate
+docker-compose -f docker-compose.edge.yml --project-name %DOCKER_IMAGE_PREFIX% up --build --no-start --remove-orphans --force-recreate
 
 IF %DOCKER_IMAGE_EXPORT% == 1 (
     SET DOCKER_IMAGE_DIR = %BATCH_PATH%images
@@ -110,7 +110,7 @@ IF %DOCKER_IMAGE_EXPORT% == 1 (
 IF %DOCKER_CONTAINER_START% == 1 (
     REM Starting containers
     REM Since environment variables have precedence over variables defined in .env, nothing has to be changed here, if another .env-file is chosen as startup parameter
-    docker-compose -f docker-compose.vapp.yml --project-name %DOCKER_IMAGE_PREFIX% up
+    docker-compose -f docker-compose.edge.yml --project-name %DOCKER_IMAGE_PREFIX% up
 )
 
 ENDLOCAL
