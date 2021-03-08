@@ -39,15 +39,15 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
 - Clone the [IoT Event Analytics](https://github.com/GENIVI/iot-event-analytics) repository into `<any folder>` using git<br>
   Update the _.env_ file (IOTEA_PROJECT_DIR) with the absolute path to `<any folder>` - could be any valid local folder<br>
   You can checkout a specific version tag if desired. __This version should match the SDKs you are copying in the next steps!__
-- Copy `<any folder>/src/sdk/javascript/lib/boschio.iotea-<version>.tgz` into _/src/vapp.hal-interface-adapter_ AND _/docker-compose/talent_<br>
+- Copy `<any folder>/src/sdk/javascript/lib/boschio.iotea-<version>.tgz` into _/src/edge.hal-interface-adapter_ AND _/docker-compose/talent_<br>
   Update the _.env_ file (IOTEA_JS_SDK) with `boschio.iotea-<version>.tgz`
-- Copy `<any folder>/src/sdk/python/lib/boschio_iotea-<version>-py3-none-any.whl` into the _/src/vapp.hal-interface_ directory<br>
+- Copy `<any folder>/src/sdk/python/lib/boschio_iotea-<version>-py3-none-any.whl` into the _/src/edge.hal-interface_ directory<br>
   Update the _.env_ file (IOTEA_PYTHON_SDK) with `boschio_iotea-<version>-py3-none-any.whl`
 - Follow **Install KUKSA.VAL** section from [https://github.com/GENIVI/iot-event-analytics/docker/vss2iotea/README.md](https://https://github.com/GENIVI/iot-event-analytics/browse/docker/vss2iotea/README.md) to __download AND load__ the latest version of KUKSA.VAL into your local Docker registry.<br>
   Update the _.env_ file (KUKSA_VAL_IMG) with
   - __>> AMD64 platform only: <<__ `amd64/kuksa-val:<version>`
   - __>> ARM64 platform only: <<__ `arm64/kuksa-val:<version>`
-- Check your configuration using `docker-compose -f docker-compose.vapp.amd64.yml config`
+- Check your configuration using `docker-compose -f docker-compose.edge.yml config`
 - Now you can run the platform by purely using docker-compose i.e. without the `<run-script>`. See bottom of [Run](Run) section;
 
 ## Run
@@ -101,7 +101,7 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
         L- config.json              // Needs to have the correct JSON Web token, to authenticate against Kuksa.Val
       ```
 
-- Start it without the `<run-script>` script using standalone docker-compose: `docker-compose -f docker-compose.vapp.amd64.yml --project-name vapp-platform --env-file .env -- up --build --remove-orphans`<br>
+- Start it without the `<run-script>` script using standalone docker-compose: `docker-compose -f docker-compose.edge.yml --project-name vehicle-edge-platform --env-file .env -- up --build --remove-orphans`<br>
   If you have a custom _.env_ file for your project, you can specify it using a different value for the --env-file parameter
 
 ## Test

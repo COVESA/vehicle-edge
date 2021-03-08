@@ -1,5 +1,5 @@
 {
-  "name": "vapp.hal-interface-adapter",
+  "name": "edge.hal-interface-adapter",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
