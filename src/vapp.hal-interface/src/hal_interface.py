@@ -262,6 +262,15 @@ class MockSignalGenerator:
         # Timestamp of the previous line
         previous_ts_ms = base_time_ms
 
+        value_type = 'string'
+
+        # Check the value type, defined by the filename e.g. A4D.Test-int.txt, A4D.Test2-float.txt, A4D.Test3.txt (defaults to string)
+        # pylint: disable=anomalous-backslash-in-string
+        value_type_result = re.search('-(int|float|string)?\.[^\.]+$', config['file'])
+
+        if value_type_result is not None:
+            value_type = value_type_result.group(1).lower()
+
         with open(config['file'], 'r') as simulation_file:
             while not self.should_stop:
                 signal = simulation_file.readline()
@@ -295,8 +304,21 @@ class MockSignalGenerator:
                     previous_ts_ms = current_ts_ms
                     self.value_cnt += 1
 
-                    # Emit signal value
-                    await self.__on_signal(self.frame_id, self.signal, signal_parts[0])
+                    signal_value = signal_parts[0]
+
+                    try:
+                        # Type case value types
+                        if value_type == 'int':
+                            signal_value = int(signal_value, base=10)
+
+                        if value_type == 'float':
+                            signal_value = float(signal_value)
+
+                        # Emit signal value
+                        await self.__on_signal(self.frame_id, self.signal, signal_value)
+                    # pylint: disable=broad-except
+                    except Exception as ex:
+                        self.logger.warn('Given value {} of signal {} cannot be cast to type {}'.format(signal_parts[0], self.get_signal_id(), value_type), ex)
                 # pylint: disable=broad-except
                 except Exception as ex:
                     self.logger.error('Error simulating signal {}'.format(self.get_signal_id()), ex)
@@ -314,6 +336,8 @@ class MockBusObserver(BusObserver):
 
         self.logger = logging.getLogger('HalInterface.MockBusObserver')
         self.generators = {}
+
+        self.lock = threading.Lock()
 
     async def start(self):
         await self.hal_broker.subscribe_json('+/start', self.__on_signal_start)
@@ -396,8 +420,9 @@ class MockBusObserver(BusObserver):
             self.logger.warning(err)
 
     async def __on_signal(self, frame_id, signal, value):
-        self.logger.info('Sending: "{}" to: {}'.format(value, self.get_signal_id(frame_id, signal)))
-        await self.hal_broker.publish_json(self.get_signal_topic(frame_id, signal), { "value": value })
+        with self.lock:
+            self.logger.info('Sending: "{}" to: {}'.format(value, self.get_signal_id(frame_id, signal)))
+            await self.hal_broker.publish_json(self.get_signal_topic(frame_id, signal), { "value": value })
 
     def extract_can_info_from_topic(self, topic):
         # Returns frame_id, signal
