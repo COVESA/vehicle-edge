@@ -19,7 +19,7 @@
 
 ## Install
 
-- Download the latest python wheel from [here](https://<Github IoTea repo>/src/sdk/python/lib)
+- Download the latest python wheel from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/python/lib)
   - Install it using `pip install --user boschio_iotea-<some-version>-py3-none-any.whl`
 - In a terminal, change into the the folder _src/vapp.hal-interface_
 - Install other missing dependencies using `pip install --user -r requirements.dev.txt`
@@ -79,6 +79,10 @@ Configure start of mock, by setting _interface_ property in _config.json_ to "mo
                 },
                 "11.Test": {
                     "file": "", // relative filepath to hal-interface executable or absolute filepath
+                                // The filename determines the singnals datatype
+                                // sampledata-int.txt >> signals are treated as integers
+                                // sampledata-float.txt >> signals are treated as float values
+                                // sampledata.txt and sampledata-string.txt >> signals are treated as string values
                     "baseTimeMs": 0, // defaults to 0, Time, which will be subtracted from all given times in the file
                     "useSignalRequestTriggers": false // Use messages via start/stop to start and stop the generator manually
                 }

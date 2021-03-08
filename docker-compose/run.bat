@@ -44,7 +44,7 @@ IF EXIST %IOTEA_PROJECT_DIR%\NUL (
   REM Create the iotea project directory
   mkdir %IOTEA_PROJECT_DIR%
   REM Clone the Repo - You might need to specify your NT password in a popup window
-  git clone https://<Github IoTea repo> %IOTEA_PROJECT_DIR%
+  git clone https://github.com/GENIVI/iot-event-analytics %IOTEA_PROJECT_DIR%
   IF errorlevel 1 GOTO error
   REM Go into the directory
   cd %IOTEA_PROJECT_DIR%
