@@ -101,7 +101,7 @@
       "subjectPath": "Vehicle.VehicleIdentification.VIN",   // (Default: undefined) Subject will be read from the given path, if vss.ws and vss.jwt are also given
                                                             // If undefined AND at least one event has to be bypass Kuksa.VAL, iotea.subject is mandatory
                                                             // MAKE SURE it's compatible path notation for the current Kuksa.VAL version
-      "instancePath": "Vehicle.Driver.Indentifier.Subject", // (Default: undefined) Instance will be read from the given path, if vss.ws and vss.jwt are also given
+      "instancePath": "Vehicle.Driver.Identifier.Subject",  // (Default: undefined) Instance will be read from the given path, if vss.ws and vss.jwt are also given
                                                             // If undefined AND at least one event has to be bypass Kuksa.VAL, iotea.instance is mandatory
                                                             // MAKE SURE it's compatible path notation for the current Kuksa.VAL version
       "pathConfig": {
