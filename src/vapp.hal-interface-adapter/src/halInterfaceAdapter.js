@@ -157,6 +157,7 @@ module.exports = class HalInterfaceAdapter {
             const messageModel = new JsonModel(msg);
 
             let value = null;
+            let whenMs = messageModel.get('whenMs', Date.now());
 
             try {
                 value = entry.processValue(messageModel.get(entry.getHalValuePath()));
@@ -167,9 +168,12 @@ module.exports = class HalInterfaceAdapter {
             }
 
             // Write the value into the buffer
-            this.retainBuffer[topic] = value;
+            this.retainBuffer[topic] = {
+                value,
+                whenMs
+            };
 
-            await this.__publishValue(entry, value);
+            await this.__publishValue(entry, value, whenMs);
         }
         catch(err) {
             this.logger.error(err.message, null, err);
@@ -202,8 +206,9 @@ module.exports = class HalInterfaceAdapter {
                         if (entry.pushUniqueConsumer(talentId) && entry.shouldRetainValue && this.retainBuffer.hasOwnProperty(entry.getHalResourceId())) {
                             // Only triggers, if it's the first time the talent was added to the consumers of a specific entry
                             this.logger.info(`Found signal ${entry.getHalResourceId()} in retain buffer`);
+                            const retainBufferEntry = this.retainBuffer[entry.getHalResourceId()];
                             // Previous value is present, publish it to give an immediate feedback for the talent
-                            await this.__publishValue(entry, this.retainBuffer[entry.getHalResourceId()]);
+                            await this.__publishValue(entry, retainBufferEntry.value, retainBufferEntry.whenMs);
                         }
 
                         this.logger.info(`All consumers ${Array.from(entry.consumers.values())}`);
@@ -273,7 +278,7 @@ module.exports = class HalInterfaceAdapter {
         });
     }
 
-    async __publishValue(entry, value) {
+    async __publishValue(entry, value, whenMs) {
         const vssPath = entry.getVssPath();
 
         if (this.vssSocket === null || entry.shouldBypassVss()) {
@@ -283,13 +288,12 @@ module.exports = class HalInterfaceAdapter {
             this.logger.debug(`Publishing ${value} to IoT Event Analytics for type=${type} and feature=${feature}...`);
 
             return this.ioTeaBroker.publishJson(iotea.constants.INGESTION_TOPIC, {
+                whenMs,
                 // First element is type
                 type,
                 // All others joined by $ is the feature
                 feature,
-                // TODO: Get timestamp directly from HAL-Interface through the given value field
                 value: value,
-                whenMs: Date.now(),
                 instance: this.instance,
                 subject: this.subject
             });
@@ -297,6 +301,7 @@ module.exports = class HalInterfaceAdapter {
 
         // Publishes it to VSS
         this.logger.debug(`Publishing ${value} to Kuksa.VAL at path ${vssPath}...`);
+        // Given timestamp cannot be transported to Kuksa.VAL and may get lost there >> May lead to duplicate timestamps and missing events
         return this.vssSocket.publish(vssPath, value);
     }
 }
