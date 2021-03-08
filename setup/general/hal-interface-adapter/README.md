@@ -136,9 +136,30 @@
   - Python has to be installed >=3.6.8
 - [Start the IoT Event Analytics platform using docker-compose](https://github.com/GENIVI/iot-event-analytics)
 - Start KUKSA Val server following the guide [here](../vss/README.md)
-- Copy __../hal-interface/config_ into _../../src/hal-interface/src_
+- Copy __../hal-interface/config_ into _../../src/hal-interface/src_<br>
+
+  ```text
+  <vehicle-edge-project>/src/hal-interface/src
+  |- config
+  |  L config.json
+  |- __init__.py
+  |- hal_interface.py
+  L- run.py
+  ```
+
   - Open a console at _../../src/hal-interface/src_ and execute `python run.py`
-- Copy __./config_ into _../../src/hal-interface-adapter/src_
+- Copy __./config_ into _../../src/hal-interface-adapter/src_<br>
+
+  ```text
+  <vehicle-edge-project>/src/hal-interface-adapter/src
+  |- config
+  |  |- config.json
+  |  L- mapping.json
+  |- __init__.py
+  |- hal_interface.py
+  L- run.py
+  ```
+
   - Open a console at _../../src/hal-interface-adapter/src_ and execute `node index.js`
 - Send the following MQTT message to `iotea/platform/$events`
 
