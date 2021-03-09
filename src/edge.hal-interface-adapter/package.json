@@ -1,7 +1,7 @@
 {
   "name": "edge.hal-interface-adapter",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "This component handles the communication between HAL-Interface and IoT Event Analytics Platform",
   "main": "src/index.js",
   "scripts": {},
   "author": "Robert Bosch GmbH",
