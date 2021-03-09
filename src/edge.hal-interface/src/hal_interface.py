@@ -250,14 +250,8 @@ class MockSignalGenerator:
 
                 value = round(min_value + multiple_of * random.randint(0, range_max), 8)
 
-            if value is None:
-                continue
-
-            # Ignore equal values
-            if value == self.last_value:
-                continue
-
-            await self.__on_signal(self.frame_id, self.signal, value, now_ms())
+            if value is not None:
+                await self.__on_signal(self.frame_id, self.signal, value, now_ms())
 
             self.last_value = value
             self.value_cnt += 1
