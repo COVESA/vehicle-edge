@@ -10,6 +10,10 @@
 
 # Welcome to the Vehicle Edge reference implementation
 
+[![Gitter](https://badges.gitter.im/vehicle-edge/community.svg)](https://gitter.im/vehicle-edge/community)
+[![License](https://img.shields.io/badge/License-MPL%202.0-blue.svg)](https://opensource.org/licenses/MPL-2.0)
+
+
 ## What is Vehicle Edge?
 
 Vehicle Edge is a software stack, which acts as an interface within the software stack of domain or vehicle computers.
