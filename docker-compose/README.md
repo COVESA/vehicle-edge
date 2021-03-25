@@ -27,8 +27,8 @@
 
 ## Setup
 
-- For further information how to build the images (especially, if you are working behind a proxy), please see [here](https://github.com/GENIVI/iot-event-analytics/docker/)
-- [Install docker-compose and check the version](https://github.com/GENIVI/iot-event-analytics/docker-compose)
+- For further information how to build the images (especially, if you are working behind a proxy), please see [here](https://github.com/GENIVI/iot-event-analytics/tree/develop/docker)
+- [Install docker-compose and check the version](https://github.com/GENIVI/iot-event-analytics/tree/develop/docker-compose)
 
 ### Scripted
 
@@ -43,7 +43,7 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
   Update the _.env_ file (IOTEA_JS_SDK) with `boschio.iotea-<version>.tgz`
 - Copy `<any folder>/src/sdk/python/lib/boschio_iotea-<version>-py3-none-any.whl` into the _/src/edge.hal-interface_ directory<br>
   Update the _.env_ file (IOTEA_PYTHON_SDK) with `boschio_iotea-<version>-py3-none-any.whl`
-- Follow **Install KUKSA.VAL** section from [https://github.com/GENIVI/iot-event-analytics/docker/vss2iotea/README.md](https://https://github.com/GENIVI/iot-event-analytics/browse/docker/vss2iotea/README.md) to __download AND load__ the latest version of KUKSA.VAL into your local Docker registry.<br>
+- Follow **Install KUKSA.VAL** section from [https://github.com/GENIVI/iot-event-analytics/tree/develop/docker/vss2iotea/README.md](https://github.com/GENIVI/iot-event-analytics/tree/develop/docker/vss2iotea/README.md) to __download AND load__ the latest version of KUKSA.VAL into your local Docker registry.<br>
   Update the _.env_ file (KUKSA_VAL_IMG) with
   - __>> AMD64 platform only: <<__ `amd64/kuksa-val:<version>`
   - __>> ARM64 platform only: <<__ `arm64/kuksa-val:<version>`
