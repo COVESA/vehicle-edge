@@ -152,7 +152,7 @@ class BusObserver:
 class MockSignalGenerator:
     def __init__(self, config, frame_id, signal, on_signal):
         self.config = config
-        self.logger = Logger('HalInterface.MockBusObserver.MockSignalGenerator.{}.{}'.format(frame_id.upper(), signal))
+        self.logger = logging.getLogger('HalInterface.MockBusObserver.MockSignalGenerator.{}.{}'.format(frame_id.upper(), signal))
         self.frame_id = frame_id
         self.signal = signal
         self.should_stop = False
