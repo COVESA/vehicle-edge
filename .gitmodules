@@ -1,0 +1,3 @@
+[submodule "iot-event-analytics"]
+	path = iot-event-analytics
+	url = https://github.com/GENIVI/iot-event-analytics
