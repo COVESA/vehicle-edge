@@ -36,12 +36,14 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
 
 ### Manual
 
-- Clone the [IoT Event Analytics](https://github.com/GENIVI/iot-event-analytics) repository into `<any folder>` using git<br>
-  Update the _.env_ file (IOTEA_PROJECT_DIR) with the absolute path to `<any folder>` - could be any valid local folder<br>
-  You can checkout a specific version tag if desired. __This version should match the SDKs you are copying in the next steps!__
-- Copy `<any folder>/src/sdk/javascript/lib/boschio.iotea-<version>.tgz` into _/src/edge.hal-interface-adapter_ AND _/docker-compose/talent_<br>
+- After cloning the vehicle-edge repository, execute `git submodule update --init --recursive` to get the contents of
+  [IoT Event Analytics](https://github.com/GENIVI/iot-event-analytics) repository as a submodule<br>
+  Update the _.env_ file (IOTEA_PROJECT_DIR) with the absolute path to `<vehicle-edge-dir>/iot-event-analytics`. 
+  IOTEA_PROJECT_DIR can also point to an externally cloned iot-event-analytics repository.<br>
+  A specific version tag can be checked out if desired. __This version should match the SDKs which are copied in the next steps!__
+- Copy `IOTEA_PROJECT_DIR/src/sdk/javascript/lib/boschio.iotea-<version>.tgz` into _/src/edge.hal-interface-adapter_ AND _/docker-compose/talent_<br>
   Update the _.env_ file (IOTEA_JS_SDK) with `boschio.iotea-<version>.tgz`
-- Copy `<any folder>/src/sdk/python/lib/boschio_iotea-<version>-py3-none-any.whl` into the _/src/edge.hal-interface_ directory<br>
+- Copy `IOTEA_PROJECT_DIR/src/sdk/python/lib/boschio_iotea-<version>-py3-none-any.whl` into the _/src/edge.hal-interface_ directory<br>
   Update the _.env_ file (IOTEA_PYTHON_SDK) with `boschio_iotea-<version>-py3-none-any.whl`
 - Follow **Install KUKSA.VAL** section from [https://github.com/GENIVI/iot-event-analytics/tree/develop/docker/vss2iotea/README.md](https://github.com/GENIVI/iot-event-analytics/tree/develop/docker/vss2iotea/README.md) to __download AND load__ the latest version of KUKSA.VAL into your local Docker registry.<br>
   Update the _.env_ file (KUKSA_VAL_IMG) with
@@ -60,7 +62,9 @@ Setup can be easily bootstrapped by using the `<run-script>`. In order to do so 
   `<run-script>` is _run.sh_
 
 - Start using the \<run-script\>
-  - Update the _IOTEA\_PROJECT\_DIR_ variable in the _.env_  file to the location where you cloned the IoT Event Analytics repository. If you do not want to clone it manually from [https://github.com/GENIVI/iot-event-analytics](https://github.com/GENIVI/iot-event-analytics), the given _IOTEA\_PROJECT\_DIR_ directory will be created and the repository will be cloned. Make sure you specify the _IOTEA\_VERSION_ (in `run.properties`) in this case in order to check out a specific version of IoT Event Analytics.<br>
+  - Update the _IOTEA\_PROJECT\_DIR_ variable in the _.env_  file to the location of the iot-event-analytics
+    submodule. If _IOTEA\_PROJECT\_DIR_ does not exist, it will be created and the repository will be cloned. Make sure you specify the
+    _IOTEA\_VERSION_ (in `run.properties`) in this case in order to check out a specific version of IoT Event Analytics.<br>
   There is no guarantee, that the stack works, if you choose diverging versions (minor, or major versions) of _IOTEA\_VERSION_, _IOTEA\_JS\_SDK_ and _IOTEA\_PYTHON\_SDK_
   - You can start the platform using `<run-script>` OR equivalently `<run-script> .env run.properties`
   - If you want to change the default configuration, you can EITHER
