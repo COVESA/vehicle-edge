@@ -1,0 +1,73 @@
+@startuml
+/'
+  Copyright (c) 2021 Robert Bosch GmbH
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+  SPDX-License-Identifier: MPL-2.0
+'/
+
+    skinparam backgroundColor #FFFFF
+    skinparam handwritten false
+    skinparam nodesep 80
+    top to bottom direction
+
+    right footer "Vehicle Edge Version: <no official release yet>"
+
+    node Vehicle #Ivory {
+        package "Vehicle Application Platform" as VehicleApplicationPlatform #SteelBlue {
+            component ConfigManager <<DockerContainer>>
+            component Pipeline <<DockerContainer>>
+            component Mosquitto <<DockerContainer>>
+                interface IF_PubSub as if_pb
+                Mosquitto -right- if_pb
+                note left of Mosquitto : MQTT broker
+        }
+
+        package "Vehicle Application Platform Services" as VehicleApplicationPlatformServices #SteelBlue {
+            component [VSS2IoTEA] <<DockerContainer>>
+            component [KuksaVal] <<DockerContainer>>
+                interface IF_VSSSocket as if_vss
+                KuksaVal -left- if_vss <<optional>>
+        }
+  
+        package "Vehicle Applications" as VehicleApplications <<Example>> #SteelBlue {
+            component [TestTalent] << DockerContainer >>
+        }
+
+        package "Vehicle Integration" as VehicleIntegration <<Placeholder>> #Silver {
+            component [HALInterface] <<DockerContainer>>
+            component [HALInterfaceAdapter] <<DockerContainer>>
+        }
+
+        package "Vehicle Core" as VehicleSensorsActors <<Example>> #Silver {
+            component SensorA <<Sensor>>
+            component SensorB <<Sensor>>
+            component ActorA <<Actor>>
+            component ActorB <<Actor>>
+            queue "CAN" as CAN<<Bus>>
+
+            SensorA -up- CAN
+            SensorB -up- CAN
+            ActorA -up- CAN
+            ActorB -up- CAN
+        }
+
+        ' Set Connections between Components
+        TestTalent .down.> if_pb : use
+        VSS2IoTEA ..> if_vss : use <<optional>>
+        VSS2IoTEA ..> if_pb : use
+        Pipeline ..> if_pb : use
+        ConfigManager ..> if_pb : use
+        HALInterfaceAdapter .up.> if_pb : use
+        HALInterfaceAdapter .up.> if_vss : use <<optional>>
+        HALInterface .up.> if_pb : use
+        HALInterface .down.> CAN : use
+
+        ' Formatting
+        VehicleApplications -[hidden]down-> VehicleApplicationPlatform
+        VehicleApplicationPlatform -[hidden]right-> VehicleApplicationPlatformServices
+    }
+@enduml

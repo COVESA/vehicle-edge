@@ -19,6 +19,8 @@
 Vehicle Edge is a software stack, which acts as an interface within the software stack of domain or vehicle computers.
 The Vehicle Edge stack is built from various software components. It is built around the IoT Event Analytics Platform, which offers to write vehicle agnostic applications so called _"Vehicle Applications"_.
 
+A deployment and component overview can be found [here](./docs/deployment.md)
+
 ## Getting started using docker-compose
 
 - For building/running the stack using docker-compose continue reading here [the description here](./docker-compose)

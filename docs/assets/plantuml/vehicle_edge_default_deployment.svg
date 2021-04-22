@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="1044px" preserveAspectRatio="none" style="width:1215px;height:1044px;" version="1.1" viewBox="0 0 1215 1044" width="1215px" zoomAndPan="magnify"><defs><filter height="300%" id="fizo7m7ipz1rs" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--MD5=[f0862bf7367bcc9d674716c64b321cab]
+cluster Vehicle--><polygon fill="#FFFFF0" filter="url(#fizo7m7ipz1rs)" points="16,16,26,6,1198,6,1198,1011,1188,1021,16,1021,16,16" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="1188" x2="1198" y1="16" y2="6"/><line style="stroke:#000000;stroke-width:1.5;" x1="16" x2="1188" y1="16" y2="16"/><line style="stroke:#000000;stroke-width:1.5;" x1="1188" x2="1188" y1="16" y2="1021"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="58" x="574" y="31.9951">Vehicle</text><!--MD5=[10198d4d7d784e6c6cacb524c2dfa621]
+cluster VehicleApplicationPlatform--><polygon fill="#4682B4" filter="url(#fizo7m7ipz1rs)" points="48,257,287,257,294,279.2969,599,279.2969,599,527,48,527,48,257" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="48" x2="294" y1="279.2969" y2="279.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="233" x="52" y="271.9951">Vehicle Application Platform</text><!--MD5=[fbaffdd981d11e4523772d56adee6685]
+cluster VehicleApplicationPlatformServices--><polygon fill="#4682B4" filter="url(#fizo7m7ipz1rs)" points="832,257,1143,257,1150,279.2969,1166,279.2969,1166,527,832,527,832,257" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="832" x2="1150" y1="279.2969" y2="279.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="305" x="836" y="271.9951">Vehicle Application Platform Services</text><!--MD5=[7ad693170e71f0fabfb42ab959acc5e7]
+cluster VehicleApplications--><polygon fill="#4682B4" filter="url(#fizo7m7ipz1rs)" points="303,62,474,62,481,84.2969,595,84.2969,595,208,303,208,303,62" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="303" x2="481" y1="84.2969" y2="84.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="165" x="307" y="76.9951">Vehicle Applications</text><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="80" x="413" y="99.292">«Example»</text><!--MD5=[7b60f05dda21455886d9f5b65c6e5e9e]
+cluster VehicleIntegration--><polygon fill="#C0C0C0" filter="url(#fizo7m7ipz1rs)" points="460,584,621,584,628,606.2969,945,606.2969,945,714,460,714,460,584" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="460" x2="628" y1="606.2969" y2="606.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="155" x="464" y="598.9951">Vehicle Integration</text><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="102" x="655.5" y="621.292">«Placeholder»</text><!--MD5=[df644270dd26922bd569d1826f8465ec]
+cluster VehicleSensorsActors--><polygon fill="#C0C0C0" filter="url(#fizo7m7ipz1rs)" points="218,763,323,763,330,785.2969,897,785.2969,897,997,218,997,218,763" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="218" x2="330" y1="785.2969" y2="785.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="99" x="222" y="777.9951">Vehicle Core</text><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="80" x="521.5" y="800.292">«Example»</text><!--MD5=[90321d3428f34f81b6d3c135b020a40c]
+entity ConfigManager--><rect fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="179" x="395.5" y="300"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="554.5" y="305"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="552.5" y="307"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="552.5" y="311"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="139" x="410.5" y="332.9951">«DockerContainer»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108" x="426" y="349.292">ConfigManager</text><!--MD5=[f144b33a3f99474ee58069094fb5394a]
+entity Pipeline--><rect fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="179" x="136.5" y="300"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="295.5" y="305"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="293.5" y="307"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="293.5" y="311"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="139" x="151.5" y="332.9951">«DockerContainer»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="58" x="192" y="349.292">Pipeline</text><!--MD5=[813b17cf9d151d5aa05a8c71a0fcb692]
+entity Mosquitto--><rect fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="179" x="297.5" y="440"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="456.5" y="445"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="454.5" y="447"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="454.5" y="451"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="139" x="312.5" y="472.9951">«DockerContainer»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="72" x="346" y="489.292">Mosquitto</text><!--MD5=[06c3b0eaf2be4bcd34274efe6de56868]
+entity if_pb--><ellipse cx="566" cy="471.5" fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" rx="8" ry="8" style="stroke:#A80036;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="529.5" y="501.4951">IF_PubSub</text><path d="M115,459 L115,484.1328 A0,0 0 0 0 115,484.1328 L217,484.1328 A0,0 0 0 0 217,484.1328 L217,477 L297.213,471.5 L217,469 L217,469 L207,459 L115,459 A0,0 0 0 0 115,459 " fill="#FBFB77" filter="url(#fizo7m7ipz1rs)" style="stroke:#A80036;stroke-width:1.0;"/><path d="M207,459 L207,469 L217,469 L207,459 " fill="#FBFB77" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="81" x="121" y="476.0669">MQTT broker</text><!--MD5=[1b868dd5140c1ab18ba740e4dfecdc40]
+entity VSS2IoTEA--><rect fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="179" x="920.5" y="300"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="1079.5" y="305"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="1077.5" y="307"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="1077.5" y="311"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="139" x="935.5" y="332.9951">«DockerContainer»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="77" x="966.5" y="349.292">VSS2IoTEA</text><!--MD5=[3391a061fc67d73510665ed4f67775ba]
+entity KuksaVal--><rect fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="179" x="962.5" y="440"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="1121.5" y="445"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="1119.5" y="447"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="1119.5" y="451"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="139" x="977.5" y="472.9951">«DockerContainer»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="64" x="1015" y="489.292">KuksaVal</text><!--MD5=[59cc448942b24f4cff635fe70a52597a]
+entity if_vss--><ellipse cx="873" cy="471.5" fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" rx="8" ry="8" style="stroke:#A80036;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="98" x="824" y="501.4951">IF_VSSSocket</text><!--MD5=[f75da66b20f8582dda50a152e9304052]
+entity TestTalent--><rect fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="179" x="391.5" y="121"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="550.5" y="126"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="548.5" y="128"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="548.5" y="132"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="139" x="406.5" y="153.9951">«DockerContainer»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="78" x="437" y="170.292">TestTalent</text><!--MD5=[95b084f0b4a5fb32642db4a95528383a]
+entity HALInterface--><rect fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="179" x="476.5" y="635"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="635.5" y="640"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="633.5" y="642"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="633.5" y="646"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="139" x="491.5" y="667.9951">«DockerContainer»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="94" x="514" y="684.292">HALInterface</text><!--MD5=[c1051dd88fe39b01761c88c27e20d67e]
+entity HALInterfaceAdapter--><rect fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="193" x="735.5" y="635"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="908.5" y="640"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="906.5" y="642"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="906.5" y="646"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="139" x="757.5" y="667.9951">«DockerContainer»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="153" x="750.5" y="684.292">HALInterfaceAdapter</text><!--MD5=[8d5a2bc0fe5ac5ffccf3416d5d508739]
+entity SensorA--><rect fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="107" x="234.5" y="918"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="321.5" y="923"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="319.5" y="925"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="319.5" y="929"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="67" x="249.5" y="950.9951">«Sensor»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="59" x="253.5" y="967.292">SensorA</text><!--MD5=[4506083807c4f0524e296f6d0ec8f86e]
+entity SensorB--><rect fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="107" x="421.5" y="918"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="508.5" y="923"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="506.5" y="925"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="506.5" y="929"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="67" x="436.5" y="950.9951">«Sensor»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="59" x="440.5" y="967.292">SensorB</text><!--MD5=[9e3119fd6fd6f9a7c7495b546e5065de]
+entity ActorA--><rect fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="96" x="609" y="918"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="685" y="923"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="683" y="925"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="683" y="929"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="56" x="624" y="950.9951">«Actor»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="50" x="627" y="967.292">ActorA</text><!--MD5=[677926d6af25d1a36bca71c19c03c814]
+entity ActorB--><rect fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" height="62.5938" style="stroke:#A80036;stroke-width:1.5;" width="96" x="785" y="918"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="861" y="923"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="859" y="925"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="859" y="929"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="56" x="800" y="950.9951">«Actor»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="50" x="803" y="967.292">ActorB</text><!--MD5=[c54ac06344dfd5517d2cc56073f5db34]
+entity CAN--><path d="M539,814 L593,814 C598,814 598,835.2969 598,835.2969 C598,835.2969 598,856.5938 593,856.5938 L539,856.5938 C534,856.5938 534,835.2969 534,835.2969 C534,835.2969 534,814 539,814 " fill="#FEFECE" filter="url(#fizo7m7ipz1rs)" style="stroke:#A80036;stroke-width:1.5;"/><path d="M593,814 C588,814 588,835.2969 588,835.2969 C588,856.5938 593,856.5938 593,856.5938 " fill="none" style="stroke:#A80036;stroke-width:1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="44" x="539" y="831.9951">«Bus»</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="30" x="546" y="848.292">CAN</text><!--MD5=[e20fa7cd1e066ac767098b48659e6f4a]
+link Mosquitto to if_pb--><path d="M476.85,471.5 C503.548,471.5 530.247,471.5 556.946,471.5 " fill="none" id="Mosquitto-if_pb" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[fcfb421a622a937cd9efe4c7944292cf]
+link if_vss to KuksaVal--><path d="M882.09,471.5 C908.86,471.5 935.629,471.5 962.399,471.5 " fill="none" id="if_vss-KuksaVal" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[9d5588618800d33162e0851679155c31]
+link CAN to SensorA--><path d="M533.838,849.457 C486.816,868.402 398.716,903.895 341.746,926.847 " fill="none" id="CAN-SensorA" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[230c2c1bb351a51f620858d8baa0fdd0]
+link CAN to SensorB--><path d="M549.309,857.043 C535.455,874.093 515.548,898.594 499.825,917.946 " fill="none" id="CAN-SensorB" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[d00942ddc589ba8bb5eaf3feab1cd1dc]
+link CAN to ActorA--><path d="M582.691,857.043 C596.545,874.093 616.452,898.594 632.175,917.946 " fill="none" id="CAN-ActorA" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[698da8a40ea1b2f467e22e7ff9352c62]
+link CAN to ActorB--><path d="M598.206,850.01 C644.671,869.5 730.848,905.65 784.879,928.314 " fill="none" id="CAN-ActorB" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[6f92b8cff660345efad64c8ba3428c00]
+link TestTalent to if_pb--><path d="M554.01,184.068 C577.489,197.811 600.818,216.549 614,241 C654.486,316.097 596.506,422.06 574.153,458.011 " fill="none" id="TestTalent-to-if_pb" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#A80036" points="571.369,462.421,579.5549,456.9447,574.0375,458.1926,572.7895,452.6751,571.369,462.421" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="629" y="336.0669">use</text><!--MD5=[30246ea183207a0fe6718e2443d09ef9]
+link VSS2IoTEA to if_vss--><path d="M979.595,363.127 C949.614,393.327 905.356,437.908 884.575,458.841 " fill="none" id="VSS2IoTEA-to-if_vss" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#A80036" points="880.977,462.465,890.1565,458.8961,884.4997,458.9166,884.4791,453.2598,880.977,462.465" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="94" x="950" y="406.0669">use «optional»</text><!--MD5=[4d797143f1b63428c0ead1dfb348a7ff]
+link VSS2IoTEA to if_pb--><path d="M920.453,361.591 C918.958,362.065 917.472,362.535 916,363 C785.845,404.101 627.793,451.883 580.211,466.223 " fill="none" id="VSS2IoTEA-to-if_pb" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#A80036" points="575.21,467.729,584.9811,468.9643,579.9977,466.2874,582.6745,461.304,575.21,467.729" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="812" y="406.0669">use</text><!--MD5=[4a8edb634f2aa527df53582a59787ab1]
+link Pipeline to if_pb--><path d="M315.724,360.763 C373.977,380.32 450.892,408.44 516,440 C528.854,446.231 542.658,454.808 552.498,461.28 " fill="none" id="Pipeline-to-if_pb" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#A80036" points="556.722,464.09,551.4418,455.7762,552.5582,461.3218,547.0126,462.4382,556.722,464.09" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="448" y="406.0669">use</text><!--MD5=[5adff142b5b7e6af2d5ac3cc38d75f94]
+link ConfigManager to if_pb--><path d="M502.977,363.127 C520.482,392.951 546.22,436.8 558.691,458.048 " fill="none" id="ConfigManager-to-if_pb" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#A80036" points="561.284,462.465,560.1765,452.6786,558.7524,458.1533,553.2777,456.7292,561.284,462.465" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="532" y="406.0669">use</text><!--MD5=[c34b21df83aefd80e1cb516b2cf58c9d]
+reverse link if_pb to HALInterfaceAdapter--><path d="M579.461,482.267 C617.776,510.067 728.605,590.48 789.935,634.979 " fill="none" id="if_pb-backto-HALInterfaceAdapter" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#A80036" points="575.156,479.143,580.0925,487.6654,579.2033,482.0788,584.7899,481.1897,575.156,479.143" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="693" y="564.0669">use</text><!--MD5=[9aa814a5f5598e1d293cf4c1a02dc13b]
+reverse link if_vss to HALInterfaceAdapter--><path d="M870.139,485.968 C863.638,516.571 847.616,591.992 838.542,634.705 " fill="none" id="if_vss-backto-HALInterfaceAdapter" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#A80036" points="871.238,480.793,865.4537,488.7643,870.1982,485.6837,873.2788,490.4281,871.238,480.793" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="94" x="858" y="564.0669">use «optional»</text><!--MD5=[d8015a93c7ade752653ca422fa3b796e]
+reverse link if_pb to HALInterface--><path d="M566,485.968 C566,516.571 566,591.992 566,634.705 " fill="none" id="if_pb-backto-HALInterface" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#A80036" points="566,480.793,562,489.793,566,485.793,570,489.793,566,480.793" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="567" y="564.0669">use</text><!--MD5=[d831fb973034a31caae954886919da99]
+link HALInterface to CAN--><path d="M566,698.13 C566,729.688 566,778.362 566,808.223 " fill="none" id="HALInterface-to-CAN" style="stroke:#A80036;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#A80036" points="566,813.571,570,804.571,566,808.571,562,804.571,566,813.571" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="23" x="567" y="743.0669">use</text><!--MD5=[7457ff3ddf26c0e0fe4a56d1fc499201]
+link VehicleApplications to VehicleApplicationPlatform--><!--MD5=[5b9c78f2415b54ef10856ff67d14843c]
+link VehicleApplicationPlatform to VehicleApplicationPlatformServices--><text fill="#888888" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="254" x="948" y="1036.2822">Vehicle Edge Version: &lt;no official release yet&gt;</text><!--MD5=[2a9295d867648f47f41315cfed414da8]
+@startuml
+/'
+  Copyright (c) 2021 Robert Bosch GmbH
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+  SPDX-License-Identifier: MPL-2.0
+'/
+
+    skinparam backgroundColor #FFFFF
+    skinparam handwritten false
+    skinparam nodesep 80
+    top to bottom direction
+
+    right footer "Vehicle Edge Version: <no official release yet>"
+
+    node Vehicle #Ivory {
+        package "Vehicle Application Platform" as VehicleApplicationPlatform #SteelBlue {
+            component ConfigManager <<DockerContainer>>
+            component Pipeline <<DockerContainer>>
+            component Mosquitto <<DockerContainer>>
+                interface IF_PubSub as if_pb
+                Mosquitto -right- if_pb 
+                note left of Mosquitto : MQTT broker
+        }
+
+        package "Vehicle Application Platform Services" as VehicleApplicationPlatformServices #SteelBlue {
+            component [VSS2IoTEA] <<DockerContainer>>
+            component [KuksaVal] <<DockerContainer>>
+                interface IF_VSSSocket as if_vss
+                KuksaVal -left- if_vss <<optional>>
+        }
+  
+        package "Vehicle Applications" as VehicleApplications <<Example>> #SteelBlue {
+            component [TestTalent] << DockerContainer >>
+        }
+
+        package "Vehicle Integration" as VehicleIntegration <<Placeholder>> #Silver {
+            component [HALInterface] <<DockerContainer>>
+            component [HALInterfaceAdapter] <<DockerContainer>>
+        }
+
+        package "Vehicle Core" as VehicleSensorsActors <<Example>> #Silver {
+            component SensorA <<Sensor>>
+            component SensorB <<Sensor>>
+            component ActorA <<Actor>>
+            component ActorB <<Actor>>
+            queue "CAN" as CAN<<Bus>>
+
+            SensorA -up- CAN
+            SensorB -up- CAN
+            ActorA -up- CAN
+            ActorB -up- CAN
+        }
+
+        ' Set Connections between Components
+        TestTalent .down.> if_pb : use
+        VSS2IoTEA ..> if_vss : use <<optional>>
+        VSS2IoTEA ..> if_pb : use
+        Pipeline ..> if_pb : use
+        ConfigManager ..> if_pb : use
+        HALInterfaceAdapter .up.> if_pb : use
+        HALInterfaceAdapter .up.> if_vss : use <<optional>>
+        HALInterface .up.> if_pb : use
+        HALInterface .down.> CAN : use
+
+        ' Formatting
+        VehicleApplications -[hidden]down-> VehicleApplicationPlatform
+        VehicleApplicationPlatform -[hidden]right-> VehicleApplicationPlatformServices
+    }
+@enduml
+
+@startuml
+
+    skinparam backgroundColor #FFFFF
+    skinparam handwritten false
+    skinparam nodesep 80
+    top to bottom direction
+
+    right footer "Vehicle Edge Version: <no official release yet>"
+
+    node Vehicle #Ivory {
+        package "Vehicle Application Platform" as VehicleApplicationPlatform #SteelBlue {
+            component ConfigManager <<DockerContainer>>
+            component Pipeline <<DockerContainer>>
+            component Mosquitto <<DockerContainer>>
+                interface IF_PubSub as if_pb
+                Mosquitto -right- if_pb 
+                note left of Mosquitto : MQTT broker
+        }
+
+        package "Vehicle Application Platform Services" as VehicleApplicationPlatformServices #SteelBlue {
+            component [VSS2IoTEA] <<DockerContainer>>
+            component [KuksaVal] <<DockerContainer>>
+                interface IF_VSSSocket as if_vss
+                KuksaVal -left- if_vss <<optional>>
+        }
+  
+        package "Vehicle Applications" as VehicleApplications <<Example>> #SteelBlue {
+            component [TestTalent] << DockerContainer >>
+        }
+
+        package "Vehicle Integration" as VehicleIntegration <<Placeholder>> #Silver {
+            component [HALInterface] <<DockerContainer>>
+            component [HALInterfaceAdapter] <<DockerContainer>>
+        }
+
+        package "Vehicle Core" as VehicleSensorsActors <<Example>> #Silver {
+            component SensorA <<Sensor>>
+            component SensorB <<Sensor>>
+            component ActorA <<Actor>>
+            component ActorB <<Actor>>
+            queue "CAN" as CAN<<Bus>>
+
+            SensorA -up- CAN
+            SensorB -up- CAN
+            ActorA -up- CAN
+            ActorB -up- CAN
+        }
+
+        TestTalent .down.> if_pb : use
+        VSS2IoTEA ..> if_vss : use <<optional>>
+        VSS2IoTEA ..> if_pb : use
+        Pipeline ..> if_pb : use
+        ConfigManager ..> if_pb : use
+        HALInterfaceAdapter .up.> if_pb : use
+        HALInterfaceAdapter .up.> if_vss : use <<optional>>
+        HALInterface .up.> if_pb : use
+        HALInterface .down.> CAN : use
+
+        VehicleApplications -[hidden]down-> VehicleApplicationPlatform
+        VehicleApplicationPlatform -[hidden]right-> VehicleApplicationPlatformServices
+    }
+@enduml
+
+PlantUML version 1.2021.5beta3(Unknown compile time)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
