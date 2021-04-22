@@ -12,13 +12,13 @@
 
 ## Overview
 
-The Vehicle Vehicle Edge consists of several docker containers to setup the mandatory platform and platform services and an optional vehicle integration for development and testing purpose.
+The Vehicle Edge consists of several docker containers to setup the mandatory platform and platform services and an optional vehicle integration for development and testing purpose.
 
 ## Deployment Diagram
 
 ![./assets/plantuml/vehicle_edge_deployment.svg](./assets/plantuml/vehicle_edge_default_deployment.svg)
 
-This diagram shows the 'default' deployment of Vehicle Edge when the docker-compose file _docker-compose.edge.yml_ is used. It shows a possible deployment incl. examples and placeholders. Therefore, it should be seen as an example how it could look like. Packages are used to logically group the docker-containers regarding their scope and feature set.
+This diagram shows the 'default' deployment of Vehicle Edge when the docker-compose file _docker-compose.edge.yml_ is used. This deployment uses examples and placeholders. Therefore, it should be seen as an example how it could look like. Packages are used to logically group the docker-containers regarding their scope and feature set.
 
 ## Overview of Packages
 
