@@ -33,7 +33,7 @@
                 KuksaVal -left- if_vss <<optional>>
         }
   
-        package "Vehicle Applications" as VehicleApplications <<Example>> #SteelBlue {
+        package "Vehicle Applications" as VehicleApplications <<Example>>  #Silver {
             component [TestTalent] << DockerContainer >>
         }
 
@@ -42,17 +42,17 @@
             component [HALInterfaceAdapter] <<DockerContainer>>
         }
 
-        package "Vehicle Core" as VehicleSensorsActors <<Example>> #Silver {
+        package "Vehicle Core" as VehicleCore <<Example>> #Silver {
             component SensorA <<Sensor>>
             component SensorB <<Sensor>>
-            component ActorA <<Actor>>
-            component ActorB <<Actor>>
+            component ActuatorA <<Actuator>>
+            component ActuatorB <<Actuator>>
             queue "CAN" as CAN<<Bus>>
 
             SensorA -up- CAN
             SensorB -up- CAN
-            ActorA -up- CAN
-            ActorB -up- CAN
+            ActuatorA -up- CAN
+            ActuatorB -up- CAN
         }
 
         ' Set Connections between Components
