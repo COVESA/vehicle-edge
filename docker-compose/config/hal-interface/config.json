@@ -14,8 +14,20 @@
             }
         }
     ],
-    "mqtt": {
-        "connectionString": "mqtt://mosquitto:1883",
-        "ns": "hal/"
+    "protocolGateway": {
+        "adapters": [
+            {
+                "platform": true,
+                "module": {
+                    "name": ".util.mqtt_client",
+                    "class": "MqttProtocolAdapter"
+                },
+                "config": {
+                    "topicNamespace": "hal/",
+                    "mqtt5Only": false,
+                    "brokerUrl": "mqtt://mosquitto-local:1883"
+                }
+            }
+        ]
     }
 }

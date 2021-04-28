@@ -22,7 +22,7 @@ import can
 import cantools
 
 from iotea.core.util.logger import Logger
-from iotea.core.util.mqtt_client import NamedMqttClient
+from iotea.core.protocol_gateway import ProtocolGateway
 
 logging.setLoggerClass(Logger)
 
@@ -32,11 +32,11 @@ def now_ms():
     return int(math.floor(time.time()) * 1000 + math.floor(dt_now.microsecond / 1000))
 
 class BusObserver:
-    def __init__(self, bus_config, hal_broker):
+    def __init__(self, bus_config, protocol_gateway):
         self.logger = logging.getLogger('HalInterface.BusObserver-{}'.format(bus_config['interface']))
         self.bus_config = bus_config
         self.bus = None
-        self.hal_broker = hal_broker
+        self.protocol_gateway = protocol_gateway
         self.filter = {}
         self.db = None
 
@@ -137,7 +137,7 @@ class BusObserver:
                 self.logger.info("Sending: '{}' to: {}".format(value, self.get_signal_id(frame_id, signal)))
 
                 # Take the current milliseconds, since message.timestamp gives the fractions of a second the frame was created?
-                await self.hal_broker.publish_json(self.get_signal_topic(frame_id, signal), {"value": value, "whenMs": now})
+                await self.protocol_gateway.publish_json(self.get_signal_topic(frame_id, signal), {"value": value, "whenMs": now})
 
     def __add_dbc_file(self, dbc_file):
         self.logger.info('Loading dbc file {}...'.format(dbc_file))
@@ -355,11 +355,11 @@ class MockSignalGenerator:
         return '{}.{}'.format(self.frame_id, self.signal)
 
 class MockBusObserver(BusObserver):
-    def __init__(self, bus_config, hal_broker):
-        super(MockBusObserver, self).__init__(bus_config, hal_broker)
+    def __init__(self, bus_config, protocol_gateway):
+        super(MockBusObserver, self).__init__(bus_config, protocol_gateway)
 
         # pylint: disable=anomalous-backslash-in-string
-        self.topic_regex = re.compile('^{}([^\.]+)\.(.+)\/(?:start|stop)$'.format((self.hal_broker.topic_ns or '').replace('\\/', '\\\\/')))
+        self.topic_regex = re.compile('([^\.]+)\.(.+)\/(?:start|stop)$')
 
         self.logger = logging.getLogger('HalInterface.MockBusObserver')
         self.generators = {}
@@ -367,8 +367,8 @@ class MockBusObserver(BusObserver):
         self.lock = threading.Lock()
 
     async def start(self):
-        await self.hal_broker.subscribe_json('+/start', self.__on_signal_start)
-        await self.hal_broker.subscribe_json('+/stop', self.__on_signal_stop)
+        await self.protocol_gateway.subscribe_json('+/start', self.__on_signal_start)
+        await self.protocol_gateway.subscribe_json('+/stop', self.__on_signal_stop)
 
     def add_to_filter(self, frame_id, signal):
         signal_id = self.get_signal_id(frame_id, signal)
@@ -403,7 +403,7 @@ class MockBusObserver(BusObserver):
             self.logger.debug('MockBusObserver stopped MockSignalGenerator for {}'.format(signal_id))
 
     # pylint: disable=unused-argument
-    async def __on_signal_start(self, ev, topic):
+    async def __on_signal_start(self, ev, topic, adapter_id):
         try:
             frame_id, signal = self.extract_can_info_from_topic(topic)
 
@@ -429,7 +429,7 @@ class MockBusObserver(BusObserver):
             self.logger.warning(err)
 
     # pylint: disable=unused-argument
-    async def __on_signal_stop(self, ev, topic):
+    async def __on_signal_stop(self, ev, topic, adapter_id):
         try:
             frame_id, signal = self.extract_can_info_from_topic(topic)
 
@@ -449,7 +449,7 @@ class MockBusObserver(BusObserver):
     async def __on_signal(self, frame_id, signal, value, when_ms=-1):
         with self.lock:
             self.logger.info('Sending: "{}" to: {}'.format(value, self.get_signal_id(frame_id, signal)))
-            await self.hal_broker.publish_json(self.get_signal_topic(frame_id, signal), {"value": value, "whenMs": when_ms})
+            await self.protocol_gateway.publish_json(self.get_signal_topic(frame_id, signal), {"value": value, "whenMs": when_ms})
 
     def extract_can_info_from_topic(self, topic):
         # Returns frame_id, signal
@@ -464,7 +464,7 @@ class HalInterface:
     def __init__(self, abs_config_path):
         self.logger = logging.getLogger('HalInterface')
         self.bus_observer = []
-        self.client = None
+        self.protocol_gateway = None
         self.config = self.read_config(abs_config_path)
         self.topic_regex = None
 
@@ -476,14 +476,14 @@ class HalInterface:
             logging.getLogger().setLevel(log_level)
 
     async def start(self):
-        await self.init_message_client()
+        await self.init_protocol_gateway()
 
         # Starting all observers
         for bus_config in self.config['can']:
             if bus_config['interface'] == 'mock':
-                bus_observer = MockBusObserver(bus_config, self.client)
+                bus_observer = MockBusObserver(bus_config, self.protocol_gateway)
             else:
-                bus_observer = BusObserver(bus_config, self.client)
+                bus_observer = BusObserver(bus_config, self.broker)
 
             self.bus_observer.append(bus_observer)
             await bus_observer.start()
@@ -492,26 +492,28 @@ class HalInterface:
             # Make the application run forever
             await asyncio.sleep(1000)
 
-    async def init_message_client(self):
-        self.client = NamedMqttClient('HalInterface-{}'.format(id(self)), self.config['mqtt']['connectionString'], self.config['mqtt']['ns'] or 'hal/')
+    async def init_protocol_gateway(self):
+        self.protocol_gateway = ProtocolGateway(self.config['protocolGateway'], 'HalInterface-{}'.format(id(self)), True)
+        if len(self.config['protocolGateway']['adapters']) is not 1:
+            raise Exception('Invalid ProtocolGateway Configuration: only one adapter is allowed!')
 
         # pylint: disable=anomalous-backslash-in-string
-        self.topic_regex = re.compile('^{}([^\.]+)\.(.+)\/(?:enable|disable)$'.format((self.client.topic_ns or '').replace('\\/', '\\\\/')))
-        self.logger.info("mqtt broker created")
+        self.topic_regex = re.compile('([^\.]+)\.(.+)\/(?:enable|disable)$')
+        self.logger.info("ProtocolGateway created")
 
-        await self.client.subscribe_json('+/enable', self.on_enable)
-        await self.client.subscribe_json('+/disable', self.on_disable)
+        await self.protocol_gateway.subscribe_json('+/enable', self.on_enable)
+        await self.protocol_gateway.subscribe_json('+/disable', self.on_disable)
 
-        self.logger.info("mqtt subscribed for: enable/disable")
+        self.logger.info("Subscribed for: enable/disable")
 
-        return self.client
+        return self.protocol_gateway
 
     def read_config(self, abs_path):
         with open(abs_path, mode='r', encoding='utf-8') as config_file:
             return json.loads(config_file.read())
 
     # pylint: disable=unused-argument
-    async def on_enable(self, ev, topic):
+    async def on_enable(self, ev, topic, adapter_id):
         # Add to filter 10.CruiseStatus2/enable
         self.logger.info("Enable for: '{}'".format(topic))
 
@@ -525,7 +527,7 @@ class HalInterface:
             self.logger.warning(err)
 
     # pylint: disable=unused-argument
-    async def on_disable(self, ev, topic):
+    async def on_disable(self, ev, topic, adapter_id):
         # Remove from filter 10.CruiseStatus2/disable
         self.logger.info("Disable for: '{}'".format(topic))
 
