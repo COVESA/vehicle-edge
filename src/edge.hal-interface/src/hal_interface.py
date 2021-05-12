@@ -21,8 +21,8 @@ from datetime import datetime
 import can
 import cantools
 
-from iotea.core.logger import Logger
-from iotea.core.mqtt_broker import NamedMqttBroker
+from iotea.core.util.logger import Logger
+from iotea.core.util.mqtt_client import NamedMqttClient
 
 logging.setLoggerClass(Logger)
 
@@ -464,7 +464,7 @@ class HalInterface:
     def __init__(self, abs_config_path):
         self.logger = logging.getLogger('HalInterface')
         self.bus_observer = []
-        self.broker = None
+        self.client = None
         self.config = self.read_config(abs_config_path)
         self.topic_regex = None
 
@@ -476,14 +476,14 @@ class HalInterface:
             logging.getLogger().setLevel(log_level)
 
     async def start(self):
-        await self.init_message_broker()
+        await self.init_message_client()
 
         # Starting all observers
         for bus_config in self.config['can']:
             if bus_config['interface'] == 'mock':
-                bus_observer = MockBusObserver(bus_config, self.broker)
+                bus_observer = MockBusObserver(bus_config, self.client)
             else:
-                bus_observer = BusObserver(bus_config, self.broker)
+                bus_observer = BusObserver(bus_config, self.client)
 
             self.bus_observer.append(bus_observer)
             await bus_observer.start()
@@ -492,19 +492,19 @@ class HalInterface:
             # Make the application run forever
             await asyncio.sleep(1000)
 
-    async def init_message_broker(self):
-        self.broker = NamedMqttBroker('HalInterface-{}'.format(id(self)), self.config['mqtt']['connectionString'], self.config['mqtt']['ns'] or 'hal/')
+    async def init_message_client(self):
+        self.client = NamedMqttClient('HalInterface-{}'.format(id(self)), self.config['mqtt']['connectionString'], self.config['mqtt']['ns'] or 'hal/')
 
         # pylint: disable=anomalous-backslash-in-string
-        self.topic_regex = re.compile('^{}([^\.]+)\.(.+)\/(?:enable|disable)$'.format((self.broker.topic_ns or '').replace('\\/', '\\\\/')))
+        self.topic_regex = re.compile('^{}([^\.]+)\.(.+)\/(?:enable|disable)$'.format((self.client.topic_ns or '').replace('\\/', '\\\\/')))
         self.logger.info("mqtt broker created")
 
-        await self.broker.subscribe_json('+/enable', self.on_enable)
-        await self.broker.subscribe_json('+/disable', self.on_disable)
+        await self.client.subscribe_json('+/enable', self.on_enable)
+        await self.client.subscribe_json('+/disable', self.on_disable)
 
         self.logger.info("mqtt subscribed for: enable/disable")
 
-        return self.broker
+        return self.client
 
     def read_config(self, abs_path):
         with open(abs_path, mode='r', encoding='utf-8') as config_file:
