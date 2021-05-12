@@ -9,7 +9,8 @@
  ****************************************************************************/
 
 const iotea = require('boschio.iotea');
-const MqttBroker = iotea.util.MqttBroker;
+
+const MqttClient = iotea.util.MqttClient;
 const fs = require('fs').promises;
 
 const {
@@ -32,8 +33,8 @@ module.exports = class HalInterfaceAdapter {
     // Publish info about enabled and disabled VSS paths
     constructor() {
         this.lut = new HalVssLookupTable();
-        this.ioTeaBroker = null;
-        this.halBroker = null;
+        this.ioteaClient = null;
+        this.halClient = null;
 
         this.vssSocket = null;
         // Needed for directly passing values to IoT Event Analytics
@@ -63,8 +64,8 @@ module.exports = class HalInterfaceAdapter {
                 process.env.LOG_LEVEL = this.config.get('loglevel', Logger.ENV_LOG_LEVEL.WARN);
 
                 this.logger.info(`IoT Event Analytics MQTT namespace: ${this.config.get('iotea.mqtt.ns', null)}`);
-                this.ioTeaBroker = new MqttBroker(this.config.get('iotea.mqtt.connectionString'), this.config.get('iotea.mqtt.ns', null));
-                this.halBroker = new MqttBroker(this.config.get('hal.mqtt.connectionString'), this.config.get('hal.mqtt.ns', null));
+                this.ioteaClient = new MqttClient(this.config.get('iotea.mqtt.connectionString'), this.config.get('iotea.mqtt.ns', null));
+                this.halClient = new MqttClient(this.config.get('hal.mqtt.connectionString'), this.config.get('hal.mqtt.ns', null));
             })
             .then(() => this.__loadMappingFile(absMappingFilePath, this.config.get('vss.bypass', false) === true))
             .then(async () => {
@@ -115,12 +116,12 @@ module.exports = class HalInterfaceAdapter {
                 }
             })
             .then(() => {
-                this.logger.info(`Subscribing for HAL events on topic + with namespace ${this.halBroker.topicNs}`);
-                return this.halBroker.subscribeJson('$share/hal-interface-adapters/+', this.__onHalMessageReceive.bind(this));
+                this.logger.info(`Subscribing for HAL events on topic + with namespace ${this.halClient.topicNs}`);
+                return this.halClient.subscribeJson('$share/hal-interface-adapters/+', this.__onHalMessageReceive.bind(this));
             })
             .then(() => {
                 this.logger.info(`Subscribing for platform events on ${PLATFORM_EVENTS_TOPIC}...`);
-                return this.ioTeaBroker.subscribeJson(`$share/hal-interface-adapter/${PLATFORM_EVENTS_TOPIC}`, this.__onIoTeaPlatformEvent.bind(this));
+                return this.ioteaClient.subscribeJson(`$share/hal-interface-adapter/${PLATFORM_EVENTS_TOPIC}`, this.__onIoTeaPlatformEvent.bind(this));
             })
             .then(() => {
                 this.logger.info('HAL interface adapter started successfully');
@@ -150,7 +151,7 @@ module.exports = class HalInterfaceAdapter {
 
         // Receives hal/10.CruiseStatus2
         // Strip namespace
-        topic = topic.replace(this.halBroker.topicNs, '');
+        topic = topic.replace(this.halClient.topicNs, '');
 
         try {
             const entry = this.lut.resolveEntryByHalResourceId(topic);
@@ -266,14 +267,14 @@ module.exports = class HalInterfaceAdapter {
 
     __enableHalResourceId(halResourceId) {
         this.logger.info(`Enable HAL resourceId ${halResourceId}`);
-        return this.halBroker.publishJson(`${halResourceId}/enable`, {
+        return this.halClient.publishJson(`${halResourceId}/enable`, {
             returnTopic: ''
         });
     }
 
     __disableHalResourceId(halResourceId) {
         this.logger.info(`Disable HAL resourceId ${halResourceId}`);
-        return this.halBroker.publishJson(`${halResourceId}/disable`, {
+        return this.halClient.publishJson(`${halResourceId}/disable`, {
             returnTopic: ''
         });
     }
@@ -287,7 +288,7 @@ module.exports = class HalInterfaceAdapter {
 
             this.logger.debug(`Publishing ${value} to IoT Event Analytics for type=${type} and feature=${feature}...`);
 
-            return this.ioTeaBroker.publishJson(iotea.constants.INGESTION_TOPIC, {
+            return this.ioteaClient.publishJson(iotea.constants.INGESTION_TOPIC, {
                 whenMs,
                 // First element is type
                 type,

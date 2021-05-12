@@ -10,39 +10,25 @@
 
 # Hardware Abstraction Layer Interface Adapter - HAL Interface Adapter
 
-## Important: ONLY WORKS WITH >= boschio.iotea-2.1.0.tgz PACKAGE
-
 ## Prerequisites
 
 ### >> ARM64 target platform only <<
 
 - Make sure you have Docker 19.03 or above installed and experimental CLI features enable to be able to perform cross platform builds
 
-## Build
-
-- Download the latest npm package from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/javascript/lib) and copy it into the _src/edge.hal-interface-adapter_ folder
-- Open the folder _src/edge.hal-interface-adapter_
-- Docker build arguments:
-  - _IOTEA_JS_SDK_ (__mandatory__): Specify the npm module e.g. `boschio.iotea-1.7.0.tgz`, that you downloaded above. It is needed at buildtime
-- For further information how to build the images (especially, if you are working behind a proxy), please see [here](https://github.com/GENIVI/iot-event-analytics/docker/)
-
-### >> ARM64 target platform only <<
-
-- Build your Docker image and export the image as tar-archive<br>
-  `docker buildx build --platform linux/arm64 -t hal-interface-adapter-arm64:<version> -o type=oci,dest=./hal-interface-adapter-arm64.<version>.tar --build-arg IOTEA_JS_SDK=boschio.iotea-<version> -f Dockerfile.arm64 .`
-- Import this image
-  - `sudo docker load --input hal-interface-adapter-arm64.<version>.tar`
-  - `sudo docker tag <SHA256-Hash> hal-interface-adapter-arm64:<version>`
-
-### >> AMD64 target platform only <<
-
-- Build your Docker image using the local registry<br>
-  `docker build --build-arg IOTEA_JS_SDK=boschio.iotea-<version> -t hal-interface-adapter-amd64:<version> -f Dockerfile.amd64 .`
-
 ## Install
 
+- Run `yarn` in the project root to install all required dependencies
+
+## Run from source
+
+- Open the project root directory in a terminal
+- Run `node src/edge.hal-interface-adapter/src/index.js -c ./setup/general/hal-interface-adapter/config-no-kuksa`
+
+## Custom configuration
+
 - Create a folder to store the configuration `<some folder>`
-- Copy the contents of the configuration folder _./config_ to `<some folder>`<br>
+- Copy the contents of the configuration folder _./setup/general/hal-interface-adapter/config_ to `<some folder>`<br>
   The directory structure looks like this<br>
 
   ```code
@@ -121,59 +107,25 @@
   }
   ```
 
-## Run
+## Build
 
-- `docker run --log-opt max-size=1m --log-opt max-file=5 --network="host" --restart=unless-stopped -d=true --name=hal-interface-adapter-<version> -v <some folder>:/home/node/app/config hal-interface-adapter-<arch>:<version>`
+### >> ARM64 target platform only <<
+
+- Build your Docker image and export the image as tar-archive<br>
+  `docker buildx build --platform linux/arm64 -t hal-interface-adapter-arm64:<version> -o type=oci,dest=./hal-interface-adapter-arm64-<version>.tar -f src/edge.hal-interface-adapter/Dockerfile.arm64 .`
+- Import this image
+  - `sudo docker load --input hal-interface-adapter-arm64.<version>.tar`
+  - `sudo docker tag <SHA256-Hash> hal-interface-adapter-arm64:<version>`
+
+### >> AMD64 target platform only <<
+
+- Build your Docker image using the local registry<br>
+  `docker build -t hal-interface-adapter-amd64:<version> -f src/edge.hal-interface-adapter/Dockerfile.amd64 .`
+
+## Run within container
+
+- `docker run --log-opt max-size=1m --log-opt max-file=5 --network="host" --restart=unless-stopped -d=true --name=hal-interface-adapter-<version> -v <some folder>:/app/config hal-interface-adapter-<arch>:<version>`
 
 ### >> Linux only <<
 
 - You have to prepend `sudo` to the docker call if you run docker as root (and you are not)
-
-## Test
-
-- __Prerequisites__
-  - NodeJS has to be installed >=12.13.0
-  - Python has to be installed >=3.6.8
-- [Start the IoT Event Analytics platform using docker-compose](https://github.com/GENIVI/iot-event-analytics)
-- Start KUKSA Val server following the guide [here](../vss/README.md)
-- Copy __../hal-interface/config_ into _../../src/hal-interface/src_<br>
-
-  ```text
-  <vehicle-edge-project>/src/hal-interface/src
-  |- config
-  |  L config.json
-  |- __init__.py
-  |- hal_interface.py
-  L- run.py
-  ```
-
-  - Open a console at _../../src/hal-interface/src_ and execute `python run.py`
-- Copy __./config_ into _../../src/hal-interface-adapter/src_<br>
-
-  ```text
-  <vehicle-edge-project>/src/hal-interface-adapter/src
-  |- config
-  |  |- config.json
-  |  L- mapping.json
-  |- __init__.py
-  |- hal_interface.py
-  L- run.py
-  ```
-
-  - Open a console at _../../src/hal-interface-adapter/src_ and execute `node index.js`
-- Send the following MQTT message to `iotea/platform/$events`
-
-  ```json
-  {
-    "type": "platform.talent.rules.set",
-    "data": {
-      "talent": "Some-Test-Talent",
-      "rules": {
-        "typeSelector": "Vehicle",
-        "feature": "Body$Lights$IsBrakeOn"
-      }
-    }
-  }
-  ```
-
-- Now you should see in the logs, that HAL Interface adapter is continuously pushing values into KUKSA.Val
