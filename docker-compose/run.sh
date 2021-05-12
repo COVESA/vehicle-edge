@@ -38,21 +38,21 @@ exit_on_error()
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Create a subshell to allow local modifications, which do not affect the actual environment variables
-DOCKER_IMAGE_PREFIX=vehicle-edge-platform
+DOCKER_IMAGE_PREFIX=vehicle-edge
 
 CONFIG="$1"
-[ -z "$CONFIG" ] && CONFIG="$SCRIPT_DIR/.env"
 
 if [ ! -f "$CONFIG" ]; then
 	echo "Can't find: $CONFIG"
 	echo "Usage $0 {.env file}"
 	exit 1
 fi
+
 # Load the configurations
 
 # default values for missing vars
 ARCH="amd64"
-DOCKER_IMAGE_BUILD=1
+USE_KUKSA_VAL=1
 DOCKER_IMAGE_EXPORT=0
 DOCKER_CONTAINER_START=1
 

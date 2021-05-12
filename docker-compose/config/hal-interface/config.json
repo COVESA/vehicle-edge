@@ -18,7 +18,7 @@
         }
     ],
     "mqtt": {
-        "connectionString": "mqtt://mosquitto-local:1883",
+        "connectionString": "mqtt://mosquitto:1883",
         "ns": "hal/"
     }
 }

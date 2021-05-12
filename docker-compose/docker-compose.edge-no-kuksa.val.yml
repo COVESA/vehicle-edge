@@ -11,7 +11,7 @@ services:
       - '1883:1883'
     volumes:
       - type: bind
-        source: "${CONFIG_DIR}/mosquitto"
+        source: "${CONFIG_DIR}/mosquitto/local"
         target: "/mosquitto/config"
   iotea:
     build:
@@ -24,48 +24,23 @@ services:
       - type: bind
         source: "${CONFIG_DIR}/iotea"
         target: "/app/docker/platform/config"
-  kuksa.val:
-    image: ${KUKSA_VAL_IMG}
-    environment:
-      - KUKSAVAL_OPTARGS=--insecure
-    ports:
-      - '8090:8090'
-    volumes:
-      - type: bind
-        source: "${CONFIG_DIR}/kuksa.val"
-        target: "/config"
-  kuksa.val2iotea:
-    build:
-      context: ../iot-event-analytics
-      dockerfile: ../iot-event-analytics/docker/kuksa.val2iotea/Dockerfile.${ARCH-amd64}
-      args:
-        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
-        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
-    depends_on:
-      - kuksa.val
-      - iotea
-    volumes:
-      - type: bind
-        source: "${CONFIG_DIR}/kuksa.val2iotea"
-        target: "/app/docker/kuksa.val2iotea/config"
   hal-interface-adapter:
     build:
-      context: ../src/edge.hal-interface-adapter
-      dockerfile: Dockerfile.${ARCH-amd64}
+      context: ../
+      dockerfile: src/edge.hal-interface-adapter/Dockerfile.${ARCH-amd64}
       args:
         - HTTP_PROXY=${DOCKER_HTTP_PROXY}
         - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
     depends_on:
-      - kuksa.val
       - iotea
     volumes:
       - type: bind
-        source: "${CONFIG_DIR}/hal-interface-adapter/config"
+        source: "${CONFIG_DIR}/hal-interface-adapter/config-no-kuksa"
         target: "/app/config"
   hal-interface:
     build:
-      context: ../src/edge.hal-interface
-      dockerfile: Dockerfile.${ARCH-amd64}
+      context: ../
+      dockerfile: src/edge.hal-interface/Dockerfile.${ARCH-amd64}
       args:
         - HTTP_PROXY=${DOCKER_HTTP_PROXY}
         - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}

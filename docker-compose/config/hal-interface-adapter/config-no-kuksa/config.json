@@ -1,8 +1,8 @@
 {
-    "loglevel": "DEBUG",
+    "loglevel": "INFO",
     "iotea": {
         "mqtt": {
-            "connectionString": "mqtt://localhost:1883",
+            "connectionString": "mqtt://mosquitto:1883",
             "ns": "iotea/"
         },
         "subject": "anyone",
@@ -19,7 +19,7 @@
     },
     "hal": {
         "mqtt": {
-            "connectionString": "mqtt://localhost:1883",
+            "connectionString": "mqtt://mosquitto:1883",
             "ns": "hal/"
         }
     }
