@@ -11,7 +11,7 @@ services:
       - '1883:1883'
     volumes:
       - type: bind
-        source: "${CONFIG_DIR}/mosquitto/local"
+        source: "${CONFIG_DIR}/mosquitto"
         target: "/mosquitto/config"
   iotea:
     build:
@@ -24,6 +24,8 @@ services:
       - type: bind
         source: "${CONFIG_DIR}/iotea"
         target: "/app/docker/platform/config"
+    depends_on:
+      - mosquitto
   hal-interface-adapter:
     build:
       context: ../
@@ -45,6 +47,7 @@ services:
         - HTTP_PROXY=${DOCKER_HTTP_PROXY}
         - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
     depends_on:
+      - mosquitto
       - hal-interface-adapter
     volumes:
       - type: bind

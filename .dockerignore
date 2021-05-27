@@ -25,3 +25,11 @@ src/edge.hal-interface-adapter/*.md
 src/edge.hal-interface/*Dockerfile*
 ## ...Markdown files
 src/edge.hal-interface/*.md
+# edge.talent: Include everything but...
+!src/edge.talent/*
+## ...node_modules
+src/edge.talent/node_modules
+## ...Dockerfiles
+src/edge.talent/*Dockerfile*
+## ...Markdown files
+src/edge.talent/*.md

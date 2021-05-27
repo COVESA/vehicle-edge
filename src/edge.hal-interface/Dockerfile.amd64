@@ -32,6 +32,6 @@ RUN mkdir /app
 
 WORKDIR /app
 
-COPY ./src/edge.hal-interface/src/* .
+COPY ./src/edge.hal-interface/src/* ./
 
 CMD [ "python", "run.py" ]

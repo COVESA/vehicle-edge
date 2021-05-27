@@ -4,16 +4,13 @@
         {
             "interface": "mock",
             "signals": {
-                "8.BrakeSwitchStatus": {
-                    "values": [
-                        "Normal Condition",
-                        "Brake Pedal Pressed",
-                        "(Undefined)",
-                        "Brake Switch Fault"
-                    ],
-                    "intervalMs": 2000,
-                    "jitterMs": 250
-                }
+				"42.Speed": {
+					"min": -15,
+					"max": 250,
+					"maxDelta": 5,
+					"intervalMs": 1000,
+					"jitterMs": 500
+				}
             }
         }
     ],

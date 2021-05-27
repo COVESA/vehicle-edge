@@ -4,15 +4,13 @@
         "types": {
             "Vehicle": {
                 "features": {
-                    "Body$Lights$IsBrakeOn": {
-                        "description": "Is brake light on",
+					"Speed": {
+                        "description": "Vehicle Speed",
                         "idx": 0,
-                        "history": 20,
+                        "history": 3,
                         "encoding": {
                             "type": "number",
-                            "encoder": "minmax",
-                            "min": 0,
-                            "max": 3
+                            "encoder": null
                         }
                     }
                 }

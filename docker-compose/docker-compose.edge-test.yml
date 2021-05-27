@@ -51,7 +51,7 @@ services:
         source: "${CONFIG_DIR}/kuksa.val2iotea"
         target: "/app/docker/kuksa.val2iotea/config"
     depends_on:
-      - iotea
+      - mosquitto
       - kuksa.val
   hal-interface-adapter:
     build:
@@ -63,6 +63,7 @@ services:
     depends_on:
       - kuksa.val
       - iotea
+      - hal-interface
     volumes:
       - type: bind
         source: "${CONFIG_DIR}/hal-interface-adapter/config"
@@ -76,8 +77,24 @@ services:
         - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
     depends_on:
       - mosquitto
-      - hal-interface-adapter
     volumes:
       - type: bind
         source: "${CONFIG_DIR}/hal-interface"
         target: "/app/config"
+  talent:
+    build:
+      context: ../
+      dockerfile: src/edge.talent/Dockerfile.${ARCH-amd64}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    environment:
+      - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+      - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/talent"
+        target: "/app/config"
+    depends_on:
+      - iotea
+      - hal-interface-adapter

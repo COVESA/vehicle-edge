@@ -1,4 +1,4 @@
-FROM arm64v8/python:3.6.12 as build
+FROM arm64v8/python:3.6.12-buster as build
 
 ARG HTTP_PROXY
 ARG HTTPS_PROXY
@@ -32,6 +32,6 @@ RUN mkdir /app
 
 WORKDIR /app
 
-COPY ./src/edge.hal-interface/src/* .
+COPY ./src/edge.hal-interface/src/* ./
 
 CMD [ "python", "run.py" ]

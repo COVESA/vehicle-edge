@@ -41,6 +41,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DOCKER_IMAGE_PREFIX=vehicle-edge
 
 CONFIG="$1"
+[ -z "$CONFIG" ] && CONFIG="$SCRIPT_DIR/.env"
 
 if [ ! -f "$CONFIG" ]; then
 	echo "Can't find: $CONFIG"
@@ -52,7 +53,9 @@ fi
 
 # default values for missing vars
 ARCH="amd64"
+DOCKER_IMAGE_BUILD=1
 USE_KUKSA_VAL=1
+USE_TALENT=0
 DOCKER_IMAGE_EXPORT=0
 DOCKER_CONTAINER_START=1
 
@@ -60,102 +63,89 @@ DOCKER_CONTAINER_START=1
 load_config "$CONFIG"
 load_config "$SCRIPT_DIR/run.properties"
 
-# Check if project dir exists
-if [ -d $IOTEA_PROJECT_DIR ]; then
-    echo "Using folder: $IOTEA_PROJECT_DIR"
-    # Go into the project directory
-    cd $IOTEA_PROJECT_DIR
-else
-    # Create the iotea project directory
-    mkdir -p $IOTEA_PROJECT_DIR
-    # Clone boschio.iotea Repo
-    git clone https://github.com/GENIVI/iot-event-analytics $IOTEA_PROJECT_DIR
-    exit_on_error
-    # Go into the project directory
-    cd $IOTEA_PROJECT_DIR
-    # Checkout the appropriate tag
-    git checkout $IOTEA_VERSION
-    exit_on_error
-fi
-
-echo
-
 cd $SCRIPT_DIR
 
-# Copy JS SDK
-echo "# Copy JS SDK"
-cp -v $IOTEA_PROJECT_DIR/src/sdk/javascript/lib/$IOTEA_JS_SDK $SCRIPT_DIR/../src/edge.hal-interface-adapter/
-exit_on_error
-# Copy <any folder>/src/sdk/javascript/lib/boschio.iotea-<version>.tgz into the ./talent
-cp -v $IOTEA_PROJECT_DIR/src/sdk/javascript/lib/$IOTEA_JS_SDK $SCRIPT_DIR/talent/
-exit_on_error
+if [ "$USE_KUKSA_VAL" = "1" ]; then
+	# Check if local image of KUKSA.VAL is already loaded
+	echo "# Checking for KUKSA_VAL_IMG: $KUKSA_VAL_IMG"
+	EXISTING_KUKSA_IMAGE=`sudo docker images --format '{{.Repository}}:{{.Tag}}' $KUKSA_VAL_IMG`
 
-# Copy Python SDK
-echo "# Copy Python SDK"
-cp -v $IOTEA_PROJECT_DIR/src/sdk/python/lib/$IOTEA_PYTHON_SDK $SCRIPT_DIR/../src/edge.hal-interface/
-exit_on_error
+	if [ -z "$EXISTING_KUKSA_IMAGE" ] || [ "$EXISTING_KUKSA_IMAGE" != "$KUKSA_VAL_IMG" ]; then
 
-# Check if local image of KUKSA.VAL is already loaded
-echo "# Checking for KUKSA_VAL_IMG: $KUKSA_VAL_IMG"
-EXISTING_KUKSA_IMAGE=`sudo docker images --format '{{.Repository}}:{{.Tag}}' $KUKSA_VAL_IMG`
+		# Download latest kuksa for $ARCH, KUKSA_VAL_IMG must be updated in $CONFIG with it's version
+		if [ -z "$KUKSA_URL" ]; then
+			echo "Warning! Missing KUKSA_URL in: $CONFIG"
+			echo "Copy download link from: https://kuksaval.northeurope.cloudapp.azure.com/job/kuksaval-upstream/job/master/lastSuccessfulBuild/artifact/artifacts/kuksa-val-*-${ARCH}.tar.xz"
+			exit 1
+		fi
 
-if [ -z "$EXISTING_KUKSA_IMAGE" ] || [ "$EXISTING_KUKSA_IMAGE" != "$KUKSA_VAL_IMG" ]; then
+		echo "# Tyrying to download $KUKSA_VAL_IMG from: $KUKSA_URL ..."
+		wget -q --no-check-certificate "$KUKSA_URL" -O kuksa-val-$ARCH.tar.xz
+		exit_on_error
 
-    # Download latest kuksa for $ARCH, KUKSA_VAL_IMG must be updated in $CONFIG with it's version
-    if [ -z "$KUKSA_URL" ]; then
-        echo "Warning! Missing KUKSA_URL in: $CONFIG"
-        echo "Copy download link from: https://kuksaval.northeurope.cloudapp.azure.com/job/kuksaval-upstream/job/master/lastSuccessfulBuild/artifact/artifacts/kuksa-val-*-${ARCH}.tar.xz"
-        exit 1
-    fi
+		# Store image name in variable KUKSA_VAL_IMG
+		DOCKER_LOAD_RESULT=`sudo docker load --input kuksa-val-$ARCH.tar.xz`
+		# Remove the file after loading
+		rm kuksa-val-$ARCH.tar.xz
 
-    echo "# Tyrying to download $KUKSA_VAL_IMG from: $KUKSA_URL ..."
-    wget -q --no-check-certificate "$KUKSA_URL" -O kuksa-val-$ARCH.tar.xz
-    exit_on_error
+		# remove prefix from result
+		LOADED_IMAGE="${DOCKER_LOAD_RESULT#Loaded image: *}"
+		echo "# Imported kuksa.val: $LOADED_IMAGE"
 
-    # Store image name in variable KUKSA_VAL_IMG
-    DOCKER_LOAD_RESULT=`sudo docker load --input kuksa-val-$ARCH.tar.xz`
-    # Remove the file after loading
-    rm kuksa-val-$ARCH.tar.xz
+		# As docker-compose uses KUKSA_VAL_IMG in $CONFIG, we can't override it, needs to be updated after each kuksa.val build.
+		if [ "$LOADED_IMAGE" != "$KUKSA_VAL_IMG" ]; then
+			echo "# WARNING! $KUKSA_URL image has version: $LOADED_IMAGE"
+			echo "Please, check KUKSA_URL and KUKSA_VAL_IMG in $CONFIG"
+			exit 1
+		fi
 
-    # remove prefix from result
-    LOADED_IMAGE="${DOCKER_LOAD_RESULT#Loaded image: *}"
-    echo "# Imported kuksa.val: $LOADED_IMAGE"
-
-    # As docker-compose uses KUKSA_VAL_IMG in $CONFIG, we can't override it, needs to be updated after each kuksa.val build.
-    if [ "$LOADED_IMAGE" != "$KUKSA_VAL_IMG" ]; then
-        echo "# WARNING! $KUKSA_URL image has version: $LOADED_IMAGE"
-        echo "Please, check KUKSA_URL and KUKSA_VAL_IMG in $CONFIG"
-        exit 1
-    fi
-
-    sudo docker images $KUKSA_VAL_IMG
-    exit_on_error
-else
-    echo "# Using local image: $KUKSA_VAL_IMG"
+		sudo docker images $KUKSA_VAL_IMG
+		exit_on_error
+	else
+		echo "# Using local image: $KUKSA_VAL_IMG"
+	fi
 fi
 
 # docker-compose always uses .env file if it exists, so it overrides ARM64 variables with AMD..
 # There is no option except putting all refered variables in .yml into dedicated .env file so sudo docker-compose
 # can actually load those variables. Otherwise use -E to inherit exported variables in sudo session:
 #  $ sudo -E docker compose --env-file /dev/null
-# NOTE: This change breaks old docker-compose withoud --env-file support.
-DOCKER_OPT="--env-file $CONFIG $DOCKER_OPT"
+if [ -n "$(docker-compose --help | grep env-file)" ]; then
+	# NOTE: This change breaks old docker-compose withoud --env-file support.
+	DOCKER_OPT="--env-file $CONFIG $DOCKER_OPT"
+else
+	if [ ! -f .env ]; then
+		echo "docker-compose version does not support --env-file argument, please make a symlink to .env:"
+		echo ln -sf $CONFIG .env
+		exit 1
+	else
+		echo "docker-compose version does not support --env-file argument, using config from: .env"
+	fi
+fi
 
 echo
 echo "# Using docker-compose version:"
 docker-compose --version
 
+if [ "$USE_TALENT" = "1" ]; then
+	YML=docker-compose.edge-test.yml
+elif [ "$USE_KUKSA_VAL" = "1" ]; then
+	YML=docker-compose.edge.yml
+else
+	YML=docker-compose.edge-no-kuksa.val.yml
+fi
+
 # Print configuration
 echo
-echo "# Print configuration"
-sudo docker-compose $DOCKER_OPT -f docker-compose.edge.yml config
+echo "# Print configuration: $YML"
+sudo docker-compose $DOCKER_OPT -f $YML config
 echo
 
 if [ "$DOCKER_IMAGE_BUILD" = "1" ]; then
     # Build all images
     echo "# Build all images"
     # Since environment variables have precedence over variables defined in .env, nothing has to be changed here, if another .env-file is chosen as startup parameter
-    sudo docker-compose $DOCKER_OPT -f docker-compose.edge.yml --project-name $DOCKER_IMAGE_PREFIX up --build --no-start --remove-orphans --force-recreate
+    sudo docker-compose $DOCKER_OPT -f $YML --project-name $DOCKER_IMAGE_PREFIX up --build --no-start --remove-orphans --force-recreate
 	exit_on_error
 fi
 
@@ -168,7 +158,7 @@ if [ "$DOCKER_IMAGE_EXPORT" = "1" ]; then
 	echo # Exporting images to: $DOCKER_IMAGE_DIR ..."
 	echo
 
-    DOCKER_IMAGES=`sudo docker images -f "reference=$DOCKER_IMAGE_PREFIX*" --format '{{.Repository}}:{{.Tag}}'`
+    DOCKER_IMAGES=`sudo docker images -f "reference=${DOCKER_IMAGE_PREFIX}_*" --format '{{.Repository}}:{{.Tag}}'`
 	### add kuksa-val image to exports
 	DOCKER_IMAGES="$DOCKER_IMAGES
 	$KUKSA_VAL_IMG"
@@ -184,6 +174,6 @@ fi
 if [ "$DOCKER_CONTAINER_START" = "1" ]; then
     # Starting containers
     # Since environment variables have precedence over variables defined in .env, nothing has to be changed here, if another .env-file is chosen as startup parameter
-    sudo docker-compose $DOCKER_OPT -f docker-compose.edge.yml --project-name $DOCKER_IMAGE_PREFIX up
+    sudo docker-compose $DOCKER_OPT -f $YML --project-name $DOCKER_IMAGE_PREFIX up
 	exit_on_error
 fi
