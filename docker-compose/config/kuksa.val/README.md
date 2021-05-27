@@ -20,6 +20,13 @@ L- Server.pem
 vss.json
 ```
 
-You can find out, where to get these files [here](https://github.com/GENIVI/iot-event-analytics/docker/kuksa.val2iotea/README.md)
+You can find out, where to get these files [here](https://github.com/GENIVI/iot-event-analytics/blob/develop/docker/vss2iotea/README.md)
 
-You can also run the helper script to rebuild vss.json and add required values
+You can also run the helper script to generate vss.json, add required values and download kuksa.val certs:
+```code
+cd vehicle-edge/setup/general/kuksa.val
+./generate-vss.sh
+cp vss-mod.json ../../../docker-compose/config/kuksa.val/vss.json
+cp -r certs ../../../docker-compose/config/kuksa.val/
+```
+

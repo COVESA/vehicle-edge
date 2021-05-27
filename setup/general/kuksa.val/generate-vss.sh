@@ -15,27 +15,45 @@ BASEDIR=`pwd`
 FORCE=0
 [ "$1" = "-f" ] && FORCE=1
 
-# from https://github.com/GENIVI/vss-tools/blob/master/README.md
-if [ $FORCE -eq 1 ] || [ ! -d $BASEDIR/vehicle_signal_specification ]; then
-	git clone --recurse-submodules https://github.com/GENIVI/vehicle_signal_specification.git
+# from https://github.com/GENIVI/iot-event-analytics/blob/develop/docker/vss2iotea/README.md (fixed links)
+
+echo "### Getting kuksa.val certs/ ..."
+[ -d $BASEDIR/certs ] || mkdir -p $BASEDIR/certs
+if [ $FORCE -eq 1 ] || [ ! -f $BASEDIR/certs/jwt.key.pub ]; then
+	wget -q https://raw.githubusercontent.com/eclipse/kuksa.val/master/kuksa_certificates/jwt/jwt.key.pub -O $BASEDIR/certs/jwt.key.pub
+fi
+if [ $FORCE -eq 1 ] || [ ! -f $BASEDIR/certs/Server.key ]; then
+	wget -q https://raw.githubusercontent.com/eclipse/kuksa.val/master/kuksa_certificates/Server.key -O $BASEDIR/certs/Server.key
+fi
+if [ $FORCE -eq 1 ] || [ ! -f $BASEDIR/certs/Server.pem ]; then
+	wget -q https://raw.githubusercontent.com/eclipse/kuksa.val/master/kuksa_certificates/Server.pem -O $BASEDIR/certs/Server.pem
 fi
 
-cd $BASEDIR/vehicle_signal_specification/
-if [ $FORCE -eq 1 ] || [ ! -f vss-tools/vspec2json.py ]; then
+#VSS_DIR=$BASEDIR
+VSS_DIR=/tmp
+
+# from https://github.com/GENIVI/vss-tools/blob/master/README.md
+if [ $FORCE -eq 1 ] || [ ! -d $VSS_DIR/vehicle_signal_specification ]; then
+	cd $VSS_DIR
+	git clone https://github.com/GENIVI/vehicle_signal_specification.git --recurse-submodules
+fi
+
+cd $VSS_DIR/vehicle_signal_specification
+if [ $FORCE -eq 1 ] || [ ! -f ./vss-tools/vspec2json.py ]; then
 	git checkout $VSS_TAG
 	git submodule update --init
 fi
 
 # from https://github.com/GENIVI/vss-tools/blob/master/README.md
-cd $BASEDIR/vehicle_signal_specification/vss-tools
+cd $VSS_DIR/vehicle_signal_specification/vss-tools
 [ $FORCE -eq 1 ] && pip3 uninstall vss-tools
 pip3 install -e .
 pip3 install -r requirements.txt
-pytest tests
+# pytest tests
 
 
 # generate json from vspec
-cd $BASEDIR/vehicle_signal_specification/
+cd $VSS_DIR/vehicle_signal_specification/
 [ $FORCE -eq 1 ] && rm -f $BASEDIR/vss.json &>/dev/null
 python3 vss-tools/vspec2json.py -I spec -i:spec/VehicleSignalSpecification.id spec/VehicleSignalSpecification.vspec $BASEDIR/vss.json
 
@@ -75,4 +93,6 @@ echo "### Modified file: $BASEDIR/vss-mod.json"
 echo
 
 echo "Execute the following command to install modified vss.json"
-echo "cp vss-mod.json ../../../docker-compose/config/kuksa.val/vss.json"
+echo "  cp vss-mod.json ../../../docker-compose/config/kuksa.val/vss.json"
+echo "  cp -r certs ../../../docker-compose/config/kuksa.val/"
+
