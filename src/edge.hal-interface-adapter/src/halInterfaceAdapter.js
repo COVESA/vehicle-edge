@@ -163,7 +163,7 @@ module.exports = class HalInterfaceAdapter {
     async __onHalMessageReceive(msg, topic) {
         this.logger.debug(`Received HAL message ${JSON.stringify(msg)} for topic ${topic}`);
 
-        // Receives 10.CruiseStatus2
+        // Receives topic like '10.CruiseStatus2'
         try {
             const entry = this.lut.resolveEntryByHalResourceId(topic);
             const messageModel = new JsonModel(msg);

@@ -356,7 +356,7 @@ class MockSignalGenerator:
 
 class MockBusObserver(BusObserver):
     def __init__(self, bus_config, protocol_gateway):
-        super(MockBusObserver, self).__init__(bus_config, protocol_gateway)
+        super().__init__(bus_config, protocol_gateway)
 
         # pylint: disable=anomalous-backslash-in-string
         self.topic_regex = re.compile('([^\.]+)\.(.+)\/(?:start|stop)$')
@@ -494,7 +494,7 @@ class HalInterface:
 
     async def init_protocol_gateway(self):
         self.protocol_gateway = ProtocolGateway(self.config['protocolGateway'], 'HalInterface-{}'.format(id(self)), True)
-        if len(self.config['protocolGateway']['adapters']) is not 1:
+        if len(self.config['protocolGateway']['adapters']) != 1:
             raise Exception('Invalid ProtocolGateway Configuration: only one adapter is allowed!')
 
         # pylint: disable=anomalous-backslash-in-string
