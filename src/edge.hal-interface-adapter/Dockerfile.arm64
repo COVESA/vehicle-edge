@@ -54,7 +54,4 @@ WORKDIR /app
 # Copy node modules
 COPY --from=build /build/src/edge.hal-interface-adapter ./
 
-# Print modules over 1MB in size
-RUN du -sh ./node_modules/* | sort -nr | grep '\dM.*' 2>&1
-
 CMD ["node", "/app/src/index.js", "-c", "/app/config"]

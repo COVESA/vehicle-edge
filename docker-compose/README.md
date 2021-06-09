@@ -72,7 +72,10 @@
 
 ### No Kuksa.val
 
-- Run `docker-compose -f docker-compose-no-kuksa.val.yml`
+- __>> AMD64 platform only: <<__<br>
+  - Run `docker-compose --env-file .amd64.env -f docker-compose-no-kuksa.val.yml`
+- __>> ARM64 platform only: <<__<br>
+  - Run `docker-compose --env-file .arm64.env -f docker-compose-no-kuksa.val.yml`
 
 ### With Kuksa.val
 

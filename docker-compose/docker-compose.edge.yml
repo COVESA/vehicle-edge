@@ -1,8 +1,11 @@
 version: '3.2'
 services:
   mosquitto:
+    platform: linux/${ARCH-amd64}
     build:
       context: ../iot-event-analytics/docker/mosquitto
+      labels:
+        arch: ${ARCH-amd64}
       dockerfile: Dockerfile.${ARCH-amd64}
       args:
         - HTTP_PROXY=${DOCKER_HTTP_PROXY}
@@ -14,8 +17,11 @@ services:
         source: "${CONFIG_DIR}/mosquitto"
         target: "/mosquitto/config"
   iotea:
+    platform: linux/${ARCH-amd64}
     build:
       context: ../iot-event-analytics
+      labels:
+        arch: ${ARCH-amd64}
       dockerfile: docker/platform/Dockerfile.slim.${ARCH-amd64}
       args:
         - HTTP_PROXY=${DOCKER_HTTP_PROXY}
@@ -37,9 +43,12 @@ services:
         source: "${CONFIG_DIR}/kuksa.val"
         target: "/config"
   kuksa.val2iotea:
+    platform: linux/${ARCH-amd64}
     build:
       context: ../iot-event-analytics
-      dockerfile: docker/kuksa.val2iotea/Dockerfile.${ARCH-amd64}
+      labels:
+        arch: ${ARCH-amd64}
+      dockerfile: ../iot-event-analytics/docker/kuksa.val2iotea/Dockerfile.${ARCH-amd64}
       args:
         - HTTP_PROXY=${DOCKER_HTTP_PROXY}
         - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
@@ -54,22 +63,27 @@ services:
       - iotea
       - kuksa.val
   hal-interface-adapter:
+    platform: linux/${ARCH-amd64}
     build:
       context: ../
+      labels:
+        arch: ${ARCH-amd64}
       dockerfile: src/edge.hal-interface-adapter/Dockerfile.${ARCH-amd64}
       args:
         - HTTP_PROXY=${DOCKER_HTTP_PROXY}
         - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
     depends_on:
-      - kuksa.val
       - iotea
     volumes:
       - type: bind
-        source: "${CONFIG_DIR}/hal-interface-adapter/config"
+        source: "${CONFIG_DIR}/hal-interface-adapter/config-no-kuksa"
         target: "/app/config"
   hal-interface:
+    platform: linux/${ARCH-amd64}
     build:
       context: ../
+      labels:
+        arch: ${ARCH-amd64}
       dockerfile: src/edge.hal-interface/Dockerfile.${ARCH-amd64}
       args:
         - HTTP_PROXY=${DOCKER_HTTP_PROXY}
