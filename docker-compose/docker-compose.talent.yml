@@ -1,0 +1,25 @@
+version: '3.2'
+services:
+  talent:
+    platform: linux/${ARCH-amd64}
+    build:
+      context: ../
+      labels:
+        arch: ${ARCH-amd64}
+      dockerfile: src/edge.talent/Dockerfile.${ARCH-amd64}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    environment:
+      - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+      - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    networks:
+      - edge-platform-network
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/talent"
+        target: "/app/config"
+networks:
+  edge-platform-network:
+    name: edge-platform-network
+    driver: bridge

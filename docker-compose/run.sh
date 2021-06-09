@@ -53,9 +53,9 @@ fi
 
 # default values for missing vars
 ARCH="amd64"
+WITH_KUKSA_VAL=1
+WITH_TALENT=0
 DOCKER_IMAGE_BUILD=1
-USE_KUKSA_VAL=1
-USE_TALENT=0
 DOCKER_IMAGE_EXPORT=0
 DOCKER_CONTAINER_START=1
 
@@ -65,7 +65,7 @@ load_config "$SCRIPT_DIR/run.properties"
 
 cd $SCRIPT_DIR
 
-if [ "$USE_KUKSA_VAL" = "1" ]; then
+if [ "$WITH_KUKSA_VAL" = "1" ]; then
 	# Check if local image of KUKSA.VAL is already loaded
 	echo "# Checking for KUKSA_VAL_IMG: $KUKSA_VAL_IMG"
 	EXISTING_KUKSA_IMAGE=`sudo docker images --format '{{.Repository}}:{{.Tag}}' $KUKSA_VAL_IMG`
@@ -127,25 +127,27 @@ echo
 echo "# Using docker-compose version:"
 docker-compose --version
 
-if [ "$USE_TALENT" = "1" ]; then
-	YML=docker-compose.edge-test.yml
-elif [ "$USE_KUKSA_VAL" = "1" ]; then
-	YML=docker-compose.edge.yml
-else
-	YML=docker-compose.edge-no-kuksa.val.yml
+YML="-f docker-compose.stack.yml"
+
+if [ "$WITH_KUKSA_VAL" = "1" ]; then
+	YML="${YML} -f docker-compose.kuksa.val.yml"
+fi
+
+if [ "$WITH_TALENT" = "1" ]; then
+	YML="${YML} -f docker-compose.talent.yml"
 fi
 
 # Print configuration
 echo
 echo "# Print configuration: $YML"
-sudo docker-compose $DOCKER_OPT -f $YML config
+sudo docker-compose $DOCKER_OPT $YML config
 echo
 
 if [ "$DOCKER_IMAGE_BUILD" = "1" ]; then
     # Build all images
     echo "# Build all images"
     # Since environment variables have precedence over variables defined in .env, nothing has to be changed here, if another .env-file is chosen as startup parameter
-    sudo docker-compose $DOCKER_OPT -f $YML --project-name $DOCKER_IMAGE_PREFIX up --build --no-start --remove-orphans --force-recreate
+    sudo docker-compose $DOCKER_OPT $YML --project-name $DOCKER_IMAGE_PREFIX up --build --no-start --remove-orphans --force-recreate
 	exit_on_error
 fi
 
@@ -165,7 +167,7 @@ if [ "$DOCKER_IMAGE_EXPORT" = "1" ]; then
 
     for img in $DOCKER_IMAGES; do
         IMG_REPO=`echo ${img} | cut -d ':' -f 1`
-        FILENAME=$( echo $IMG_REPO.$IOTEA_VERSION.${ARCH}.tar | tr '/' '_' )
+        FILENAME=$( echo $IMG_REPO.${ARCH}.tar | tr '/' '_' )
         echo "# Exporting $img as $FILENAME"
         sudo docker save $img -o $DOCKER_IMAGE_DIR/$FILENAME
     done

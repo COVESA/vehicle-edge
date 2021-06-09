@@ -22,6 +22,8 @@ WORKDIR /build
 
 COPY iot-event-analytics ./iot-event-analytics
 
+COPY ./src/install-js-sdk.js ./src/
+
 COPY ./src/edge.hal-interface-adapter ./src/edge.hal-interface-adapter
 
 WORKDIR /build/src/edge.hal-interface-adapter

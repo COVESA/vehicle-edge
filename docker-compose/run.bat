@@ -15,6 +15,12 @@ SET VARIANT
 SET DOCKER_IMAGE_PREFIX=vehicle-edge
 SET BATCH_PATH=%~dp0
 SET DOCKER_IMAGE_DIR=%BATCH_PATH%images
+SET YML=-f docker-compose.stack.yml
+SET WITH_KUKSA_VAL=0
+SET WITH_TALENT=0
+SET DOCKER_IMAGE_BUILD=1
+SET DOCKER_IMAGE_EXPORT=0
+SET DOCKER_CONTAINER_START=1
 
 echo %DOCKER_IMAGE_DIR%
 
@@ -34,16 +40,17 @@ REM Load environment variables from provided scripts
     GOTO LoadEnvFilesLoop
 :LoadEnvFilesLoopComplete
 
-IF NOT %USE_KUKSA_VAL% == 1 (
-    GOTO SkipKuksa
+IF %WITH_TALENT% == 1 (
+    SET YML=%YML% -f docker-compose.talent.yml
+)
+
+IF NOT %WITH_KUKSA_VAL% == 1 (
+    GOTO SkipKuksaVal
 )
 
 REM Check if local image of Kuksa.val is already loaded
 SET DOCKER_LIST_COMMAND=docker images %KUKSA_VAL_IMG%
 FOR /f "tokens=1-2" %%i IN ('%DOCKER_LIST_COMMAND%') DO SET EXISTING_KUKSA_IMAGE=%%i:%%j
-
-SET DOCKER_IMAGE_TMP_PATH
-
 
 REM Load the downloaded image into the local registry
 SET DOCKER_LOAD_COMMAND=docker image load --input "%TMP%\kuksa-val-%ARCH%.tar.xz"
@@ -60,24 +67,17 @@ IF NOT %EXISTING_KUKSA_IMAGE% == %KUKSA_VAL_IMG% (
     echo Using existing image %KUKSA_VAL_IMG%
 )
 
-REM Print configuration
-docker-compose -f docker-compose.edge.yml config
+SET YML=%YML% -f docker-compose.kuksa.val.yml
 
-REM Build all images
-docker-compose -f docker-compose.edge.yml --project-name %DOCKER_IMAGE_PREFIX% build --no-cache --force-rm --progress auto
-REM docker-compose -f docker-compose.edge.yml --project-name %DOCKER_IMAGE_PREFIX% build --progress auto
-
-GOTO EndKuksa
-
-:SkipKuksa
+:SkipKuksaVal
 
 REM Print configuration
-docker-compose -f docker-compose.edge-no-kuksa.val.yml config
+docker-compose %YML% config
 
-REM Build all images
-docker-compose -f docker-compose.edge-no-kuksa.val.yml --project-name %DOCKER_IMAGE_PREFIX% up --build --no-start --remove-orphans --force-recreate
-
-:EndKuksa
+IF %DOCKER_IMAGE_BUILD% == 1 (
+    REM Build all images
+    docker-compose %YML% --project-name %DOCKER_IMAGE_PREFIX% build --force-rm --no-cache
+)
 
 IF %DOCKER_IMAGE_EXPORT% == 1 (
     REM Make image dir
@@ -91,7 +91,7 @@ IF %DOCKER_IMAGE_EXPORT% == 1 (
     )
 
     REM Export Kuksa.VAL image
-    IF %USE_KUKSA_VAL% == 1 (
+    IF %WITH_KUKSA_VAL% == 1 (
         docker save %KUKSA_VAL_IMG% -o "%DOCKER_IMAGE_DIR%\%DOCKER_IMAGE_PREFIX%_kuksa.val.%ARCH%.tar"
     )
 )
@@ -99,11 +99,7 @@ IF %DOCKER_IMAGE_EXPORT% == 1 (
 IF %DOCKER_CONTAINER_START% == 1 (
     REM Starting containers
     REM Since environment variables have precedence over variables defined in .env, nothing has to be changed here, if another .env-file is chosen as startup parameter
-    IF NOT %USE_KUKSA_VAL% == 1 (
-        docker-compose -f docker-compose.edge-no-kuksa.val.yml --project-name %DOCKER_IMAGE_PREFIX% up
-    ) ELSE (
-        docker-compose -f docker-compose.edge.yml --project-name %DOCKER_IMAGE_PREFIX% up
-    )
+    docker-compose %YML% --project-name %DOCKER_IMAGE_PREFIX% up --remove-orphans
 )
 
 ENDLOCAL

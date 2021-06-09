@@ -22,6 +22,8 @@ WORKDIR /build
 
 COPY iot-event-analytics ./iot-event-analytics
 
+COPY ./src/install-js-sdk.js ./src/
+
 COPY ./src/edge.talent ./src/edge.talent
 
 WORKDIR /build/src/edge.talent
@@ -56,9 +58,6 @@ WORKDIR /app
 
 # Copy node modules
 COPY --from=build /build/src/edge.talent ./
-
-# Print modules over 1MB in size
-RUN du -sh ./node_modules/* | sort -nr | grep '\dM.*' 2>&1
 
 ### uncomment for debug
 #RUN find /app 2>&1

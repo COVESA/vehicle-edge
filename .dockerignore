@@ -11,6 +11,8 @@
 !iot-event-analytics/src/tools/*.js
 # IoT Event Analytics: Python SDK
 !iot-event-analytics/src/sdk/python/src
+# Install js SDK
+!src/install-js-sdk.js
 # HAL-Interface adapter: Include everything but...
 !src/edge.hal-interface-adapter/*
 ## ...node_modules
@@ -31,5 +33,3 @@ src/edge.hal-interface/*.md
 src/edge.talent/node_modules
 ## ...Dockerfiles
 src/edge.talent/*Dockerfile*
-## ...Markdown files
-src/edge.talent/*.md

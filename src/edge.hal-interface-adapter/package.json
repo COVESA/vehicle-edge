@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "postinstall": "yarn install.sdk",
-    "install.sdk": "node install-sdk.js"
+    "install.sdk": "node ../install-js-sdk.js -d ./edge.hal-interface-adapter"
   },
   "author": "Robert Bosch GmbH",
   "license": "MPL-2.0",

@@ -5,14 +5,11 @@
   "main": "src/index.js",
   "scripts": {
     "postinstall": "yarn install.sdk",
-    "install.sdk": "node install-sdk.js"
+    "install.sdk": "node ../install-js-sdk.js -d ./edge.talent"
   },
   "author": "Robert Bosch GmbH",
   "license": "MPL-2.0",
   "engines": {
     "node": ">=12.13.0"
-  },
-  "dependencies": {
-    "yargs": "^17.0.1"
   }
 }

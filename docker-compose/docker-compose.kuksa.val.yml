@@ -1,0 +1,39 @@
+version: '3.2'
+services:
+  hal-interface-adapter:
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/hal-interface-adapter/config"
+        target: "/app/config"
+  kuksa.val:
+    image: ${KUKSA_VAL_IMG}
+    environment:
+      - KUKSAVAL_OPTARGS=--insecure
+    networks:
+      - edge-platform-network
+    ports:
+      - '8090:8090'
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/kuksa.val"
+        target: "/config"
+  kuksa.val2iotea:
+    platform: linux/${ARCH-amd64}
+    build:
+      context: ../iot-event-analytics
+      labels:
+        arch: ${ARCH-amd64}
+      dockerfile: ../iot-event-analytics/docker/kuksa.val2iotea/Dockerfile.${ARCH-amd64}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    networks:
+      - edge-platform-network
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/kuksa.val2iotea"
+        target: "/app/docker/kuksa.val2iotea/config"
+networks:
+  edge-platform-network:
+    name: edge-platform-network
+    driver: bridge
