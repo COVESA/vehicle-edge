@@ -97,7 +97,7 @@ if [ "$WITH_KUKSA_VAL" = "1" ]; then
             exit 1
         fi
 
-        echo "# Tyrying to download $KUKSA_VAL_IMG from: $KUKSA_URL ..."
+        echo "# Trying to download $KUKSA_VAL_IMG from: $KUKSA_URL ..."
         wget -q --no-check-certificate "$KUKSA_URL" -O kuksa-val-$ARCH.tar.xz
         exit_on_error
 

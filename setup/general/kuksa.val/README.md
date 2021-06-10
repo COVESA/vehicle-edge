@@ -20,6 +20,6 @@ L- Server.pem
 vss.json
 ```
 
-You can find out, where to get these files [here](https://github.com/GENIVI/iot-event-analytics/blob/develop/docker/vss2iotea/README.md)
+You can find out, where to get these files [here](https://github.com/GENIVI/iot-event-analytics/blob/develop/docker/kuksa.val2iotea/README.md)
 
 For creating a Kuksa.VAL configuration on a Linux terminal, use the provided _./generate-config.sh_ script. This will create a configuration in the _./config_ directory.
