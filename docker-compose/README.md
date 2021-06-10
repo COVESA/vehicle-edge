@@ -64,7 +64,16 @@
      L- config.json                 // Needs to have the correct JSON Web token, to authenticate against Kuksa.Val
   ```
 
-- Update the your _.env_ file and set the value _CONFIG\_DIR_ to `/abs/path/to/<custom config folder>`
+- Update the (.amd64.env OR .arm64.env) file and set the value _CONFIG\_DIR_ to `/abs/path/to/<custom config folder>`
+
+## Proxy prerequisites
+
+Append the following to the _.amd64.env_ OR _.arm64.env_ file
+
+```text
+DOCKER_HTTP_PROXY=http://host.docker.internal:3128
+DOCKER_HTTPS_PROXY=http://host.docker.internal:3128
+```
 
 ## Run manually
 
@@ -73,9 +82,9 @@
 ### No Kuksa.val
 
 - __>> AMD64 platform only: <<__<br>
-  - Run `docker-compose --env-file .amd64.env -f docker-compose-no-kuksa.val.yml`
+  - Run `docker-compose --env-file .amd64.env -f docker-compose.stack.yml up`
 - __>> ARM64 platform only: <<__<br>
-  - Run `docker-compose --env-file .arm64.env -f docker-compose-no-kuksa.val.yml`
+  - Run `docker-compose --env-file .arm64.env -f docker-compose.stack.yml up`
 
 ### With Kuksa.val
 
@@ -86,18 +95,13 @@
     Set the property KUKSA_VAL_IMG to `arm64/kuksa-val:<version>` in the _.arm64.env_ file
 - Check your configuration using `docker-compose -f docker-compose.edge.yml config`
 - __>> AMD64 platform only: <<__<br>
-  Run `docker-compose -f docker-compose.edge.yml --project-name vehicle-edge-platform --env-file <path to your env file OR .amd64.env> up --build --remove-orphans`
+  Run `docker-compose -f docker-compose.stack.yml -f docker-compose.kuksa.val.yml --project-name vehicle-edge-platform --env-file <path to your env file OR .amd64.env> up --build --remove-orphans`
 - __>> ARM64 platform only: <<__<br>
-  Run `docker-compose -f docker-compose.edge.yml --project-name vehicle-edge-platform --env-file <path to your env file OR .arm64.env> up --build --remove-orphans`
+  Run `docker-compose -f docker-compose.stack.yml -f docker-compose.kuksa.val.yml --project-name vehicle-edge-platform --env-file <path to your env file OR .arm64.env> up --build --remove-orphans`
 
 ## Run scripted
 
-### >> AMD64 platform only <<
-
 - __>> Windows only <<__<br>
-  `<run-script>` is _run.bat_
+  _run.bat_ run.properties (.amd64.env OR .arm64.env)
 - __>> Linux only <<__<br>
-  `<run-script>` is _run.sh_
-
-- Start using the \<run-script\>
-  - You can start the platform `<run-script> <path to your env file or .amd64.env or .arm64.env> <path to run.properties>`
+   _run.sh_ (.amd64.env OR .arm64.env)

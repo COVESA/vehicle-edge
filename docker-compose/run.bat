@@ -11,7 +11,6 @@ REM ############################################################################
 SETLOCAL EnableExtensions
 
 SET ARCH=amd64
-SET VARIANT
 SET DOCKER_IMAGE_PREFIX=vehicle-edge
 SET BATCH_PATH=%~dp0
 SET DOCKER_IMAGE_DIR=%BATCH_PATH%images
@@ -21,8 +20,6 @@ SET WITH_TALENT=0
 SET DOCKER_IMAGE_BUILD=1
 SET DOCKER_IMAGE_EXPORT=0
 SET DOCKER_CONTAINER_START=1
-
-echo %DOCKER_IMAGE_DIR%
 
 REM Enable buildkit support
 SET DOCKER_BUILDKIT=1
