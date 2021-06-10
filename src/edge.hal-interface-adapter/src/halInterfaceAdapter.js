@@ -9,17 +9,18 @@
  ****************************************************************************/
 
 const iotea = require('boschio.iotea');
-const MqttBroker = iotea.util.MqttBroker;
+
+const MqttClient = iotea.util.MqttClient;
 const fs = require('fs').promises;
 
 const {
     PLATFORM_EVENTS_TOPIC,
-    PLATFORM_EVENT_TYPE_SET_RULES,
-    PLATFORM_EVENT_TYPE_UNSET_RULES
+    PLATFORM_EVENT_TYPE_SET_CONFIG,
+    PLATFORM_EVENT_TYPE_UNSET_CONFIG
 } = iotea.constants;
 
 const {
-    VssWebsocket,
+	KuksaValWebsocket,
     VssPathTranslator
 } = iotea.adapter;
 
@@ -32,8 +33,8 @@ module.exports = class HalInterfaceAdapter {
     // Publish info about enabled and disabled VSS paths
     constructor() {
         this.lut = new HalVssLookupTable();
-        this.ioTeaBroker = null;
-        this.halBroker = null;
+        this.ioteaClient = null;
+        this.halClient = null;
 
         this.vssSocket = null;
         // Needed for directly passing values to IoT Event Analytics
@@ -53,44 +54,46 @@ module.exports = class HalInterfaceAdapter {
                 this.config = new JsonModel(configData);
 
                 try {
-                    this.vssPathTranslator = new VssPathTranslator(this.config.get('vss.pathConfig'));
+                    this.vssPathTranslator = new VssPathTranslator(this.config.get("'kuksa.val'.pathConfig"));
                 }
                 catch(err) {
                     // Invalid configuration for VSS path translator
+					this.logger.error(err.message, null, err);
                 }
 
                 // Init the global log level
                 process.env.LOG_LEVEL = this.config.get('loglevel', Logger.ENV_LOG_LEVEL.WARN);
 
                 this.logger.info(`IoT Event Analytics MQTT namespace: ${this.config.get('iotea.mqtt.ns', null)}`);
-                this.ioTeaBroker = new MqttBroker(this.config.get('iotea.mqtt.connectionString'), this.config.get('iotea.mqtt.ns', null));
-                this.halBroker = new MqttBroker(this.config.get('hal.mqtt.connectionString'), this.config.get('hal.mqtt.ns', null));
+                this.ioteaClient = new MqttClient(this.config.get('iotea.mqtt.connectionString'), this.config.get('iotea.mqtt.ns', null));
+                this.halClient = new MqttClient(this.config.get('hal.mqtt.connectionString'), this.config.get('hal.mqtt.ns', null));
             })
-            .then(() => this.__loadMappingFile(absMappingFilePath, this.config.get('vss.bypass', false) === true))
+            .then(() => this.__loadMappingFile(absMappingFilePath, this.config.get("'kuksa.val'.bypass", false) === true))
             .then(async () => {
                 this.subject = this.config.get('iotea.subject', null);
                 this.instance = this.config.get('iotea.instance', null);
 
-                const hasVssConfig = this.config.get('vss.ws', null) !== null && this.config.get('vss.jwt', null) !== null;
+                const hasVssConfig = this.config.get("'kuksa.val'.ws", null) !== null && this.config.get("'kuksa.val'.jwt", null) !== null;
 
                 if (!hasVssConfig) {
                     this.logger.always('*****INFO***** No Kuksa.VAL configuration found. All events will be directly sent to IoT Event Anayltics Platform');
 
                     if (this.subject === null || this.instance === null) {
-                        throw new Error(`You need to define the mandatory fields iotea.subject and iotea.instance to be able to omit vss.ws and vss.jwt`);
+                        throw new Error(`You need to define the mandatory fields iotea.subject and iotea.instance to be able to omit 'kuksa.val'.ws and 'kuksa.val'.jwt`);
                     }
 
                     return;
                 }
 
-                this.vssSocket = new VssWebsocket(this.config.get('vss.ws'), this.config.get('vss.jwt'));
+                this.logger.info(`Connecting to KuksaVal: ${this.config.get("'kuksa.val'.ws")}`);
+                this.vssSocket = new KuksaValWebsocket(this.config.get("'kuksa.val'.ws"), this.config.get("'kuksa.val'.jwt"));
 
                 // Check if any event goes directly to IoT Event Analytics Platform
                 const sendAnyEventToIoTea = this.lut.entries().reduce((acc, entry) => acc && entry.shouldBypassVss(), false);
 
                 // Get subject from KUKSA.val
-                if (this.config.get('vss.subjectPath', null) !== null) {
-                    await this.vssSocket.subscribe(this.config.get('vss.subjectPath'), msg => {
+                if (this.config.get("'kuksa.val'.subjectPath", null) !== null) {
+                    await this.vssSocket.subscribe(this.config.get("'kuksa.val'.subjectPath"), msg => {
                         this.subject = msg.value;
                     }, err => {
                         this.logger.error(err.message, null, err);
@@ -102,8 +105,8 @@ module.exports = class HalInterfaceAdapter {
                 }
 
                 // Get instance from KUKSA.val
-                if (this.config.get('vss.instancePath', null) !== null) {
-                    await this.vssSocket.subscribe(this.config.get('vss.instancePath'), msg => {
+                if (this.config.get("'kuksa.val'.instancePath", null) !== null) {
+                    await this.vssSocket.subscribe(this.config.get("'kuksa.val'.instancePath"), msg => {
                         this.instance = msg.value;
                     }, err => {
                         this.logger.error(err.message, null, err);
@@ -115,12 +118,12 @@ module.exports = class HalInterfaceAdapter {
                 }
             })
             .then(() => {
-                this.logger.info(`Subscribing for HAL events on topic + with namespace ${this.halBroker.topicNs}`);
-                return this.halBroker.subscribeJson('$share/hal-interface-adapters/+', this.__onHalMessageReceive.bind(this));
+                this.logger.info(`Subscribing for HAL events on topic + with namespace ${this.halClient.topicNs}`);
+                return this.halClient.subscribeJson('$share/hal-interface-adapters/+', this.__onHalMessageReceive.bind(this));
             })
             .then(() => {
                 this.logger.info(`Subscribing for platform events on ${PLATFORM_EVENTS_TOPIC}...`);
-                return this.ioTeaBroker.subscribeJson(`$share/hal-interface-adapter/${PLATFORM_EVENTS_TOPIC}`, this.__onIoTeaPlatformEvent.bind(this));
+                return this.ioteaClient.subscribeJson(`$share/hal-interface-adapter/${PLATFORM_EVENTS_TOPIC}`, this.__onIoTeaPlatformEvent.bind(this));
             })
             .then(() => {
                 this.logger.info('HAL interface adapter started successfully');
@@ -131,11 +134,13 @@ module.exports = class HalInterfaceAdapter {
     }
 
     __loadConfigFile(absPath) {
+		this.logger.debug(`Loading config from: ${absPath} ...`);
         return fs.readFile(absPath, { encoding: 'utf8' })
             .then(content => JSON.parse(content));
     }
 
     __loadMappingFile(absPath, defaultBypassVss) {
+		this.logger.debug(`Loading mapping from: ${absPath} ...`);
         return fs.readFile(absPath, { encoding: 'utf8' })
             .then(content => JSON.parse(content))
             .then(entries => {
@@ -150,7 +155,7 @@ module.exports = class HalInterfaceAdapter {
 
         // Receives hal/10.CruiseStatus2
         // Strip namespace
-        topic = topic.replace(this.halBroker.topicNs, '');
+        topic = topic.replace(this.halClient.topicNs, '');
 
         try {
             const entry = this.lut.resolveEntryByHalResourceId(topic);
@@ -183,7 +188,8 @@ module.exports = class HalInterfaceAdapter {
     async __onIoTeaPlatformEvent(ev, topic) {
         this.logger.debug(`Received platform event ${JSON.stringify(ev)} on topic ${topic}`);
 
-        if (ev.type !== PLATFORM_EVENT_TYPE_SET_RULES && ev.type !== PLATFORM_EVENT_TYPE_UNSET_RULES) {
+        if (ev.type !== PLATFORM_EVENT_TYPE_SET_CONFIG && ev.type !== PLATFORM_EVENT_TYPE_UNSET_CONFIG) {
+            // this.logger.debug(`### Ignored ev.type: ${ev.type}`);
             return;
         }
 
@@ -192,7 +198,7 @@ module.exports = class HalInterfaceAdapter {
         this.logger.info(`Received event for talent ${talentId}`);
 
         try {
-            const uniqueVssPaths = this.__extractUniqueVssPathsFromRules(ev.data.rules);
+            const uniqueVssPaths = this.__extractUniqueVssPathsFromRules(ev.data.config.rules);
 
             this.logger.info(`Unique vss paths: ${uniqueVssPaths}`);
 
@@ -200,7 +206,7 @@ module.exports = class HalInterfaceAdapter {
                 try {
                     const entry = this.lut.resolveEntryByVssPath(uniqueVssPath);
 
-                    if (ev.type === PLATFORM_EVENT_TYPE_SET_RULES) {
+                    if (ev.type === PLATFORM_EVENT_TYPE_SET_CONFIG) {
                         this.logger.info(`Adding consumer for ${entry.getVssPath()} with HAL resourceId ${entry.getHalResourceId()}`);
 
                         if (entry.pushUniqueConsumer(talentId) && entry.shouldRetainValue && this.retainBuffer.hasOwnProperty(entry.getHalResourceId())) {
@@ -219,7 +225,7 @@ module.exports = class HalInterfaceAdapter {
                         }
                     }
 
-                    if (ev.type === PLATFORM_EVENT_TYPE_UNSET_RULES) {
+                    if (ev.type === PLATFORM_EVENT_TYPE_UNSET_CONFIG) {
                         this.logger.info(`Removing consumer from ${entry.getVssPath()} with HAL resourceId ${entry.getHalResourceId()}`);
 
                         entry.removeConsumerIfExisting(talentId);
@@ -266,14 +272,14 @@ module.exports = class HalInterfaceAdapter {
 
     __enableHalResourceId(halResourceId) {
         this.logger.info(`Enable HAL resourceId ${halResourceId}`);
-        return this.halBroker.publishJson(`${halResourceId}/enable`, {
+        return this.halClient.publishJson(`${halResourceId}/enable`, {
             returnTopic: ''
         });
     }
 
     __disableHalResourceId(halResourceId) {
         this.logger.info(`Disable HAL resourceId ${halResourceId}`);
-        return this.halBroker.publishJson(`${halResourceId}/disable`, {
+        return this.halClient.publishJson(`${halResourceId}/disable`, {
             returnTopic: ''
         });
     }
@@ -287,7 +293,7 @@ module.exports = class HalInterfaceAdapter {
 
             this.logger.debug(`Publishing ${value} to IoT Event Analytics for type=${type} and feature=${feature}...`);
 
-            return this.ioTeaBroker.publishJson(iotea.constants.INGESTION_TOPIC, {
+            return this.ioteaClient.publishJson(iotea.constants.INGESTION_TOPIC, {
                 whenMs,
                 // First element is type
                 type,

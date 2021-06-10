@@ -1,0 +1,9 @@
+[
+    {
+        "halResourceId": "42.Speed",
+        "halValuePath": "value",
+        "halValueFactor": 1,
+        "halValueOffset": 0,
+        "vssPath": "Vehicle.Speed"
+    }
+]

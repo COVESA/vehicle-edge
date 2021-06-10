@@ -13,13 +13,16 @@
 [![Gitter](https://badges.gitter.im/vehicle-edge/community.svg)](https://gitter.im/vehicle-edge/community)
 [![License](https://img.shields.io/badge/License-MPL%202.0-blue.svg)](https://opensource.org/licenses/MPL-2.0)
 
-
 ## What is Vehicle Edge?
 
 Vehicle Edge is a software stack, which acts as an interface within the software stack of domain or vehicle computers.
 The Vehicle Edge stack is built from various software components. It is built around the IoT Event Analytics Platform, which offers to write vehicle agnostic applications so called _"Vehicle Applications"_.
 
 A deployment and component overview can be found [here](./docs/deployment.md)
+
+## Initialize and/or update the iot-event-analytics submodule
+
+Since the repository uses submodules, you have to clone it with the option `--recurse-submodules`. If you already have a clone without the submodule, then simply run `git submodule update --init --recursive` to fetch the submodule.
 
 ## Getting started using docker-compose
 

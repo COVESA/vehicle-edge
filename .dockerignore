@@ -1,0 +1,35 @@
+*
+# IoT Event Analytics: Node.js SDK
+!iot-event-analytics/package.json
+!iot-event-analytics/*.md
+!iot-event-analytics/LICENSE
+!iot-event-analytics/yarn.lock
+!iot-event-analytics/src/core
+!iot-event-analytics/src/adapter
+!iot-event-analytics/src/module.js
+!iot-event-analytics/src/sdk/javascript/pack.js
+!iot-event-analytics/src/tools/*.js
+# IoT Event Analytics: Python SDK
+!iot-event-analytics/src/sdk/python/src
+# Install js SDK
+!src/install-js-sdk.js
+# HAL-Interface adapter: Include everything but...
+!src/edge.hal-interface-adapter/*
+## ...node_modules
+src/edge.hal-interface-adapter/node_modules
+## ...Dockerfiles
+src/edge.hal-interface-adapter/*Dockerfile*
+## ...Markdown files
+src/edge.hal-interface-adapter/*.md
+# HAL-Interface: Include everything but...
+!src/edge.hal-interface/*
+## ...Dockerfiles
+src/edge.hal-interface/*Dockerfile*
+## ...Markdown files
+src/edge.hal-interface/*.md
+# edge.talent: Include everything but...
+!src/edge.talent/*
+## ...node_modules
+src/edge.talent/node_modules
+## ...Dockerfiles
+src/edge.talent/*Dockerfile*

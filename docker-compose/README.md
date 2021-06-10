@@ -20,7 +20,6 @@
   - Ubuntu 18.04.5
     - Docker Engine v19.03.6
     - Compose 1.27.4
-(Not completed)
   - Ubuntu Desktop 20.10 (on Raspberry Pi4)
     - Docker Engine v19.03.6
     - Compose 1.27.4
@@ -30,81 +29,79 @@
 - For further information how to build the images (especially, if you are working behind a proxy), please see [here](https://github.com/GENIVI/iot-event-analytics/tree/develop/docker)
 - [Install docker-compose and check the version](https://github.com/GENIVI/iot-event-analytics/tree/develop/docker-compose)
 
-### Scripted
+## Custom configuration
 
-Setup can be easily bootstrapped by using the `<run-script>`. In order to do so directly proceed with the [Run](##Run) section
+- Copy the _./docker-compose/config_ folder. For further information about the configuration for a specific component, read _setup/general/\<component-name\>_
+- Copy the respective _.env_ file matching your deployment architecture (Either _.arm64.env_ or _.amd64.env_)
+- The contents should look like this<br>
 
-### Manual
+  ```text
+  <custom config folder>
+  |- hal-interface
+  |  L- config.json
+  |- hal-interface-adapter
+  |  |- config.json                 // Needs to have the correct JSON Web token, to authenticate against Kuksa.val
+  |  L- mapping.json
+  |- iotea
+  |  |- channels
+  |  |  |- talent.channel.json
+  |  |  |- talent.schema.json
+  |  |  |- kuksa.val.channel.json
+  |  |  |- kuksa.val.schema.json
+  |  |  L- kuksa.val.transform.jna
+  |  |- config.json
+  |  |- types.json                  // Needs to have types configuration, which matches the provided Vehicle Signal Specification
+  |  L- uom.json
+  |- mosquitto
+  |  L- config.json
+  |- kuksa.val                      // (optional, needed if Kuksa.val should be used)
+  |  |- certs                       // Read in setup/general/kuksa.val/README.md how to create the required configuration files
+  |  |  |- jwt.key.pub
+  |  |  |- Server.key
+  |  |  L- Server.pem
+  |  L- vss.json
+  L- kuksa.val2iotea                // (optional, needed if Kuksa.val should be used)
+     L- config.json                 // Needs to have the correct JSON Web token, to authenticate against Kuksa.Val
+  ```
 
-- Clone the [IoT Event Analytics](https://github.com/GENIVI/iot-event-analytics) repository into `<any folder>` using git<br>
-  Update the _.env_ file (IOTEA_PROJECT_DIR) with the absolute path to `<any folder>` - could be any valid local folder<br>
-  You can checkout a specific version tag if desired. __This version should match the SDKs you are copying in the next steps!__
-- Copy `<any folder>/src/sdk/javascript/lib/boschio.iotea-<version>.tgz` into _/src/edge.hal-interface-adapter_ AND _/docker-compose/talent_<br>
-  Update the _.env_ file (IOTEA_JS_SDK) with `boschio.iotea-<version>.tgz`
-- Copy `<any folder>/src/sdk/python/lib/boschio_iotea-<version>-py3-none-any.whl` into the _/src/edge.hal-interface_ directory<br>
-  Update the _.env_ file (IOTEA_PYTHON_SDK) with `boschio_iotea-<version>-py3-none-any.whl`
-- Follow **Install KUKSA.VAL** section from [https://github.com/GENIVI/iot-event-analytics/tree/develop/docker/vss2iotea/README.md](https://github.com/GENIVI/iot-event-analytics/tree/develop/docker/vss2iotea/README.md) to __download AND load__ the latest version of KUKSA.VAL into your local Docker registry.<br>
-  Update the _.env_ file (KUKSA_VAL_IMG) with
-  - __>> AMD64 platform only: <<__ `amd64/kuksa-val:<version>`
-  - __>> ARM64 platform only: <<__ `arm64/kuksa-val:<version>`
+- Update the (.amd64.env OR .arm64.env) file and set the value _CONFIG\_DIR_ to `/abs/path/to/<custom config folder>`
+
+## Proxy prerequisites
+
+Append the following to the _.amd64.env_ OR _.arm64.env_ file
+
+```text
+DOCKER_HTTP_PROXY=http://host.docker.internal:3128
+DOCKER_HTTPS_PROXY=http://host.docker.internal:3128
+```
+
+## Run manually
+
+- Clone this repository with `--recurse-submodules` flag. If you already cloned it, but you do not have the submodule, run `git submodule update --init --recursive`
+
+### No Kuksa.val
+
+- __>> AMD64 platform only: <<__<br>
+  - Run `docker-compose --env-file .amd64.env -f docker-compose.stack.yml up`
+- __>> ARM64 platform only: <<__<br>
+  - Run `docker-compose --env-file .arm64.env -f docker-compose.stack.yml up`
+
+### With Kuksa.val
+
+- Follow **Install Kuksa.val** section from [https://github.com/GENIVI/iot-event-analytics/tree/develop/docker/kuksa.val2iotea/README.md](https://github.com/GENIVI/iot-event-analytics/tree/develop/docker/kuksa.val2iotea/README.md) to __download AND load__ the latest version of KUKSA.VAL into your local Docker registry.<br>
+  - __>> AMD64 platform only: <<__<br>
+    Set the property KUKSA_VAL_IMG to `amd64/kuksa-val:<version>` in the _.env_ file
+  - __>> ARM64 platform only: <<__<br>
+    Set the property KUKSA_VAL_IMG to `arm64/kuksa-val:<version>` in the _.arm64.env_ file
 - Check your configuration using `docker-compose -f docker-compose.edge.yml config`
-- Now you can run the platform by purely using docker-compose i.e. without the `<run-script>`. See bottom of [Run](Run) section;
+- __>> AMD64 platform only: <<__<br>
+  Run `docker-compose -f docker-compose.stack.yml -f docker-compose.kuksa.val.yml --project-name vehicle-edge-platform --env-file <path to your env file OR .amd64.env> up --build --remove-orphans`
+- __>> ARM64 platform only: <<__<br>
+  Run `docker-compose -f docker-compose.stack.yml -f docker-compose.kuksa.val.yml --project-name vehicle-edge-platform --env-file <path to your env file OR .arm64.env> up --build --remove-orphans`
 
-## Run
-
-### >> AMD64 platform only <<
+## Run scripted
 
 - __>> Windows only <<__<br>
-  `<run-script>` is _run.bat_
+  _run.bat_ run.properties (.amd64.env OR .arm64.env)
 - __>> Linux only <<__<br>
-  `<run-script>` is _run.sh_
-
-- Start using the \<run-script\>
-  - Update the _IOTEA\_PROJECT\_DIR_ variable in the _.env_  file to the location where you cloned the IoT Event Analytics repository. If you do not want to clone it manually from [https://github.com/GENIVI/iot-event-analytics](https://github.com/GENIVI/iot-event-analytics), the given _IOTEA\_PROJECT\_DIR_ directory will be created and the repository will be cloned. Make sure you specify the _IOTEA\_VERSION_ (in `run.properties`) in this case in order to check out a specific version of IoT Event Analytics.<br>
-  There is no guarantee, that the stack works, if you choose diverging versions (minor, or major versions) of _IOTEA\_VERSION_, _IOTEA\_JS\_SDK_ and _IOTEA\_PYTHON\_SDK_
-  - You can start the platform using `<run-script>` OR equivalently `<run-script> .env run.properties`
-  - If you want to change the default configuration, you can EITHER
-    - Copy _run.properties_ and _.env_ to a custom location and provide the names as parameters. i.e. `<run-script> <custom .env path> <custom run.properties path>`
-    - Merge both files into one and call `<run-script> <custom merged file path>`
-    - If you want to configure every single component of the Vehicle Edge stack, copy the whole _./config_ folder to `<some-custom-config-folder>`. Change the _CONFIG\_DIR_ variable to the absolute path to this folder e.g. `/home/user/<some-custom-config-folder>`<br>
-      It should look like this<br>
-
-      ```text
-      /home/user/<some-custom-config-folder>
-      |- hal-interface
-      |  L- config.json
-      |- hal-interface-adapter
-      |  |- config.json             // Needs to have the correct JSON Web token, to authenticate against Kuksa.Val
-      |  L- mapping.json
-      |- iotea-platform
-      |  |- channels
-      |  |  |- talent.channel.json
-      |  |  |- talent.schema.json
-      |  |  |- vss.channel.json
-      |  |  |- vss.schema.json
-      |  |  L- vss.transform.jna
-      |  |- config.json
-      |  |- types.json              // Needs to have type configuration, which matches the provided Vehicle Signal Specification
-      |  L- uom.json
-      |- mosquitto
-      |  |- local
-      |  |  L- config.json
-      |  L- remote
-      |  |  L- config.json
-      |- vss                        // Read the provided README.md in this folder to obtain all the needed Kuksa.Val configuration files
-      |  |- certs
-      |  |  |- jwt.key.pub
-      |  |  |- Server.key
-      |  |  L- Server.pem
-      |  L- vss.json
-      L- vss2iotea
-        L- config.json              // Needs to have the correct JSON Web token, to authenticate against Kuksa.Val
-      ```
-
-- Start it without the `<run-script>` script using standalone docker-compose: `docker-compose -f docker-compose.edge.yml --project-name vehicle-edge-platform --env-file .env -- up --build --remove-orphans`<br>
-  If you have a custom _.env_ file for your project, you can specify it using a different value for the --env-file parameter
-
-## Test
-
-- Start the Vehicle Edge stack by using the instructions given in the previous __[Run](##Run)__ section
-  - The Vehicle Application BrakeLightTalent is automatically started along with the stack
+   _run.sh_ (.amd64.env OR .arm64.env)

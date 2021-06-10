@@ -1,0 +1,4 @@
+[submodule "iot-event-analytics"]
+	path = iot-event-analytics
+	url = https://github.com/boschglobal/iot-event-analytics
+	branch = develop

@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "description": "This component handles the communication between HAL-Interface and IoT Event Analytics Platform",
   "main": "src/index.js",
-  "scripts": {},
+  "scripts": {
+    "postinstall": "yarn install.sdk",
+    "install.sdk": "node ../install-js-sdk.js -d ./edge.hal-interface-adapter"
+  },
   "author": "Robert Bosch GmbH",
   "license": "MPL-2.0",
-  "dependencies": {
-    "openapi-types": "7.0.1"
-  },
   "engines": {
     "node": ">=12.13.0"
+  },
+  "dependencies": {
+    "yargs": "^17.0.1"
   }
 }

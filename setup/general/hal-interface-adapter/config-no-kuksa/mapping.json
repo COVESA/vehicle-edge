@@ -1,0 +1,25 @@
+[
+    {
+        "halResourceId": "8.BrakeSwitchStatus",
+        "halValuePath": "value",
+        "halValueMapping": {
+            "Normal Condition": 0,
+            "Brake Pedal Pressed": 1,
+            "(Undefined)": 2,
+            "Brake Switch Fault": 3
+        },
+        "halValueFactor": 1,
+        "halValueOffset": 0,
+        "vssBypass": true,
+        "vssPath": "Vehicle.Body.Lights.IsBrakeOn",
+        "retainValue": true
+    },
+    {
+        "halResourceId": "4E0.Timer1Time",
+        "halValuePath": "value",
+        "halValueFactor": 1,
+        "halValueOffset": 0,
+        "vssPath": "Vehicle.Drivetrain.FuelSystem.TimeSinceStart",
+        "retainValue": false
+    }
+]

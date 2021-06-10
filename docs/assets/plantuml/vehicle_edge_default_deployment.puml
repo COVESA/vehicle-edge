@@ -26,13 +26,13 @@
                 note left of Mosquitto : MQTT broker
         }
 
-        package "Vehicle Application Platform Services" as VehicleApplicationPlatformServices #SteelBlue {
-            component [VSS2IoTEA] <<DockerContainer>>
-            component [KuksaVal] <<DockerContainer>>
+        package "Kuksa.val Integration" as KuksaValIntegration <<Optional>> #SteelBlue {
+            component [Kuksa.val2iotea] <<DockerContainer>>
+            component [Kuksa.val] <<DockerContainer>>
                 interface IF_VSSSocket as if_vss
-                KuksaVal -left- if_vss <<optional>>
+                Kuksa.val -left- if_vss
         }
-  
+
         package "Vehicle Applications" as VehicleApplications <<Example>>  #Silver {
             component [TestTalent] << DockerContainer >>
         }
@@ -57,17 +57,17 @@
 
         ' Set Connections between Components
         TestTalent .down.> if_pb : use
-        VSS2IoTEA ..> if_vss : use <<optional>>
-        VSS2IoTEA ..> if_pb : use
+        Kuksa.val2iotea ..> if_vss : use
+        Kuksa.val2iotea ..> if_pb : use
         Pipeline ..> if_pb : use
         ConfigManager ..> if_pb : use
         HALInterfaceAdapter .up.> if_pb : use
-        HALInterfaceAdapter .up.> if_vss : use <<optional>>
+        HALInterfaceAdapter .up.> if_vss : use
         HALInterface .up.> if_pb : use
         HALInterface .down.> CAN : use
 
         ' Formatting
         VehicleApplications -[hidden]down-> VehicleApplicationPlatform
-        VehicleApplicationPlatform -[hidden]right-> VehicleApplicationPlatformServices
+        VehicleApplicationPlatform -[hidden]right-> KuksaValIntegration
     }
 @enduml

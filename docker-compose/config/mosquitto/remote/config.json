@@ -1,9 +1,0 @@
-{
-    "logTypes": [
-        "error",
-        "warning"
-    ],
-	"mqtt": {
-        "port": 1884
-    }
-}

@@ -1,29 +1,37 @@
-FROM arm64v8/node:12.13.0 as base
+##############################################################################
+# Copyright (c) 2021 Robert Bosch GmbH
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#
+# SPDX-License-Identifier: MPL-2.0
+##############################################################################
 
-FROM base as build
+FROM arm64v8/node:12.13.0 as build
 
-ARG IOTEA_JS_SDK
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
 
-RUN mkdir /build
+ENV HTTP_PROXY=${HTTP_PROXY}
+ENV HTTPS_PROXY=${HTTPS_PROXY}
 
-# Create app directory
+RUN mkdir -p /build
+
 WORKDIR /build
 
-COPY package.json yarn.lock ./
+COPY iot-event-analytics ./iot-event-analytics
 
-# Copy IoT Event Analytics Library
-COPY ${IOTEA_JS_SDK} .
+COPY ./src/install-js-sdk.js ./src/
 
-RUN npm config set strict-ssl false -g
-RUN npm config set maxsockets 5 -g
+COPY ./src/edge.hal-interface-adapter ./src/edge.hal-interface-adapter
 
-RUN yarn add file:${IOTEA_JS_SDK}
+WORKDIR /build/src/edge.hal-interface-adapter
 
-# Install all dependencies
-RUN yarn --production
+RUN yarn
 
 # Audit all packages for security vulnerabilities
-RUN yarn audit
+RUN yarn audit --groups dependencies --level critical
 
 # Shrink node_modules
 RUN curl -sf https://gobinaries.com/tj/node-prune | sh
@@ -31,28 +39,21 @@ RUN curl -sf https://gobinaries.com/tj/node-prune | sh
 # Prune node-modules
 RUN node-prune
 
-FROM arm64v8/node:12.13.0-alpine as runtime
+FROM yobasystems/alpine:3.11.6-aarch64
+
+RUN apk add --no-cache nodejs
 
 # Set root password
 # https://stackoverflow.com/questions/28721699/root-password-inside-a-docker-container
 # https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
 RUN echo "root:`date +%s | sha256sum | base64 | head -c 32`" | chpasswd &> /dev/null
 
-# user with username node is provided from the official node image
-ENV user node
-
 # Create app directory
-RUN mkdir -p /home/$user/app
+RUN mkdir -p /app
 
-# Copy all node modules into this directory
-COPY --chown=node:node --from=build /build /home/$user/app
+WORKDIR /app
 
-WORKDIR /home/$user/app
+# Copy node modules
+COPY --from=build /build/src/edge.hal-interface-adapter ./
 
-# Copy the application sources
-COPY --chown=node:node src/ ./
-
-# Run the image as a non-root user
-USER $user
-
-CMD ["node", "/home/node/app/index.js"]
+CMD ["node", "/app/src/index.js", "-c", "/app/config"]

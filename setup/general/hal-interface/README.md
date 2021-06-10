@@ -14,51 +14,25 @@
 
 - Make sure your installed version of Python is 3.6.x or above
   - Check that with `python --version`
-- `<some-folder>` refers to your installation folder
-- `<some-version>` refers to the version of the IoT Event Analytics Python SDK. Hint: Take the most recent one
 
-## Build Docker image
+## Run from source
 
-- Download the latest npm package from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/python/lib) and copy it into the _src/edge.hal-interface_ folder
-- Open the folder _src/edge.hal-interface_
-- Docker build arguments:
-  - _IOTEA_PYTHON_SDK_ (__mandatory__): Specify the npm module e.g. `boschio_iotea-2.2.1-py3-none-any.whl`, that you downloaded above. It is needed at buildtime
-- For further information how to build the images (especially, if you are working behind a proxy), please see [here](https://github.com/GENIVI/iot-event-analytics/docker/)
+- Open the the project root directory in a terminal
+- Run `python src/edge.hal-interface/src/run.py -c ./setup/general/hal-interface/config`
 
-### >> ARM64 target platform only <<
+## Configure
 
-- Build your Docker image and export the image as tar-archive<br>
-  `docker buildx build --platform linux/arm64 -t hal-interface-arm64:<version> -o type=oci,dest=./hal-interface-arm64.<version>.tar --build-arg IOTEA_PYTHON_SDK=boschio_iotea-<version>-py3-none-any.whl -f Dockerfile.arm64 .`
-- Import this image
-  - `sudo docker load --input hal-interface-arm64.<version>.tar`
-  - `sudo docker tag <SHA256-Hash> hal-interface-arm64:<version>`
-
-### >> AMD64 target platform only <<
-
-- Build your Docker image using the local registry<br>
-  `docker build --build-arg IOTEA_PYTHON_SDK=boschio_iotea-<version>-py3-none-any.whl -t hal-interface-amd64:<version> -f Dockerfile.amd64 .`
-
-## Install
-
-- Download the latest python wheel from [here](https://github.com/GENIVI/iot-event-analytics/src/sdk/python/lib)
-  - Install it using `pip install --user boschio_iotea-<some-version>-py3-none-any.whl`
-- In a terminal, change into the the folder _src/edge.hal-interface_
-- Install other missing dependencies using `pip install --user -r requirements.dev.txt`
-- Create the folder `config` and copy _config.json_ from _./config_ into _src/edge.hal-interface/config_
+- Copy the contents from _./config_ into a new folder
   - Adapt this configuration according to your needs (see below)
 - Optionally create the folder `resources` e.g. for mock CAN-signal files
-- The directory structure should look like this<br>
+- The directory structure of your configuration folder should look like this<br>
 
   ```code
-  src/edge.hal-interface
-  L- config
-  |  L- config.json
+  config
+  |- config.json
   L- resources
-  |  |- signalmock.txt (optional)
-  |  L- *.dbc (optional)
-  |- __init__.py
-  |- hal_interface.py
-  L- run.py
+     |- sampledata.txt (optional)
+     L- *.dbc (optional)
   ```
 
 ### Configuration
@@ -99,7 +73,7 @@ Configure start of mock, by setting _interface_ property in _config.json_ to "mo
                     "useSignalRequestTriggers": true // defaults to true, Uses messages via enable/disable to start and stop the generator
                 },
                 "11.Test": {
-                    "file": "", // relative filepath to hal-interface executable or absolute filepath
+                    "file": "", // relative filepath to hal-interface executable or absolute filepath i.e. resources/sampledata.txt
                                 // The filename determines the singnals datatype
                                 // sampledata-int.txt >> signals are treated as integers
                                 // sampledata-float.txt >> signals are treated as float values
@@ -151,36 +125,24 @@ The first entry is the signal value, the second entry is the timestamp in millis
 Specify an arbitary amount of dbc files, which should be used to decode the received signals from the given CAN bus.
 As default, all signals are published when they change. For continuous values like speed, _signalThrottleMs_ gives the opportunity to set the minimum delay between to signals until they are published again.
 
-## Run
+## Build
 
-Start everything using `python src/edge.hal-interface/run.py`<br>
+### >> ARM64 target platform only <<
 
-### >> Linux only <<
+- Build your Docker image and export the image as tar-archive<br>
+  `docker buildx build --platform linux/arm64 -t hal-interface-arm64:<version> -o type=oci,dest=./hal-interface-arm64.<version>.tar -f src/hal-interface/Dockerfile.arm64 .`
+- Import this image
+  - `sudo docker load --input hal-interface-arm64.<version>.tar`
+  - `sudo docker tag <SHA256-Hash> hal-interface-arm64:<version>`
 
-### HAL interface
+### >> AMD64 target platform only <<
 
-- Create the service for the HAL interface and start it
-  - `sudo nano /lib/systemd/system/hal-interface.service`<br>
-    Be sure to exchange `<some-folder>` by your installation folder
+- Build your Docker image using the local registry<br>
+  `docker build -t hal-interface-amd64:<version> -f src/hal-interface/Dockerfile.amd64 .`
 
-    ```code
-    [Unit]
-    Description=HAL interface
-    After=multi-user.target
+## Run within container
 
-    [Service]
-    Type=idle
-    User=user
-    ExecStart=/usr/bin/python3 <some-folder>/run.py 2>&1
-
-    [Install]
-    WantedBy=multi-user.target
-    ```
-
-  - `sudo systemctl daemon-reload`
-  - `sudo systemctl enable hal-interface`
-  - `sudo systemctl start hal-interface`
-  - __Note:__ if the service complains with errors try hidden / weired characters from copying the content from here into the VM.
+`docker run hal-interface-<arch>:<version> -v <config folder>:/app/config`
 
 ## Misc
 

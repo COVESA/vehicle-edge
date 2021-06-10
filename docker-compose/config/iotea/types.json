@@ -1,0 +1,20 @@
+{
+    "280101": {
+        "features": {},
+        "types": {
+            "Vehicle": {
+                "features": {
+					"Speed": {
+                        "description": "Vehicle Speed",
+                        "idx": 0,
+                        "history": 3,
+                        "encoding": {
+                            "type": "number",
+                            "encoder": null
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

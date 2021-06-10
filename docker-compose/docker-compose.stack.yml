@@ -1,0 +1,72 @@
+version: '3.2'
+services:
+  mosquitto:
+    platform: linux/${ARCH-amd64}
+    build:
+      context: ../iot-event-analytics/docker/mosquitto
+      labels:
+        arch: ${ARCH-amd64}
+      dockerfile: Dockerfile.${ARCH-amd64}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    ports:
+      - '1883:1883'
+    networks:
+      - edge-platform-network
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/mosquitto"
+        target: "/mosquitto/config"
+  iotea:
+    platform: linux/${ARCH-amd64}
+    build:
+      context: ../iot-event-analytics
+      labels:
+        arch: ${ARCH-amd64}
+      dockerfile: docker/platform/Dockerfile.slim.${ARCH-amd64}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    networks:
+      - edge-platform-network
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/iotea"
+        target: "/app/docker/platform/config"
+  hal-interface-adapter:
+    platform: linux/${ARCH-amd64}
+    build:
+      context: ../
+      labels:
+        arch: ${ARCH-amd64}
+      dockerfile: src/edge.hal-interface-adapter/Dockerfile.${ARCH-amd64}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    networks:
+      - edge-platform-network
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/hal-interface-adapter/config-no-kuksa"
+        target: "/app/config"
+  hal-interface:
+    platform: linux/${ARCH-amd64}
+    build:
+      context: ../
+      labels:
+        arch: ${ARCH-amd64}
+      dockerfile: src/edge.hal-interface/Dockerfile.${ARCH-amd64}
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    networks:
+      - edge-platform-network
+    volumes:
+      - type: bind
+        source: "${CONFIG_DIR}/hal-interface"
+        target: "/app/config"
+networks:
+  edge-platform-network:
+    name: edge-platform-network
+    driver: bridge

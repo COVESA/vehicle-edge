@@ -1,0 +1,28 @@
+{
+    "loglevel": "INFO",
+    "iotea": {
+        "mqtt": {
+            "connectionString": "mqtt://mosquitto:1883",
+            "ns": "iotea/"
+        },
+        "subject": "anyone",
+        "instance": "anyinstance"
+    },
+    "kuksa.val": {
+        "ws": "ws://kuksa.val:8090",
+        "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJrdWtzYS52YWwiLCJpc3MiOiJFY2xpcHNlIEtVS1NBIERldiIsImFkbWluIjp0cnVlLCJtb2RpZnlUcmVlIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTY1NDY4ODE2NSwia3Vrc2EtdnNzIjp7IioiOiJydyJ9fQ.CsTbYO_Xb8EmPU5PWKmsBpbx9LoOQXZjL9NwdEKrDR4g-Ky1vAQ5Rrst17gTb3zEUWNC2-UbVPNA38qttCrN3f2uQTTFQbevx2UVP42OWzbddUplAAcjxTvz3kGmQxKeR8Ijs7fPCHogK_nw9V9O9FO2cGPfKVrhV_JpD5sf9iM_RfbqwyWjBJ3Vo7zj5slWnFD9w6MZdAQbBVp_QjYJwH5B02QFJ0AS7urmCgInRnzxjayH_Z74Bu1RROrUxe1HyCPMcd8xnlTcoh-wCxotYj-Rg3t9mQY2ywG59Bq0T1pMocJ_5Jx4_5zSNF2JU3H8FL_iP0OjzljoBpK89qzOVYVepEmAo9W6ze1JXjxQo5WH6C0fsjo6gJMVCJ5fnUCm5cP6FPIwV_pN00bQKrFxulGP7gigSO2a__CDv4EdbdquJPktSK4LtAO0MqFbWxPlkggnwz59fqqCaJ1fpcywtkRWHCCui3a80eE7wllGthGkNhjqB9a4xB8DOYzpMYjhmY9_E5WvXY4WHq_rTTpHhKf3xja66Z8y4NVp_P4a7_gWy8LRzQThdX2wpXosVRPFsa2dHjSL4bwvSi_tdgkRajXI6G2KFMFkbrWP6hfab5GhIOKDOp2TNp0b5Ff2vJsuqfQrBVF63NzefKMNYNc0NT_CfVwQDtZJkLegZDaV1JU",
+        "bypass": false,
+        "pathConfig": {
+            "separator": ".",
+            "replacer": {
+                ".": "$"
+            }
+        }
+    },
+    "hal": {
+        "mqtt": {
+            "connectionString": "mqtt://mosquitto:1883",
+            "ns": "hal/"
+        }
+    }
+}

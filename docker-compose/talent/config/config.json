@@ -1,7 +1,0 @@
-{
-    "loglevel": "DEBUG",
-    "mqtt": {
-        "connectionString": "mqtt://mosquitto-local:1883",
-        "ns": "iotea/"
-    }
-}

@@ -1,0 +1,66 @@
+##############################################################################
+# Copyright (c) 2021 Robert Bosch GmbH
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#
+# SPDX-License-Identifier: MPL-2.0
+##############################################################################
+
+FROM node:12.13.0 as build
+
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+
+ENV HTTP_PROXY=${HTTP_PROXY}
+ENV HTTPS_PROXY=${HTTPS_PROXY}
+
+RUN mkdir -p /build
+
+WORKDIR /build
+
+COPY iot-event-analytics ./iot-event-analytics
+
+COPY ./src/install-js-sdk.js ./src/
+
+COPY ./src/edge.talent ./src/edge.talent
+
+WORKDIR /build/src/edge.talent
+
+RUN yarn
+
+# Audit all packages for security vulnerabilities
+RUN yarn audit --groups dependencies --level critical
+
+# Shrink node_modules
+RUN curl -sf https://gobinaries.com/tj/node-prune | sh
+
+# Prune node-modules
+RUN node-prune
+
+### uncomment for debug
+#RUN ls -la . 2>&1
+
+FROM yobasystems/alpine:3.11.6-amd64 as runtime
+
+RUN apk add --no-cache nodejs
+
+# Set root password
+# https://stackoverflow.com/questions/28721699/root-password-inside-a-docker-container
+# https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/
+RUN echo "root:`date +%s | sha256sum | base64 | head -c 32`" | chpasswd &> /dev/null
+
+# Create app directory
+RUN mkdir -p /app
+
+WORKDIR /app
+
+# Copy node modules
+COPY --from=build /build/src/edge.talent ./
+
+### uncomment for debug
+#RUN find /app 2>&1
+#RUN ls -la /app 2>&1
+
+CMD ["node", "/app/src/index.js", "-c", "/app/config"]

@@ -10,3 +10,4 @@ target
 **/venv*/*
 **/__pycache__/*
 node_modules/
+*.tar
