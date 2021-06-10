@@ -31,7 +31,7 @@ WORKDIR /build/src/edge.hal-interface-adapter
 RUN yarn
 
 # Audit all packages for security vulnerabilities
-RUN yarn audit
+RUN yarn audit --groups dependencies --level critical
 
 # Shrink node_modules
 RUN curl -sf https://gobinaries.com/tj/node-prune | sh
