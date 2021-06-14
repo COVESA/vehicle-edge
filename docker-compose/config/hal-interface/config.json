@@ -24,8 +24,7 @@
                 },
                 "config": {
                     "topicNamespace": "hal/",
-                    "mqtt5Only": false,
-                    "brokerUrl": "mqtt://mosquitto-local:1883"
+                    "brokerUrl": "mqtt://mosquitto:1883"
                 }
             }
         ]
