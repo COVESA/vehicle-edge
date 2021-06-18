@@ -483,7 +483,7 @@ class HalInterface:
             if bus_config['interface'] == 'mock':
                 bus_observer = MockBusObserver(bus_config, self.protocol_gateway)
             else:
-                bus_observer = BusObserver(bus_config, self.broker)
+                bus_observer = BusObserver(bus_config, self.protocol_gateway)
 
             self.bus_observer.append(bus_observer)
             await bus_observer.start()
