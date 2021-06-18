@@ -94,9 +94,20 @@ Configure start of mock, by setting _interface_ property in _config.json_ to "mo
             }
         }
     ],
-    "mqtt": {
-        "connectionString": "mqtt://localhost:1883",
-        "ns": "hal/"
+    "protocolGateway": {
+        "adapters": [
+            {
+                "platform": true,
+                "module": {
+                    "name": ".util.mqtt_client",
+                    "class": "MqttProtocolAdapter"
+                },
+                "config": {
+                    "topicNamespace": "hal/",
+                    "brokerUrl": "mqtt://mosquitto:1883"
+                }
+            }
+        ]
     }
 }
 ```

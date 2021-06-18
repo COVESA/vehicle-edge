@@ -17,8 +17,19 @@
             }
         }
     ],
-    "mqtt": {
-        "connectionString": "mqtt://localhost:1883",
-        "ns": "hal/"
+    "protocolGateway": {
+        "adapters": [
+            {
+                "platform": true,
+                "module": {
+                    "name": ".util.mqtt_client",
+                    "class": "MqttProtocolAdapter"
+                },
+                "config": {
+                    "topicNamespace": "hal/",
+                    "brokerUrl": "mqtt://mosquitto:1883"
+                }
+            }
+        ]
     }
 }

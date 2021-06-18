@@ -93,6 +93,6 @@ echo "### Modified file: $CONFIG_DIR/vss-mod.json"
 echo
 
 echo "Execute the following command to install modified vss.json"
-echo "  cp config/vss-mod.json ../../../docker-compose/config/kuksa.val/vss.json"
-echo "  cp -r config/certs ../../../docker-compose/config/kuksa.val/"
+echo "  cp $CONFIG_DIR/vss-mod.json ../../../docker-compose/config/kuksa.val/vss.json"
+echo "  cp -r $CONFIG_DIR/certs ../../../docker-compose/config/kuksa.val/"
 

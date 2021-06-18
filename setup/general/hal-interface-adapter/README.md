@@ -70,9 +70,20 @@
   {
     "loglevel": "DEBUG",                                    // Can be VERBOSE, DEBUG, INFO, WARN, ERROR
     "iotea": {
-      "mqtt": {
-        "connectionString": "mqtt://localhost:1883",
-        "ns": "iotea/"
+      "protocolGateway": {
+        "adapters": [
+          {
+            "platform": true,
+            "module": {
+              "name": "./util/mqttClient",
+              "class": "MqttProtocolAdapter"
+            },
+            "config": {
+              "topicNamespace": "iotea/",
+              "brokerUrl": "mqtt://mosquitto:1883"
+            }
+          }
+        ]
       },
       "subject": "<Some userId>",                           // Mandatory, if Kuksa.VAL should be bypasseed, vss.ws is not given and/or vss.subjectPath is undefined
       "instance": "<The VIN, or serial number>"             // Mandatory, if Kuksa.VAL should be bypasseed, vss.ws is not given and/or vss.instancePath is undefined
@@ -99,9 +110,20 @@
       }
     },
     "hal": {
-      "mqtt": {
-        "connectionString": "mqtt://localhost:1883",
-        "ns": "hal/"
+      "protocolGateway": {
+          "adapters": [
+              {
+                  "platform": true,
+                  "module": {
+                      "name": "./util/mqttClient",
+                      "class": "MqttProtocolAdapter"
+                  },
+                  "config": {
+                      "topicNamespace": "hal/",
+                      "brokerUrl": "mqtt://mosquitto:1883"
+                  }
+              }
+          ]
       }
     }
   }
