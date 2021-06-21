@@ -2,9 +2,20 @@
     "loglevel": "DEBUG",
     "platformId": "ABCDE",
     "talentDiscoveryIntervalMs": 30000,
-    "mqtt": {
-        "connectionString": "mqtt://localhost:1883",
-        "ns": "iotea/"
+    "protocolGateway": {
+        "adapters": [
+            {
+                "platform": true,
+                "module": {
+                    "name": "./util/mqttClient",
+                    "class": "MqttProtocolAdapter"
+                },
+                "config": {
+                    "topicNamespace": "iotea/",
+                    "brokerUrl": "mqtt://mosquitto:1883"
+                }
+            }
+        ]
     },
     "api": {
         "port": 8080,

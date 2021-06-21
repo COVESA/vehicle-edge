@@ -23,7 +23,7 @@ services:
       context: ../iot-event-analytics
       labels:
         arch: ${ARCH-amd64}
-      dockerfile: ../iot-event-analytics/docker/kuksa.val2iotea/Dockerfile.${ARCH-amd64}
+      dockerfile: docker/kuksa.val2iotea/Dockerfile.${ARCH-amd64}
       args:
         - HTTP_PROXY=${DOCKER_HTTP_PROXY}
         - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
