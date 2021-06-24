@@ -4,7 +4,7 @@
         "types": {
             "Vehicle": {
                 "features": {
-					"Speed": {
+                    "Speed": {
                         "description": "Vehicle Speed",
                         "idx": 0,
                         "history": 3,
