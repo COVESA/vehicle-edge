@@ -15,10 +15,6 @@ services:
       - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
     networks:
       - edge-platform-network
-    volumes:
-      - type: bind
-        source: "${CONFIG_DIR}/talent"
-        target: "/app/config"
 networks:
   edge-platform-network:
     name: edge-platform-network
