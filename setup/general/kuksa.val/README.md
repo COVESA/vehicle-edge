@@ -20,6 +20,11 @@ L- Server.pem
 vss.json
 ```
 
-You can find out, where to get these files [here](https://github.com/GENIVI/iot-event-analytics/blob/develop/docker/kuksa.val2iotea/README.md)
+You can find out, where to get these files manually [here](https://github.com/GENIVI/iot-event-analytics/blob/develop/docker/kuksa.val2iotea/README.md)
 
-For creating a Kuksa.VAL configuration on a Linux terminal, use the provided _./generate-config.sh_ script. This will create a configuration in the _./config_ directory.
+For automatic configuration creation use one of the tools for your platform
+
+- __>> Linux only <<__<br>
+  Run _./generate-config.sh_. This will create a configuration in the _./config_ directory.
+- __>> Windows only <<__<br>
+  Run `generate-config.bat <optional Kuksa.Val configuration directory>`. Without the optional argument, which needs to be an absolute path, the configuration will be created in the _./config_ directory. The tool will also assist in updating the required JSON Web Tokens in the HAL Interface Adapter configuration and the Kuksa.VAL2IoTea Adapter configuration. You will be prompted to specify the absolute location of these files when running the script.

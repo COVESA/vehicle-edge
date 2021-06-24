@@ -12,4 +12,4 @@
 
 See [here](https://github.com/GENIVI/iot-event-analytics/browse/docker/kuksa.val2iotea)
 
-Update the JWT for authentication against Kuksa.VAL in these configuration file _./config/config.json_
+Update the JWT for authentication against Kuksa.VAL in this configuration file _./config/config.json_
