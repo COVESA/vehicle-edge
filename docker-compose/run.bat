@@ -43,6 +43,12 @@ IF %WITH_TALENT% == 1 (
 
 IF NOT %WITH_KUKSA_VAL% == 1 (
     GOTO SkipKuksaVal
+) ELSE (
+    REM Check if the Kuksa configuration is present
+    IF NOT EXIST %BATCH_PATH%config\kuksa.val\certs\ (
+        CALL "%BATCH_PATH%..\setup\general\kuksa.val\generate-config.bat" %BATCH_PATH%config\kuksa.val
+        IF %ERRORLEVEL% NEQ 0 EXIT 1
+    )
 )
 
 REM Check if local image of Kuksa.val is already loaded
