@@ -90,14 +90,14 @@ DOCKER_HTTPS_PROXY=http://host.docker.internal:3128
 
 - Follow **Install Kuksa.val** section from [https://github.com/GENIVI/iot-event-analytics/tree/develop/docker/kuksa.val2iotea/README.md](https://github.com/GENIVI/iot-event-analytics/tree/develop/docker/kuksa.val2iotea/README.md) to __download AND load__ the latest version of KUKSA.VAL into your local Docker registry.<br>
   - __>> AMD64 platform only: <<__<br>
-    Set the property KUKSA_VAL_IMG to `amd64/kuksa-val:<version>` in the _.env_ file
+    Set the property KUKSA_VAL_IMG to `amd64/kuksa-val:<version>` in the _.amd64env_ file
   - __>> ARM64 platform only: <<__<br>
     Set the property KUKSA_VAL_IMG to `arm64/kuksa-val:<version>` in the _.arm64.env_ file
 - Check your configuration using `docker-compose -f docker-compose.edge.yml config`
 - __>> AMD64 platform only: <<__<br>
-  Run `docker-compose -f docker-compose.stack.yml -f docker-compose.kuksa.val.yml --project-name vehicle-edge-platform --env-file <path to your env file OR .amd64.env> up --build --remove-orphans`
+  Run `docker-compose -f docker-compose.stack.yml -f docker-compose.kuksa.val.yml --project-name vehicle-edge-platform --env-file <path to your env file> up --build --remove-orphans`
 - __>> ARM64 platform only: <<__<br>
-  Run `docker-compose -f docker-compose.stack.yml -f docker-compose.kuksa.val.yml --project-name vehicle-edge-platform --env-file <path to your env file OR .arm64.env> up --build --remove-orphans`
+  Run `docker-compose -f docker-compose.stack.yml -f docker-compose.kuksa.val.yml --project-name vehicle-edge-platform --env-file <path to your env file> up --build -remove-orphans`
 
 ## Run scripted
 
