@@ -1,0 +1,22 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  check_pr:
+    runs-on: ubuntu-latest
+    name: Check sign-off
+    steps:
+      - name: Checkout Action Repository
+        uses: actions/checkout@v2
+        with:
+          repository: GENIVI/iot-event-analytics
+          path: .github-actions
+      - name: Validate commit signature
+        uses: ./.github-actions/.github/actions/pr-check-signoff
+        id: pr-check-signoff
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
