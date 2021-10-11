@@ -31,7 +31,13 @@ WORKDIR /build/src/edge.talent
 RUN yarn
 
 # Audit all packages for security vulnerabilities
-RUN yarn audit --groups dependencies --level critical
+RUN yarn audit --groups dependencies --level critical; \
+    yarncode=$?; \
+    if [ "$yarncode" -lt 16 ]; then \
+        exit 0; \
+    else \
+        exit $yarncode; \
+    fi
 
 # Shrink node_modules
 RUN curl -sf https://gobinaries.com/tj/node-prune | sh
