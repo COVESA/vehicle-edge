@@ -24,9 +24,9 @@ COPY iot-event-analytics ./iot-event-analytics
 
 COPY ./src/install-js-sdk.js ./src/
 
-COPY ./src/edge.hal-interface-adapter ./src/edge.hal-interface-adapter
+COPY ./src/edge.talent ./src/edge.talent
 
-WORKDIR /build/src/edge.hal-interface-adapter
+WORKDIR /build/src/edge.talent
 
 RUN yarn
 
@@ -45,6 +45,9 @@ RUN curl -sf https://gobinaries.com/tj/node-prune | sh
 # Prune node-modules
 RUN node-prune
 
+### uncomment for debug
+#RUN ls -la . 2>&1
+
 FROM yobasystems/alpine:3.11.6-amd64 as runtime
 
 RUN apk add --no-cache nodejs
@@ -60,6 +63,10 @@ RUN mkdir -p /app
 WORKDIR /app
 
 # Copy node modules
-COPY --from=build /build/src/edge.hal-interface-adapter ./
+COPY --from=build /build/src/edge.talent ./
+
+### uncomment for debug
+#RUN find /app 2>&1
+#RUN ls -la /app 2>&1
 
 CMD ["node", "/app/src/index.js", "-c", "/app/config"]
